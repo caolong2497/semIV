@@ -1,0 +1,55 @@
+use coupleapp
+go
+create table tbl_user(
+	UserId int AUTO_INCREMENT  primary key,
+	gmail varchar(255) not null,
+	password varchar(255) not null,
+	code int
+)
+go
+create table tbl_userinfor(
+	UserId int AUTO_INCREMENT  primary key,
+	name varchar(255) not null,
+	gender bit not null,
+	birthday date not null,
+	coupleId int not null,
+	avatar TEXT(500)
+)
+go
+drop table tbl_userinfor
+create table couple(
+	coupleId int primary key,
+	start date,
+	image TEXT(500)
+)
+go
+drop table tbl_memory
+go
+create table tbl_chat(
+	chatID int,
+	content TEXT(1000),
+	time date,
+    userid int,
+        FOREIGN KEY (userid) REFERENCES tbl_userinfor(userid),
+	PRIMARY KEY (chatID,userid)
+)
+go
+create table tbl_memory(
+	memoryID int not null,
+	image Text(500),
+	dateofmemory date,
+	caption Text(1000),
+    userid int,
+        FOREIGN KEY (userid) REFERENCES tbl_userinfor(userid),
+	PRIMARY KEY NONCLUSTERED (memoryID,userid)
+)
+go
+create table tbl_comment(
+	commentID int ,
+	content Text(1000) not null,
+	memoryId int ,
+	userid int ,
+	datecreat date,
+            FOREIGN KEY (userid) REFERENCES tbl_userinfor(userid),
+
+	PRIMARY KEY  (commentID,memoryId)
