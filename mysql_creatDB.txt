@@ -1,30 +1,27 @@
+create database coupleapp
 use coupleapp
-go
-create table tbl_user(
-	UserId int AUTO_INCREMENT  primary key,
-	gmail varchar(255) not null,
-	password varchar(255) not null,
-	code int
-)
+
+drop table tbl_userinfor
 go
 create table tbl_userinfor(
 	UserId int AUTO_INCREMENT  primary key,
-	name varchar(255) not null,
+	name varchar(255) ,
+    gmail varchar(255) not null,
+    password varchar(255) not null,
 	gender bit not null,
-	birthday date not null,
-	coupleId int not null,
-	avatar TEXT(500)
+	birthday date ,
+	coupleId int ,
+	avatar TEXT(500),
+    code int
 )
-go
-drop table tbl_userinfor
-create table couple(
-	coupleId int primary key,
+;
+create table tbl_couple(
+	coupleId int primary key AUTO_INCREMENT,
 	start date,
 	image TEXT(500)
 )
-go
-drop table tbl_memory
-go
+
+;
 create table tbl_chat(
 	chatID int,
 	content TEXT(1000),
@@ -33,7 +30,7 @@ create table tbl_chat(
         FOREIGN KEY (userid) REFERENCES tbl_userinfor(userid),
 	PRIMARY KEY (chatID,userid)
 )
-go
+;
 create table tbl_memory(
 	memoryID int not null,
 	image Text(500),
@@ -43,13 +40,16 @@ create table tbl_memory(
         FOREIGN KEY (userid) REFERENCES tbl_userinfor(userid),
 	PRIMARY KEY NONCLUSTERED (memoryID,userid)
 )
-go
+;
 create table tbl_comment(
 	commentID int ,
 	content Text(1000) not null,
 	memoryId int ,
 	userid int ,
 	datecreat date,
-            FOREIGN KEY (userid) REFERENCES tbl_userinfor(userid),
-
+    FOREIGN KEY (userid) REFERENCES tbl_userinfor(userid),
 	PRIMARY KEY  (commentID,memoryId)
+)
+
+;
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234$'
