@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/setting_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:orientation="vertical"
+    android:weightSum="10"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#42a7ff"
+        android:padding="12dp">
+
+        <ImageButton
+            android:id="@+id/setting_close"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:onClick="choiseOption"
+            android:src="@drawable/icon_delete" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Cài đặt"
+            android:textColor="#FFF"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/setting_backgroundimg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="9dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:onClick="choiseOption"
+        android:paddingLeft="15dp"
+        android:text="Sửa ảnh bìa"
+        android:textColor="#000"
+        android:textSize="16dp" />
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_line2" />
+
+    <TextView
+        android:id="@+id/setting_firstday"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:onClick="choiseOption"
+        android:paddingLeft="15dp"
+        android:text="Ngày bắt đầu"
+        android:textColor="#000"
+        android:textSize="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_line2" />
+
+    <TextView
+        android:id="@+id/setting_password"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:onClick="choiseOption"
+        android:paddingLeft="15dp"
+        android:text="Đổi mật khẩu"
+        android:textColor="#000"
+        android:textSize="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_line2" />
+
+    <TextView
+        android:id="@+id/setting_logout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:onClick="choiseOption"
+        android:paddingLeft="15dp"
+        android:text="Đăng xuất"
+        android:textColor="#000"
+        android:textSize="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_line2" />
+
+    <TextView
+        android:id="@+id/setting_disconnect"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#999999"
+        android:gravity="center_vertical"
+        android:onClick="choiseOption"
+        android:paddingLeft="15dp"
+        android:text="Disconnect Partner"
+        android:textColor="#FFF"
+        android:textSize="16dp" />
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_line2" />
+
+</LinearLayout>

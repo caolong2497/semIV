@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.firstdayActivity"
+    android:padding="15dp">
+    <ImageButton
+        android:id="@+id/firstday_back"
+        android:layout_width="35dp"
+        android:layout_height="25dp"
+        android:src="@drawable/icon_previous"
+        android:background="@null"
+        android:scaleType="fitXY"
+        />
+    <LinearLayout
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="8"
+        android:orientation="vertical"
+        android:layout_below="@+id/firstday_back">
+
+        <TextView
+            android:id="@+id/first"
+            android:layout_below="@+id/firstday_back"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="The Firstday we met"
+            android:textSize="27dp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:textColor="#000"
+            android:text="Do you remember the first day that we met? Fill in the fields below."/>
+        <EditText
+            android:id="@+id/firstday_started"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:hint="Started on"/>
+
+        <ImageButton
+            android:id="@+id/firstday_next"
+            android:layout_marginTop="20dp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_right" />
+    </LinearLayout>
+
+</RelativeLayout>
