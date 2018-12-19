@@ -17,20 +17,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.CountDateActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.CountDateActivity" />
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.PairingActivity" />
         <activity android:name=".Activity.firstdayActivity" />
-        <activity android:name=".Activity.TimeLineActivity" />
+
         <activity android:name=".Activity.DetailMemoryActivity" />
-        <activity android:name=".Activity.ChangePassword"></activity>
+        <activity android:name=".Activity.ChangePassword" />
+        <activity android:name=".Activity.UpdateUserActivity"></activity>
     </application>
 
 </manifest>

@@ -123,6 +123,7 @@
                 android:textStyle="italic" />
         </LinearLayout>
     </LinearLayout>
+
     <ListView
         android:id="@+id/detail_listview_comment"
         android:layout_width="match_parent"
@@ -131,4 +132,10 @@
 
     </ListView>
 
+    <EditText
+        android:id="@+id/content_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:hint="Write Somethings" />
 </RelativeLayout>

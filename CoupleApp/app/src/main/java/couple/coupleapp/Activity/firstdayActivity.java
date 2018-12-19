@@ -2,6 +2,7 @@ package couple.coupleapp.Activity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -40,7 +42,7 @@ public class firstdayActivity extends AppCompatActivity {
                 getDatePicker();
             }
         });
-
+        
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +75,7 @@ public class firstdayActivity extends AppCompatActivity {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(firstdayActivity.this);
                     alertDialog.setTitle("Thông báo!");
                     alertDialog.setMessage("Ngày bắt đầu yêu không được sau ngày hiện tại");
+
                     alertDialog.show();
                 } else {
                     cal.set(year, month, dayOfMonth);

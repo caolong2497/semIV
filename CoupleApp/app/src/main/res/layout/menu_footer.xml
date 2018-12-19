@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:background="@drawable/custom_footer"
-    android:padding="5dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,12 +21,12 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/home_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-
                 android:layout_gravity="center"
-
                 android:background="@null"
+                android:onClick="selectedMenu"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_home" />
 
@@ -45,12 +45,12 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/heart_img"
+                android:id="@+id/timline_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-
                 android:background="@null"
+                android:onClick="selectedMenu"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_love" />
 
@@ -68,12 +68,12 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/chat_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-
                 android:layout_gravity="center"
-
                 android:background="@null"
+                android:onClick="selectedMenu"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_chat" />
 
@@ -91,10 +91,12 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/notification_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:background="@null"
+                android:onClick="selectedMenu"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_bell" />
 
