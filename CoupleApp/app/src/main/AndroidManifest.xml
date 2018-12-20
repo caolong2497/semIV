@@ -3,7 +3,9 @@
     package="couple.coupleapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -36,10 +38,10 @@
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.PairingActivity" />
         <activity android:name=".Activity.firstdayActivity" />
-
         <activity android:name=".Activity.DetailMemoryActivity" />
         <activity android:name=".Activity.ChangePassword" />
-        <activity android:name=".Activity.UpdateUserActivity"></activity>
+        <activity android:name=".Activity.UpdateUserActivity" />
+        <activity android:name=".Activity.UploadBackgroundActivity"></activity>
     </application>
 
 </manifest>

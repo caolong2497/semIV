@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp" android:layout_height="wrap_content"
+android:paddingBottom="10dp"
+
+    >
+    <TextView
+        android:id="@+id/dialog_upload_caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn ảnh"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:textColor="#FFF"
+        android:background="#006fff"
+        android:padding="5dp"/>
+    <LinearLayout
+
+        android:id="@+id/dialog_upload_option"
+        android:layout_below="@+id/dialog_upload_caption"
+        android:background="#01ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+>
+
+
+        <Button
+            android:id="@+id/dialog_update_gallery"
+            android:background="@drawable/custom_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#004cff"
+            android:text="Chọn ảnh từ thư viện ..."/>
+
+        <Button
+
+            android:id="@+id/dialog_update_capture"
+            android:background="@drawable/custom_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#004cff"
+            android:textStyle="normal"
+            android:text="Chụp ảnh ..."/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_line2"/>
+    </LinearLayout>
+
+    <Button
+        android:layout_centerInParent="true"
+
+        android:id="@+id/dialog_update_exit"
+        android:background="@drawable/custom_button"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/dialog_upload_option"
+        android:layout_height="wrap_content"
+        android:textColor="#004cff"
+        android:text="Thoát"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

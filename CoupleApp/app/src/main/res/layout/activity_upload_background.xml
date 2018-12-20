@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".Activity.UploadBackgroundActivity"
+    >
+
+    <ImageButton
+        android:id="@+id/uploadbackground_back"
+        android:layout_width="35dp"
+        android:layout_height="25dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_previous" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text=" Chọn hình nền "
+        android:textColor="#000"
+        android:textSize="18dp"
+        android:textStyle="bold"
+
+        />
+
+    <LinearLayout
+        android:id="@+id/uploadbackground_open"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uploadbackground_back"
+        android:layout_marginTop="10dp"
+        android:weightSum="10"
+        android:background="#e4e4e4"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:layout_height="wrap_content"
+            android:text="CHỌN HÌNH CỦA BẠN"
+            android:layout_gravity="center"
+            android:textColor="#000"
+
+            />
+        <ImageButton
+            android:id="@+id/uploadbackground_more"
+            android:layout_width="10dp"
+            android:layout_height="22dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
+            android:src="@drawable/icon_more"
+            android:clickable="false"/>
+
+
+    </LinearLayout>
+<ImageView
+    android:id="@+id/image_selected"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:layout_below="@+id/uploadbackground_open"/>
+</RelativeLayout>

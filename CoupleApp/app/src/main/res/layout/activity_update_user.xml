@@ -9,7 +9,7 @@
 
 
     <ImageButton
-        android:id="@+id/password_back"
+        android:id="@+id/userinfor_back"
         android:layout_width="35dp"
         android:layout_height="25dp"
         android:background="@null"
@@ -25,7 +25,7 @@
         android:textSize="18dp"
         android:textStyle="bold" />
     <ImageButton
-        android:id="@+id/password_save"
+        android:id="@+id/userinfor_save"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@null"
@@ -37,7 +37,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/password_back"
+        android:layout_below="@+id/userinfor_back"
         android:orientation="vertical">
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="100dp"

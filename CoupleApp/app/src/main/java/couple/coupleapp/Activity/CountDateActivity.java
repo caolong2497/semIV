@@ -16,13 +16,13 @@ public class CountDateActivity extends AppCompatActivity {
     ImageView myAvatar, ImageHeart;
     FrameLayout setting_layout, disconnect_layout;
     String firstday;
-
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count_date);
         anhxa();
-        Intent intent = getIntent();
+        intent = getIntent();
         if (intent != null) {
             firstday = intent.getStringExtra("date");
         }
@@ -89,13 +89,14 @@ public class CountDateActivity extends AppCompatActivity {
                 Toast.makeText(this, "goto logout", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_backgroundimg:
-                Toast.makeText(this, "goto backgroud", Toast.LENGTH_SHORT).show();
+                intent=new Intent(this,UploadBackgroundActivity.class);
+                startActivity(intent);
                 break;
             case R.id.setting_firstday:
                 Toast.makeText(this, "go to firstday", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_password:
-                Intent intent = new Intent(CountDateActivity.this, ChangePassword.class);
+                 intent = new Intent(CountDateActivity.this, ChangePassword.class);
                 startActivity(intent);
                 break;
             default:
