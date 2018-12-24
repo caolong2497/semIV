@@ -30,12 +30,13 @@ public class firstdayActivity extends AppCompatActivity {
     ImageButton next_btn;
     SimpleDateFormat simpleDateFormat;
     long timenow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstday);
         anhxa();
-        Log.e("date", "onCreate: "+firstday );
+        Log.e("date", "onCreate: " + firstday);
         simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         firstday_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,12 +48,12 @@ public class firstdayActivity extends AppCompatActivity {
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("date", "onCreate2: "+firstday );
-                if (firstday!=0) {
+                Log.e("date", "onCreate2: " + firstday);
+                if (firstday != 0) {
                     Intent intent = new Intent(firstdayActivity.this, CountDateActivity.class);
-                    intent.putExtra("date", firstday+"");
+                    intent.putExtra("date", firstday + "");
                     startActivity(intent);
-                }else{
+                } else {
                     Toast.makeText(firstdayActivity.this, "Hãy chọn ngày bắt đầu yêu", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -66,8 +67,8 @@ public class firstdayActivity extends AppCompatActivity {
             year_now = year_lastchoise = cal.get(Calendar.YEAR);
             month_now = month_lastchoise = cal.get(Calendar.MONTH);
             day_now = day_lastchoise = cal.get(Calendar.DAY_OF_MONTH);
-            timenow=cal.getTimeInMillis();
-            Log.e("Firstday", "Now: "+timenow+"->"+simpleDateFormat.format(timenow) );
+            timenow = cal.getTimeInMillis();
+            Log.e("Firstday", "Now: " + timenow + "->" + simpleDateFormat.format(timenow));
         }
         DatePickerDialog pickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -76,26 +77,26 @@ public class firstdayActivity extends AppCompatActivity {
                     final AlertDialog.Builder alertDialog = new AlertDialog.Builder(firstdayActivity.this);
                     alertDialog.setTitle("Thông báo!");
                     alertDialog.setMessage("Ngày bắt đầu yêu không được sau ngày hiện tại");
-//                    alertDialog.setPositiveButton("Close", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-//                        }
-//                    });
+                    alertDialog.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                        }
+                    });
                     alertDialog.show();
                 } else {
                     cal.set(year, month, dayOfMonth);
                     year_lastchoise = year;
                     month_lastchoise = month;
                     day_lastchoise = dayOfMonth;
-                    firstday=cal.getTimeInMillis();
+                    firstday = cal.getTimeInMillis();
                     firstday_edit.setText(simpleDateFormat.format(cal.getTime()));
                 }
-                Log.e("Firstday", "choise: "+firstday+"->"+simpleDateFormat.format(firstday) );
+                Log.e("Firstday", "choise: " + firstday + "->" + simpleDateFormat.format(firstday));
             }
         }, year_lastchoise, month_lastchoise, day_lastchoise);
 
-//        pickerDialog.getDatePicker();
+//        pickerDialog.getDatePicker().setMaxDate(timenow);
         pickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         pickerDialog.show();
     }

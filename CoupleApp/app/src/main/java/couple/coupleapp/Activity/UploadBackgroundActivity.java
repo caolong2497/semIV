@@ -22,11 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import couple.coupleapp.R;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UploadBackgroundActivity extends AppCompatActivity {
-    LinearLayout btn_upload;
+    LinearLayout uploadbackground_open;
     Dialog dialog;
     Button open_gallery_btn, open_capture_btn, exit_btn;
+    ImageButton upload_background_back;
     ImageView image_choise;
     private static final int REQUEST_CODE_ALBUM=200;
     private static final int REQUEST_CODE_CAMERA=100;
@@ -35,7 +37,13 @@ public class UploadBackgroundActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_background);
         anhxa();
-        btn_upload.setOnClickListener(new View.OnClickListener() {
+        upload_background_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        uploadbackground_open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialogOptionUpload();
@@ -44,8 +52,9 @@ public class UploadBackgroundActivity extends AppCompatActivity {
     }
 
     private void anhxa() {
-        btn_upload = (LinearLayout) findViewById(R.id.uploadbackground_open);
+        upload_background_back=(ImageButton) findViewById(R.id.uploadbackground_back);
         image_choise= (ImageView) findViewById(R.id.image_selected);
+        uploadbackground_open=(LinearLayout) findViewById(R.id.uploadbackground_open);
     }
 
     private void showDialogOptionUpload() {
@@ -97,7 +106,6 @@ public class UploadBackgroundActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(this, "Không có quyền truy cập camera", Toast.LENGTH_SHORT).show();
                 }
-                Log.e("Long", "onRequestPermissionsResult: den duoc day2" );
                 break;
             case REQUEST_CODE_ALBUM:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -117,6 +125,7 @@ public class UploadBackgroundActivity extends AppCompatActivity {
         switch (requestCode){
             case REQUEST_CODE_CAMERA:
                 if (resultCode == RESULT_OK && data != null) {
+                    Log.e("Long", "onActivityResult: set anh" );
                     Bitmap img = (Bitmap) data.getExtras().get("data");
                     image_choise.setImageBitmap(img);
                 }

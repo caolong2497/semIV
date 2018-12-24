@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".Activity.CreateMemoryActivity">
+
+    <ImageButton
+        android:id="@+id/memory_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_delete" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Create New Memory"
+        android:textColor="#000"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/memory_save"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/icon_save" />
+
+    <LinearLayout
+        android:layout_below="@+id/memory_save"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="15">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Captions"/>
+        <EditText
+
+            android:id="@+id/memory_caption"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:hint="Write something"
+            android:paddingLeft="10dp"
+            android:background="@drawable/custom_edittext_memory"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/memory_date"
+            android:layout_weight="2"
+            android:background="@drawable/custom_edittext_memory"
+            android:text="dd/mm/yyyy"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textSize="18dp"
+            />
+
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:id="@+id/memory_addImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:text="Choose Picture"
+                android:textColor="#0022ff"
+
+                />
+            <ImageButton
+                android:layout_marginLeft="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_picture"
+                android:clickable="false"
+                />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/memory_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:src="@drawable/icon_picture_2"
+            android:scaleType="center"
+            android:background="@drawable/custom_edittext_memory"
+            android:visibility="visible"
+            />
+    </LinearLayout>
+</RelativeLayout>

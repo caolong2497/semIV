@@ -40,12 +40,13 @@
         android:layout_below="@+id/userinfor_back"
         android:orientation="vertical">
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/update_user_avatar"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/avatar_boy"
             android:layout_gravity="center"
-            app:civ_border_color="#000"
-            app:civ_border_width="1dp"
+            app:civ_border_color="#c2c2c2"
+            app:civ_border_width="2dp"
             />
         <TextView
             android:layout_width="match_parent"
