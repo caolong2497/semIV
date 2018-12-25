@@ -5,6 +5,10 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Utils {
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
@@ -25,5 +29,25 @@ public class Utils {
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
-
+    /**
+     *
+     * @param date ngày bắt đầu format dd/MM/yyyy
+     * @return số lượng ngày
+     */
+    public static long countDate(String date){
+        long result=0;
+        Date startDate=null;
+        Date toDate=null;
+        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd-MM-yyyy");
+        Date currentDate=new Date();
+        String str_currentDate=simpleDateFormat.format(currentDate);
+        try {
+            startDate=simpleDateFormat.parse(date);
+            toDate=simpleDateFormat.parse(str_currentDate);
+            result =(toDate.getTime()-startDate.getTime())/(24*60*60*1000);
+        } catch (ParseException e) {
+            System.out.println("Lỗi đếm ngày");
+        }
+        return result;
+    }
 }

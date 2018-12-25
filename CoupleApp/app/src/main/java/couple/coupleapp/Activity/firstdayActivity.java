@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +31,7 @@ public class firstdayActivity extends AppCompatActivity {
     ImageButton next_btn;
     SimpleDateFormat simpleDateFormat;
     long timenow;
-
+    SharedPreferences login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,10 @@ public class firstdayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.e("date", "onCreate2: " + firstday);
                 if (firstday != 0) {
+                    SharedPreferences.Editor editor=login.edit();
+                    editor.putString("coupleid","1");
+                    editor.putBoolean("status",true);
+                    editor.commit();
                     Intent intent = new Intent(firstdayActivity.this, CountDateActivity.class);
                     intent.putExtra("date", firstday + "");
                     startActivity(intent);
@@ -102,6 +107,7 @@ public class firstdayActivity extends AppCompatActivity {
     }
 
     private void anhxa() {
+        login= getSharedPreferences("logininfor",MODE_PRIVATE);
         firstday_edit = (EditText) findViewById(R.id.firstday_started);
         next_btn = (ImageButton) findViewById(R.id.firstday_next);
     }

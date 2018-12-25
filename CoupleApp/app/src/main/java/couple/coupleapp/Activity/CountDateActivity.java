@@ -1,6 +1,7 @@
 package couple.coupleapp.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,7 +23,7 @@ public class CountDateActivity extends AppCompatActivity {
     ImageButton home_btn, timeline_btn;
     String firstday;
     Intent intent;
-
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,7 @@ public class CountDateActivity extends AppCompatActivity {
     }
 
     private void anhxa() {
+        sharedPreferences=getSharedPreferences("logininfor",MODE_PRIVATE);
         setting_layout = (FrameLayout) findViewById(R.id.setting_frame);
         disconnect_layout = (FrameLayout) findViewById(R.id.disconnect_frame);
         home_btn = (ImageButton) findViewById(R.id.home_menu);
@@ -102,7 +104,13 @@ public class CountDateActivity extends AppCompatActivity {
                 Toast.makeText(this, "touch close", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_logout:
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+                 intent=new Intent(this,LoginActivity.class);
+                 startActivity(intent);
                 Toast.makeText(this, "goto logout", Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.setting_backgroundimg:
                 intent = new Intent(this, UploadBackgroundActivity.class);

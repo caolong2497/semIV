@@ -2,10 +2,13 @@ package couple.coupleapp.Activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +19,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Calendar;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import couple.coupleapp.Common.Constant;
+import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
 
 public class CountdateFragment extends Fragment {
@@ -28,21 +45,24 @@ public class CountdateFragment extends Fragment {
     ImageButton close_dialog_btn;
     Button update_btn;
     Dialog dialog;
-
+    String startDate;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_countdate, container, false);
         Bundle bundle = getArguments();
         anhxa();
-        if (bundle != null) {
-            String timefirst =  bundle.getString("date");
-            long firstday = Long.parseLong(timefirst);
-            Calendar calendar = Calendar.getInstance();
-            long today = calendar.getTimeInMillis();
-            result_date = (today - firstday) / (1000 * 60 * 60 * 24);
-        }
-        countDate.setText(result_date + "");
+        String url = Constant.HOSTING + Constant.GETCOUPLEBYID + "2";
+        getData(url);
+//        Log.e("Long", "onCreateView: "+result_date );
+//        if (bundle != null) {
+//            String timefirst =  bundle.getString("date");
+//            long firstday = Long.parseLong(timefirst);
+//            Calendar calendar = Calendar.getInstance();
+//            long today = calendar.getTimeInMillis();
+//            result_date = (today - firstday) / (1000 * 60 * 60 * 24);
+//        }
+//        countDate.setText(result_date + "");
         myAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,18 +74,17 @@ public class CountdateFragment extends Fragment {
     }
 
     private void anhxa() {
+        startDate = "0";
         result_date = 0;
         countDate = (TextView) view.findViewById(R.id.count_date);
         myAvatar = (ImageView) view.findViewById(R.id.count_myimg);
-
-
     }
 
     private void showDialogUser() {
-         dialog = new Dialog(getContext());
+        dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_userinfor);
-        close_dialog_btn=(ImageButton) dialog.findViewById(R.id.dialog_close);
-        update_btn=(Button) dialog.findViewById(R.id.dialog_updateinfor);
+        close_dialog_btn = (ImageButton) dialog.findViewById(R.id.dialog_close);
+        update_btn = (Button) dialog.findViewById(R.id.dialog_updateinfor);
         close_dialog_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,14 +94,37 @@ public class CountdateFragment extends Fragment {
         update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getContext(),UpdateUserActivity.class);
+                Intent intent = new Intent(getContext(), UpdateUserActivity.class);
                 startActivity(intent);
             }
         });
         dialog.show();
     }
 
-//    public void setCountDate(String date){
-//        countDate.setText(date+"");
-//    }
+    private void getData(String url) {
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            startDate = response.getString("start");
+                            result_date = Utils.countDate(startDate);
+                            countDate.setText(result_date + "");
+                            Log.e("Long", "onResponse: " + startDate);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("request", "onResponse: lỗi");
+                    }
+                }
+        );
+        requestQueue.add(objectRequest);
+    }
+
 }
