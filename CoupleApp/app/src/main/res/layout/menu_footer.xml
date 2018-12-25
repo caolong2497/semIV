@@ -28,6 +28,7 @@
                 android:background="@null"
                 android:onClick="selectedMenu"
                 android:scaleType="fitXY"
+
                 android:src="@drawable/icon_home" />
 
             <TextView
