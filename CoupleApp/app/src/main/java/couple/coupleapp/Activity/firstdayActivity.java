@@ -38,7 +38,7 @@ public class firstdayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_firstday);
         anhxa();
         Log.e("date", "onCreate: " + firstday);
-        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         firstday_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,7 +56,6 @@ public class firstdayActivity extends AppCompatActivity {
                     editor.putBoolean("status",true);
                     editor.commit();
                     Intent intent = new Intent(firstdayActivity.this, CountDateActivity.class);
-                    intent.putExtra("date", firstday + "");
                     startActivity(intent);
                 } else {
                     Toast.makeText(firstdayActivity.this, "Hãy chọn ngày bắt đầu yêu", Toast.LENGTH_SHORT).show();

@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
 
 public class CountDateActivity extends AppCompatActivity {
@@ -29,17 +30,10 @@ public class CountDateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count_date);
         anhxa();
-        intent = getIntent();
-        if (intent != null) {
-            firstday = intent.getStringExtra("date");
-        }
         lastItemSelected = R.id.home_menu;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CountdateFragment fragmentC = new CountdateFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("date", firstday);
-        fragmentC.setArguments(bundle);
         fragmentTransaction.replace(R.id.frame_content, fragmentC);
         fragmentTransaction.commit();
 

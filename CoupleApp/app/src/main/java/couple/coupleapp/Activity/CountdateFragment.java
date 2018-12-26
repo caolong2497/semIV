@@ -50,27 +50,21 @@ public class CountdateFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_countdate, container, false);
-        Bundle bundle = getArguments();
         anhxa();
-        String url = Constant.HOSTING + Constant.GETCOUPLEBYID + "2";
-        getData(url);
-        Log.e("long", "onCreateView: "+url );
-//        Log.e("Long", "onCreateView: "+result_date );
-//        if (bundle != null) {
-//            String timefirst =  bundle.getString("date");
-//            long firstday = Long.parseLong(timefirst);
-//            Calendar calendar = Calendar.getInstance();
-//            long today = calendar.getTimeInMillis();
-//            result_date = (today - firstday) / (1000 * 60 * 60 * 24);
+            if(!"".equals(Constant.STARTDATE)){
+                result_date= Utils.countDate(Constant.STARTDATE);
+                countDate.setText(result_date + "");
+            }else{
+                String url = Constant.HOSTING + Constant.GETCOUPLEBYID + "2";
+                getData(url);
+            }
 //        }
-//        countDate.setText(result_date + "");
         myAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialogUser();
             }
         });
-
         return view;
     }
 
@@ -110,6 +104,7 @@ public class CountdateFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             startDate = response.getString("start");
+                            Constant.STARTDATE=startDate;
                             result_date = Utils.countDate(startDate);
                             countDate.setText(result_date + "");
                             Log.e("Long", "onResponse: " + startDate);
