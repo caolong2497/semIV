@@ -54,6 +54,7 @@ public class CountdateFragment extends Fragment {
         anhxa();
         String url = Constant.HOSTING + Constant.GETCOUPLEBYID + "2";
         getData(url);
+        Log.e("long", "onCreateView: "+url );
 //        Log.e("Long", "onCreateView: "+result_date );
 //        if (bundle != null) {
 //            String timefirst =  bundle.getString("date");
