@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
 
 public class firstdayActivity extends AppCompatActivity {
@@ -31,7 +32,7 @@ public class firstdayActivity extends AppCompatActivity {
     ImageButton next_btn;
     SimpleDateFormat simpleDateFormat;
     long timenow;
-    SharedPreferences login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +52,8 @@ public class firstdayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.e("date", "onCreate2: " + firstday);
                 if (firstday != 0) {
-                    SharedPreferences.Editor editor=login.edit();
-                    editor.putString("coupleid","1");
-                    editor.putBoolean("status",true);
-                    editor.commit();
+                    //lưu hạng mục startDate cho bảng couple
+                    //lưu thành công thì chuyển sang màn hình chính
                     Intent intent = new Intent(firstdayActivity.this, CountDateActivity.class);
                     startActivity(intent);
                 } else {
@@ -106,7 +105,7 @@ public class firstdayActivity extends AppCompatActivity {
     }
 
     private void anhxa() {
-        login= getSharedPreferences("logininfor",MODE_PRIVATE);
+
         firstday_edit = (EditText) findViewById(R.id.firstday_started);
         next_btn = (ImageButton) findViewById(R.id.firstday_next);
     }

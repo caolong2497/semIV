@@ -15,7 +15,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import couple.coupleapp.Common.Constant;
+import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
 
 public class CountDateActivity extends AppCompatActivity {
@@ -24,29 +35,38 @@ public class CountDateActivity extends AppCompatActivity {
     ImageButton home_btn, timeline_btn;
     String firstday;
     Intent intent;
+    String url;
     SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count_date);
         anhxa();
+        init();
         lastItemSelected = R.id.home_menu;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        CountdateFragment fragmentC = new CountdateFragment();
-        fragmentTransaction.replace(R.id.frame_content, fragmentC);
-        fragmentTransaction.commit();
+        getData(url);
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        CountdateFragment fragmentC = new CountdateFragment();
+//        fragmentTransaction.replace(R.id.frame_content, fragmentC);
+//        fragmentTransaction.commit();
+    }
 
+    private void init() {
+        sharedPreferences = getSharedPreferences(Constant.SHARED_FILENAME_LOGIN, MODE_PRIVATE);
+        Constant.MY_USER_ID = sharedPreferences.getInt(Constant.MY_USERID_SHARED, 0);
+        Constant.MY_COUPLE_ID = sharedPreferences.getInt(Constant.COUPLE_ID_SHARED, 0);
+        url = Constant.HOSTING + Constant.GETCOUPLEBYID + Constant.MY_COUPLE_ID;
+        firstday = "0";
+        lastItemSelected = 0;
     }
 
     private void anhxa() {
-        sharedPreferences=getSharedPreferences("logininfor",MODE_PRIVATE);
         setting_layout = (FrameLayout) findViewById(R.id.setting_frame);
         disconnect_layout = (FrameLayout) findViewById(R.id.disconnect_frame);
         home_btn = (ImageButton) findViewById(R.id.home_menu);
         timeline_btn = (ImageButton) findViewById(R.id.timline_menu);
-        firstday = "0";
-        lastItemSelected = 0;
     }
 
     public void selectedMenu(View v) {
@@ -98,11 +118,11 @@ public class CountDateActivity extends AppCompatActivity {
                 Toast.makeText(this, "touch close", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_logout:
-                SharedPreferences.Editor editor=sharedPreferences.edit();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.commit();
-                 intent=new Intent(this,LoginActivity.class);
-                 startActivity(intent);
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
                 Toast.makeText(this, "goto logout", Toast.LENGTH_SHORT).show();
 
                 break;
@@ -120,5 +140,34 @@ public class CountDateActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+    private void getData(String url) {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Constant.STARTDATE=response.getString("start");
+                            Log.e("Long", "call service: " + Constant.STARTDATE);
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            CountdateFragment fragmentC = new CountdateFragment();
+                            fragmentTransaction.replace(R.id.frame_content, fragmentC);
+                            fragmentTransaction.commit();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("request", "onResponse: lỗi");
+                    }
+                }
+        );
+        requestQueue.add(objectRequest);
+
     }
 }

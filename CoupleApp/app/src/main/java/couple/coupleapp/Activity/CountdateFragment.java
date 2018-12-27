@@ -46,19 +46,14 @@ public class CountdateFragment extends Fragment {
     Button update_btn;
     Dialog dialog;
     String startDate;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_countdate, container, false);
         anhxa();
-            if(!"".equals(Constant.STARTDATE)){
-                result_date= Utils.countDate(Constant.STARTDATE);
-                countDate.setText(result_date + "");
-            }else{
-                String url = Constant.HOSTING + Constant.GETCOUPLEBYID + "2";
-                getData(url);
-            }
-//        }
+        result_date = Utils.countDate(Constant.STARTDATE);
+        countDate.setText(result_date + "");
         myAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +99,7 @@ public class CountdateFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             startDate = response.getString("start");
-                            Constant.STARTDATE=startDate;
+                            Constant.STARTDATE = startDate;
                             result_date = Utils.countDate(startDate);
                             countDate.setText(result_date + "");
                             Log.e("Long", "onResponse: " + startDate);

@@ -15,55 +15,57 @@ import org.hibernate.Session;
  * @author chinam
  */
 public class UserInfoDAO {
-    public List<UserInfo> getUserInfos(){
+
+    public List<UserInfo> getUserInfos() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             List list = session.createQuery("from UserInfo").list();
             session.getTransaction().commit();
-            session.close();
             return list;
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        }finally {
             session.close();
         }
         return null;
     }
-    
-    public Boolean addUserInfo(UserInfo userInfo){
+
+    public Boolean addUserInfo(UserInfo userInfo) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             session.save(userInfo);
             session.getTransaction().commit();
-            session.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+                    return false;
+        } finally {
             session.close();
         }
-        return false;
+
     }
-    
-    public Boolean updateUserInfo(UserInfo userInfo){
+
+    public Boolean updateUserInfo(UserInfo userInfo) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
             session.update(userInfo);
             session.getTransaction().commit();
-            session.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return false;
     }
-    
-    public Boolean deleteUserInfo(int userID){
+
+    public Boolean deleteUserInfo(int userID) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -71,18 +73,20 @@ public class UserInfoDAO {
             query.setParameter("UserId", userID);
             int i = query.executeUpdate();
             session.getTransaction().commit();
-            session.close();
-            if(i>0)
+            if (i > 0) {
                 return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+
+        } finally {
             session.close();
         }
-        return false;
+           return false;
     }
-    
-    public UserInfo getUserInfoById(int userID){
+
+    public UserInfo getUserInfoById(int userID) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         UserInfo p = null;
         try {
@@ -91,11 +95,31 @@ public class UserInfoDAO {
             query.setParameter("userID", userID);
             p = (UserInfo) query.uniqueResult();
             session.getTransaction().commit();
-            session.close();
             return p;
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return null;
+    }
+
+    public UserInfo getUserInfoByGmailAndPassword(String gmail, String password) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        UserInfo p = null;
+        try {
+            session.beginTransaction();
+            Query query = session.createQuery("from UserInfo where gmail= :gmail and password = :password");
+            query.setParameter("gmail", gmail);
+            query.setParameter("password", password);
+            p = (UserInfo) query.uniqueResult();
+            session.getTransaction().commit();
+            return p;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return null;

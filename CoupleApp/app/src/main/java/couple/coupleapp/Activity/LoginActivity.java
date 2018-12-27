@@ -1,6 +1,7 @@
 package couple.coupleapp.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
 
 
@@ -18,7 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     TextView txt_regis;
     Button btn_login;
     String email, password;
-//    String url_login = Constant.HOSTING + "user/login/";
+
+    SharedPreferences login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,23 +46,23 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                email = Ed_Email.getText().toString();
+                email = Ed_Email.getText().toString().trim();
                 password = Ed_Password.getText().toString();
-                if("caolong".equals(email)&&"123".equals(password)){
-                    Intent intent=new Intent(LoginActivity.this,PairingActivity.class);
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
-                }
-               // register();
-//                String url = url_login + email + "/" + password;
-//                Login(url);
+//                if ("caolong".equals(email) && "123".equals(password)) {
+//                    Intent intent = new Intent(LoginActivity.this, PairingActivity.class);
+//                    startActivity(intent);
+//                } else {
+//                    Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+//                }
+                String url = Constant.HOSTING + Constant.LOGIN + "/" + email + "/" + password;
+                Login(url);
+
             }
         });
-        txt_regis.setOnClickListener(new View.OnClickListener(){
+        txt_regis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -52,29 +70,59 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void anhxa() {
+        login = getSharedPreferences(Constant.SHARED_FILENAME_LOGIN, MODE_PRIVATE);
         Ed_Email = (EditText) findViewById(R.id.login_email);
         Ed_Password = (EditText) findViewById(R.id.login_password);
         btn_login = (Button) findViewById(R.id.btn_login);
-        txt_regis=(TextView) findViewById(R.id.txt_register);
+        txt_regis = (TextView) findViewById(R.id.txt_register);
     }
 
 
-//    private void Login(String url) {
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Toast.makeText(LoginActivity.this, "Login thành công", Toast.LENGTH_SHORT).show();
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(LoginActivity.this, "login that bai", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        requestQueue.add(stringRequest);
-//    }
+    private void Login(String url) {
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            int userId = response.getInt("userID");
+                            int coupleid = response.getInt("coupleID");
+                                //check xem là người dùng mới hay cũ,người dùng mới sẽ chưa có coupleid => coupleid= default
+                                if (coupleid == Constant.DEFEAULT_COUPLEID) {
+                                    // người dùng mơi đi đến màn hình ghép cặp
+                                    Intent intent = new Intent(LoginActivity.this, PairingActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    //người dùng cũ đi đến màn hình chính(countDate)
+
+                                    //Lưu thông tin coupleid vào file Shared
+                                    SharedPreferences.Editor editor = login.edit();
+                                    editor.putInt(Constant.COUPLE_ID_SHARED, coupleid);
+                                    editor.putInt(Constant.MY_USERID_SHARED, userId);
+                                    editor.commit();
+
+                                    //chuyển màn hình
+                                    Intent intent = new Intent(LoginActivity.this, CountDateActivity.class);
+                                    startActivity(intent);
+                                }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 }
 
 //    private void Login(String url) {
