@@ -52,7 +52,9 @@ public class CountdateFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_countdate, container, false);
         anhxa();
-        result_date = Utils.countDate(Constant.STARTDATE);
+        if(!"0".equals(Constant.STARTDATE)){
+            result_date = Utils.countDate(Constant.STARTDATE);
+        }
         countDate.setText(result_date + "");
         myAvatar.setOnClickListener(new View.OnClickListener() {
             @Override

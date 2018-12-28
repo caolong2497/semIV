@@ -24,7 +24,7 @@ public class PairingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor=login.edit();
-                editor.putString(Constant.COUPLE_ID_SHARED,"1"); //set giá trị coupleID cho user sau khi ghép cặp thành công
+                editor.putInt(Constant.COUPLE_ID_SHARED,1); //set giá trị coupleID cho user sau khi ghép cặp thành công
                 editor.commit();
                 Intent intent=new Intent(PairingActivity.this,firstdayActivity.class);
                 startActivity(intent);

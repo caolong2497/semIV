@@ -1,9 +1,9 @@
 package couple.coupleapp.Common;
 
 public class Constant {
-    public static final String HOSTING="http://10.0.3.2:8080/ServiceProjectSem3/rest/";
-    public static final String GETCOUPLEBYID="couple/getCouple/";
-    public static final String LOGIN="user/dangnhap";
+    public static final String URL_HOSTING="http://10.0.3.2:8080/ServiceProjectSem3/rest/"; //lưu hosting service
+    public static final String URL_GETCOUPLEBYID="couple/getCouple/"; //url getcouplebyid
+    public static final String URL_LOGIN="user/dangnhap";             //url login
     public static String STARTDATE="0";
     public static int MY_USER_ID=0;
     public static int MY_COUPLE_ID=0;

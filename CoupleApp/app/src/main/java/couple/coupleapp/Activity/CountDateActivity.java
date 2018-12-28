@@ -57,7 +57,7 @@ public class CountDateActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(Constant.SHARED_FILENAME_LOGIN, MODE_PRIVATE);
         Constant.MY_USER_ID = sharedPreferences.getInt(Constant.MY_USERID_SHARED, 0);
         Constant.MY_COUPLE_ID = sharedPreferences.getInt(Constant.COUPLE_ID_SHARED, 0);
-        url = Constant.HOSTING + Constant.GETCOUPLEBYID + Constant.MY_COUPLE_ID;
+        url = Constant.URL_HOSTING + Constant.URL_GETCOUPLEBYID + Constant.MY_COUPLE_ID;
         firstday = "0";
         lastItemSelected = 0;
     }
@@ -163,11 +163,13 @@ public class CountDateActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        intent = new Intent(CountDateActivity.this, LoginActivity.class);
+                        startActivity(intent);
                         Log.e("request", "onResponse: lỗi");
                     }
                 }
         );
         requestQueue.add(objectRequest);
-
     }
+
 }
