@@ -36,40 +36,50 @@ import java.util.Date;
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CountdateFragment extends Fragment {
-    TextView countDate;
-    ImageView myAvatar;
+    TextView countDate,myName,partnerName;
+    CircleImageView myAvatar,partnerAvatar;
+    int partner_id;
     View view;
     long result_date;
     ImageButton close_dialog_btn;
     Button update_btn;
     Dialog dialog;
-    String startDate;
-
+    String url;
+    String str_name,str_partnername;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_countdate, container, false);
         anhxa();
-        if(!"0".equals(Constant.STARTDATE)){
-            result_date = Utils.countDate(Constant.STARTDATE);
-        }
+        init();
+
         countDate.setText(result_date + "");
+        getData(url);
         myAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialogUser();
             }
         });
+
         return view;
     }
-
+    private void init(){
+        url = Constant.URL_HOSTING + Constant.URL_GET_DETAIL_COUPLE + Constant.MY_USER_ID+"/"+Constant.MY_COUPLE_ID;
+        str_name="";
+        str_partnername="";
+        partner_id=0;
+    }
     private void anhxa() {
-        startDate = "0";
         result_date = 0;
         countDate = (TextView) view.findViewById(R.id.count_date);
-        myAvatar = (ImageView) view.findViewById(R.id.count_myimg);
+        myAvatar = (CircleImageView) view.findViewById(R.id.count_myimg);
+        partnerAvatar=(CircleImageView) view.findViewById(R.id.count_partnerimg);
+        myName=(TextView) view.findViewById(R.id.count_myname);
+        partnerName=(TextView) view.findViewById(R.id.count_partnername);
     }
 
     private void showDialogUser() {
@@ -100,11 +110,15 @@ public class CountdateFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            startDate = response.getString("start");
-                            Constant.STARTDATE = startDate;
-                            result_date = Utils.countDate(startDate);
+                            Constant.STARTDATE = response.getString("start");
+                            str_name=response.getString("myname");
+                            str_partnername=response.getString("partnername");
+                            partner_id=response.getInt("partneruserID");
+                            myName.setText(str_name);
+                            partnerName.setText(str_partnername);
+
+                            result_date = Utils.countDate(Constant.STARTDATE);
                             countDate.setText(result_date + "");
-                            Log.e("Long", "onResponse: " + startDate);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -6,7 +6,9 @@
 package service;
 
 import com.google.gson.Gson;
+import dao.CoupleDAO;
 import dao.UserInfoDAO;
+import entity.Couple;
 import entity.UserInfo;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -15,6 +17,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import model.DetailCoupleInfor_Model;
 import model.Login_Model;
 
 /**
@@ -86,17 +89,14 @@ public class UserInforService {
         String result = son.toJson(u);
         return result;
     }
+
     @GET
     @Path(value = "/dangnhap/{gmail}/{password}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String Dangnhap(@PathParam("gmail") String gmail,@PathParam("password") String password) {
+    public String Dangnhap(@PathParam("gmail") String gmail, @PathParam("password") String password) {
         UserInfo u = new UserInfoDAO().getUserInfoByGmailAndPassword(gmail, password);
         Gson son = new Gson();
         String result = son.toJson(u);
         return result;
     }
-//    public static void main(String[] args) {
-//        System.out.println("value:"+new UserInforService().Dangnhap("caolong2497@gmail.com", "123"));
-//    }
-    
 }

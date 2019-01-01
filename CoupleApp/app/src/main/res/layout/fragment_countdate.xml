@@ -61,6 +61,7 @@
 
 
             <TextView
+                android:id="@+id/count_myname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -105,7 +106,7 @@
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/count_parterimg"
+                android:id="@+id/count_partnerimg"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
@@ -114,6 +115,7 @@
                 app:civ_border_width="1dp" />
 
             <TextView
+                android:id="@+id/count_partnername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 //                } else {
 //                    Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
 //                }
-                String url = Constant.HOSTING + Constant.LOGIN + "/" + email + "/" + password;
+                String url = Constant.URL_HOSTING + Constant.URL_LOGIN + "/" + email + "/" + password;
                 Login(url);
 
             }

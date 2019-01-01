@@ -8,7 +8,9 @@ package service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.CoupleDAO;
+import dao.UserInfoDAO;
 import entity.Couple;
+import entity.UserInfo;
 import java.text.DateFormat;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -17,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import model.DetailCoupleInfor_Model;
 
 /**
  *
@@ -75,5 +78,40 @@ public class CoupleService {
         return result;
     }
 
-   
+   @GET
+    @Path(value = "/getdetailcouple/{userid}/{coupleid}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String getdetailcouple(@PathParam("userid") String userid, @PathParam("coupleid") String coupleid) {
+        int myuserid = Integer.parseInt(userid);
+        List<UserInfo> list = new UserInfoDAO().getUserInfosByCoupleID(Integer.parseInt(coupleid));
+        Couple couple = new CoupleDAO().getCoupleById(Integer.parseInt(coupleid));
+        DetailCoupleInfor_Model detailCoupleInfor_Model=null;
+        if (list != null && couple != null) {
+            detailCoupleInfor_Model = new DetailCoupleInfor_Model();
+            for (UserInfo u : list) {
+                if (u.getUserID() == myuserid) {
+                    detailCoupleInfor_Model.setMyuserID(u.getUserID());
+                    detailCoupleInfor_Model.setMygmail(u.getGmail());
+                    detailCoupleInfor_Model.setMyname(u.getName());
+                    detailCoupleInfor_Model.setMyimage(u.getAvatar());
+                } else {
+                    detailCoupleInfor_Model.setPartneruserID(u.getUserID());
+                    detailCoupleInfor_Model.setPartnergmail(u.getGmail());
+                    detailCoupleInfor_Model.setPartnername(u.getName());
+                    detailCoupleInfor_Model.setPartnerimage(u.getAvatar());
+                }
+            }
+            detailCoupleInfor_Model.setCoupleId(couple.getCoupleID());
+            detailCoupleInfor_Model.setStart(couple.getStart());
+            detailCoupleInfor_Model.setCoupleImage(couple.getImage());
+        }
+        Gson son = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
+        String result = son.toJson(detailCoupleInfor_Model);
+        return result; 
+    }
+    
+    
+    public static void main(String[] args) {
+        System.out.println("value:"+new CoupleService().getdetailcouple("1", "1"));
+    }
 }

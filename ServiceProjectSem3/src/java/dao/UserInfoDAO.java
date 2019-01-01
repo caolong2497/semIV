@@ -26,7 +26,7 @@ public class UserInfoDAO {
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        }finally {
+        } finally {
             session.close();
         }
         return null;
@@ -42,7 +42,7 @@ public class UserInfoDAO {
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-                    return false;
+            return false;
         } finally {
             session.close();
         }
@@ -83,7 +83,7 @@ public class UserInfoDAO {
         } finally {
             session.close();
         }
-           return false;
+        return false;
     }
 
     public UserInfo getUserInfoById(int userID) {
@@ -123,5 +123,24 @@ public class UserInfoDAO {
             session.close();
         }
         return null;
+    }
+
+    public List<UserInfo> getUserInfosByCoupleID(int coupleid) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<UserInfo> list = null;
+        try {
+            session.beginTransaction();
+            Query query = session.createQuery("from UserInfo where coupleID=:coupleid");
+            query.setParameter("coupleid", coupleid);
+            list = query.list();
+            session.getTransaction().commit();
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return null;
+        } finally {
+            session.close();
+        }
     }
 }

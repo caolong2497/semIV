@@ -101,7 +101,5 @@ public class CoupleDAO {
         return null;
     }
     
-    public static void main(String[] args) {
-        System.out.println(new CoupleDAO().getCouples().size());
-    }
+
 }
