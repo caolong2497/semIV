@@ -55,8 +55,6 @@ public class CountdateFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_countdate, container, false);
         anhxa();
         init();
-
-        countDate.setText(result_date + "");
         getData(url);
         myAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +62,6 @@ public class CountdateFragment extends Fragment {
                 showDialogUser();
             }
         });
-
         return view;
     }
     private void init(){
@@ -116,7 +113,6 @@ public class CountdateFragment extends Fragment {
                             partner_id=response.getInt("partneruserID");
                             myName.setText(str_name);
                             partnerName.setText(str_partnername);
-
                             result_date = Utils.countDate(Constant.STARTDATE);
                             countDate.setText(result_date + "");
                         } catch (JSONException e) {

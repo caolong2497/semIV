@@ -34,7 +34,6 @@ public class CountDateActivity extends AppCompatActivity {
     FrameLayout setting_layout, disconnect_layout;
     ImageButton home_btn, timeline_btn;
     Intent intent;
-    String url;
     SharedPreferences sharedPreferences;
 
     @Override
@@ -48,7 +47,6 @@ public class CountDateActivity extends AppCompatActivity {
         CountdateFragment fragmentC = new CountdateFragment();
         fragmentTransaction.replace(R.id.frame_content, fragmentC);
         fragmentTransaction.commit();
-//        getData(url);
     }
 
     private void init() {

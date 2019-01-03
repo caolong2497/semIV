@@ -124,7 +124,26 @@ public class UserInfoDAO {
         }
         return null;
     }
-
+    public UserInfo getUserInfoByIDAndPassword(String userid, String password) {
+        
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        UserInfo p = null;
+        try {
+            session.beginTransaction();
+            Query query = session.createQuery("from UserInfo where userID= :userID and password = :password");
+            query.setParameter("userID", Integer.parseInt(userid));
+            query.setParameter("password", password);
+            p = (UserInfo) query.uniqueResult();
+            session.getTransaction().commit();
+            return p;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return null;
+    }
     public List<UserInfo> getUserInfosByCoupleID(int coupleid) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<UserInfo> list = null;
@@ -143,4 +162,5 @@ public class UserInfoDAO {
             session.close();
         }
     }
+
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import couple.coupleapp.Common.Constant;
+import couple.coupleapp.Common.Utils;
+import couple.coupleapp.Common.Validate;
 import couple.coupleapp.R;
 
 
@@ -48,14 +51,21 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 email = Ed_Email.getText().toString().trim();
                 password = Ed_Password.getText().toString();
+                password=Utils.encodeText(password);
+                if(Validate.validateLogin(email,password)){
+
+                    String url = Constant.URL_HOSTING + Constant.URL_LOGIN + "/" + email + "/" + password;
+                    Login(url);
+                }else{
+                    Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                }
 //                if ("caolong".equals(email) && "123".equals(password)) {
 //                    Intent intent = new Intent(LoginActivity.this, PairingActivity.class);
 //                    startActivity(intent);
 //                } else {
 //                    Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
 //                }
-                String url = Constant.URL_HOSTING + Constant.URL_LOGIN + "/" + email + "/" + password;
-                Login(url);
+
 
             }
         });
@@ -115,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
                     }
                 }
         );

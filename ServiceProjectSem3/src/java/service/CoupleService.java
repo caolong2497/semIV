@@ -11,7 +11,6 @@ import dao.CoupleDAO;
 import dao.UserInfoDAO;
 import entity.Couple;
 import entity.UserInfo;
-import java.text.DateFormat;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -27,6 +26,7 @@ import model.DetailCoupleInfor_Model;
  */
 @Path(value = "/couple")
 public class CoupleService {
+
      @GET
     @Path(value = "/getall")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -109,8 +109,7 @@ public class CoupleService {
         String result = son.toJson(detailCoupleInfor_Model);
         return result; 
     }
-    
-    
+
     public static void main(String[] args) {
         System.out.println("value:"+new CoupleService().getdetailcouple("1", "1"));
     }
