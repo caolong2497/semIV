@@ -77,9 +77,9 @@ public class ChangePassword extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if ("0".equals(response)) {
-                    Toast.makeText(ChangePassword.this, "Mật khẩu hiện tại không chính xác", Toast.LENGTH_SHORT).show();
-                } else if ("1".equals(response)) {
+                if (Constant.RESULT_FALSE.equals(response)) {
+                    Toast.makeText(ChangePassword.this, "Mật khẩu cũ không chính xác", Toast.LENGTH_SHORT).show();
+                } else if (Constant.RESULT_TRUE.equals(response)) {
                     Toast.makeText(ChangePassword.this, "Update Mật Khẩu Thành Công", Toast.LENGTH_SHORT).show();
                     onBackPressed();
                 } else {

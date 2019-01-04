@@ -5,13 +5,19 @@
  */
 package service;
 
+import Common.Constant;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.CoupleDAO;
 import dao.UserInfoDAO;
 import entity.Couple;
 import entity.UserInfo;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,7 +33,7 @@ import model.DetailCoupleInfor_Model;
 @Path(value = "/couple")
 public class CoupleService {
 
-     @GET
+    @GET
     @Path(value = "/getall")
     @Consumes(MediaType.APPLICATION_JSON)
     public String listCouples() {
@@ -71,6 +77,7 @@ public class CoupleService {
 
     @GET
     @Path(value = "/getCouple/{coupleID}")
+    @Consumes(MediaType.APPLICATION_JSON)
     public String getCoupleById(@PathParam("coupleID") Integer coupleID) {
         Couple c = new CoupleDAO().getCoupleById(coupleID);
         Gson son = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
@@ -78,14 +85,14 @@ public class CoupleService {
         return result;
     }
 
-   @GET
+    @GET
     @Path(value = "/getdetailcouple/{userid}/{coupleid}")
     @Consumes(MediaType.APPLICATION_JSON)
     public String getdetailcouple(@PathParam("userid") String userid, @PathParam("coupleid") String coupleid) {
         int myuserid = Integer.parseInt(userid);
         List<UserInfo> list = new UserInfoDAO().getUserInfosByCoupleID(Integer.parseInt(coupleid));
         Couple couple = new CoupleDAO().getCoupleById(Integer.parseInt(coupleid));
-        DetailCoupleInfor_Model detailCoupleInfor_Model=null;
+        DetailCoupleInfor_Model detailCoupleInfor_Model = null;
         if (list != null && couple != null) {
             detailCoupleInfor_Model = new DetailCoupleInfor_Model();
             for (UserInfo u : list) {
@@ -107,10 +114,30 @@ public class CoupleService {
         }
         Gson son = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
         String result = son.toJson(detailCoupleInfor_Model);
-        return result; 
+        return result;
     }
-
-    public static void main(String[] args) {
-        System.out.println("value:"+new CoupleService().getdetailcouple("1", "1"));
+    /**
+     * 
+     * @param coupleid mã couple muốn cập nhật
+     * @param startDate ngày start mới
+     * @return  "0" update thành công
+     *          "1" update thất bại
+     */ 
+    @GET
+    @Path(value = "/updateStartDate/{coupleid}/{startdate}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String updateStartDate(@PathParam("coupleid") String coupleid, @PathParam("startdate") String startDate) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date date = simpleDateFormat.parse(startDate);
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            boolean result = new CoupleDAO().updateStartDate(Integer.parseInt(coupleid), sqlDate);
+            if (result) {
+                return Constant.TRUE;
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(CoupleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Constant.FALSE;
     }
 }

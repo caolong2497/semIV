@@ -5,6 +5,7 @@
  */
 package dao;
 
+import Common.Constant;
 import entity.UserInfo;
 import java.util.List;
 import org.hibernate.Query;
@@ -49,6 +50,33 @@ public class UserInfoDAO {
 
     }
 
+    public Boolean disconnectPartner(int coupleID) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            //update coupleid=6(mã coupleid mặc định) 
+            String str="update UserInfo u set u.coupleID = "+Constant.DEFEAULT_COUPLEID+" where u.coupleID = :coupleID";
+            Query query = session.createQuery(str);
+             query.setParameter("coupleID", coupleID);
+            int i = query.executeUpdate();
+            //Xóa đối tượng couple có coupleid=:coupleid
+            //.....
+            //Xóa record trong bảng memory,chat,comment có userid = 2 tài khoản liên kết đến couple
+            //.....
+            session.getTransaction().commit();
+            if (i > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+
+        } finally {
+            session.close();
+        }
+        return false;
+    }
+    
     public Boolean updateUserInfo(UserInfo userInfo) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
@@ -124,8 +152,9 @@ public class UserInfoDAO {
         }
         return null;
     }
+    
     public UserInfo getUserInfoByIDAndPassword(String userid, String password) {
-        
+
         Session session = HibernateUtil.getSessionFactory().openSession();
         UserInfo p = null;
         try {
@@ -144,6 +173,7 @@ public class UserInfoDAO {
         }
         return null;
     }
+
     public List<UserInfo> getUserInfosByCoupleID(int coupleid) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<UserInfo> list = null;

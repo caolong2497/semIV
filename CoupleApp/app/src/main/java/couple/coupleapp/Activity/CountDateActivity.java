@@ -20,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -35,7 +36,7 @@ public class CountDateActivity extends AppCompatActivity {
     ImageButton home_btn, timeline_btn;
     Intent intent;
     SharedPreferences sharedPreferences;
-
+    String url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,7 @@ public class CountDateActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(Constant.SHARED_FILENAME_LOGIN, MODE_PRIVATE);
         Constant.MY_USER_ID = sharedPreferences.getInt(Constant.MY_USERID_SHARED, 0);
         Constant.MY_COUPLE_ID = sharedPreferences.getInt(Constant.COUPLE_ID_SHARED, 0);
+        url=Constant.URL_HOSTING+Constant.URL_DISCONNECT+"/"+Constant.MY_COUPLE_ID;
         lastItemSelected = 0;
     }
 
@@ -105,6 +107,9 @@ public class CountDateActivity extends AppCompatActivity {
                 disconnect_layout.setVisibility(View.GONE);
                 Toast.makeText(this, "back disconnect", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.disconnect_accept:
+                disconnectPartner(url);
+                break;
             case R.id.setting_disconnect:
                 disconnect_layout.setVisibility(View.VISIBLE);
                 break;
@@ -113,20 +118,16 @@ public class CountDateActivity extends AppCompatActivity {
                 Toast.makeText(this, "touch close", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_logout:
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.commit();
-                intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                Toast.makeText(this, "goto logout", Toast.LENGTH_SHORT).show();
-
+                logout();
                 break;
             case R.id.setting_backgroundimg:
                 intent = new Intent(this, UploadBackgroundActivity.class);
                 startActivity(intent);
                 break;
             case R.id.setting_firstday:
-                Toast.makeText(this, "go to firstday", Toast.LENGTH_SHORT).show();
+                intent =new Intent(this,firstdayActivity.class);
+                Constant.FLAG_STARTDATE=Constant.CONSTANT_UPDATE;
+                startActivity(intent);
                 break;
             case R.id.setting_password:
                 intent = new Intent(CountDateActivity.this, ChangePassword.class);
@@ -137,35 +138,32 @@ public class CountDateActivity extends AppCompatActivity {
         }
     }
 
-//    private void getData(String url) {
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                            Constant.PARTNER_ID= response.getInt("partneruserID");
-//                            Log.e("Long", "call service: " + Constant.STARTDATE);
-//                            FragmentManager fragmentManager = getSupportFragmentManager();
-//                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                            CountdateFragment fragmentC = new CountdateFragment();
-//                            fragmentTransaction.replace(R.id.frame_content, fragmentC);
-//                            fragmentTransaction.commit();
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        intent = new Intent(CountDateActivity.this, LoginActivity.class);
-//                        startActivity(intent);
-//                        Log.e("request", "onResponse: lỗi");
-//                    }
-//                }
-//        );
-//        requestQueue.add(objectRequest);
-//    }
+    private void disconnectPartner(String url) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if ("0".equals(response)) {
+                    logout();
+                } else {
+                    Toast.makeText(CountDateActivity.this, "Có lỗi xảy ra,thử lại sau", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(CountDateActivity.this, "Có lỗi xảy ra,thử lại sau", Toast.LENGTH_SHORT).show();
+            }
+        }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 
+    private void logout() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+        intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
 }

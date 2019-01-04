@@ -5,6 +5,7 @@
  */
 package service;
 
+import Common.Constant;
 import com.google.gson.Gson;
 import dao.UserInfoDAO;
 import entity.UserInfo;
@@ -42,28 +43,29 @@ public class UserInforService {
      * @param userid 
      * @param current_password
      * @param new_password
-     * @return String 0:mật khẩu hiện tại sai
-     *                1:update mật khẩu thành công
+     * @return String 0:update mật khẩu thành công
+     *                1:Mật khẩu hiện tại không đúng
      *                2:update mật khẩu thất bại
      */
     @GET
     @Path(value = "/changepass/{userid}/{currentpass}/{newpass}")
     @Consumes(MediaType.APPLICATION_JSON)
     public String changePassword(@PathParam("userid") String userid, @PathParam("currentpass") String current_password, @PathParam("newpass") String new_password) {
-        String response = "0";
+        
         Boolean result = false;
         UserInfoDAO uidao = new UserInfoDAO();
+        String kq=Constant.FALSE;  //1
         UserInfo ui = uidao.getUserInfoByIDAndPassword(userid, current_password);
         if (ui != null) {
             ui.setPassword(new_password);
             result = uidao.updateUserInfo(ui);
             if (result) {
-                response = "1";
+               kq=Constant.TRUE; //0
             } else {
-                response = "2";
+               kq=Constant.RESULT_FAIL; //2
             }
         }
-        return response;
+        return kq; //1
     }
 //    @POST
 //    @Path(value = "/changepass")
@@ -148,8 +150,20 @@ public class UserInforService {
         String result = son.toJson(u);
         return result;
     }
-    
-    public static void main(String[] args) {
-        System.out.println("value:"+new UserInforService().changePassword("1","12345","123"));
+    /**
+     * hủy kết nối cặp đôi
+     * @param coupleid mã cặp đôi
+     * @return "0" nếu hủy thành công,"1" nếu thất bại
+     */
+    @GET
+    @Path(value = "/disconnect/{coupleid}")
+    public String DisconnectPartner(@PathParam("coupleid") String coupleid) {
+        UserInfoDAO userInfoDAO=new UserInfoDAO();
+        if(userInfoDAO.disconnectPartner(Integer.parseInt(coupleid))){
+            return Constant.TRUE;
+        }else{
+            return Constant.FALSE;
+        }
     }
+
 }

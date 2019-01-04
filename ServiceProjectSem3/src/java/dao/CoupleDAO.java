@@ -5,8 +5,14 @@
  */
 package dao;
 
+import Common.Constant;
 import entity.Couple;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -15,7 +21,8 @@ import org.hibernate.Session;
  * @author chinam
  */
 public class CoupleDAO {
-    public List<Couple> getCouples(){
+
+    public List<Couple> getCouples() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -30,8 +37,8 @@ public class CoupleDAO {
         }
         return null;
     }
-    
-    public Boolean addCouple(Couple couple){
+
+    public Boolean addCouple(Couple couple) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -46,8 +53,8 @@ public class CoupleDAO {
         }
         return false;
     }
-    
-    public Boolean updateCouple(Couple couple){
+
+    public Boolean updateCouple(Couple couple) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -62,8 +69,8 @@ public class CoupleDAO {
         }
         return false;
     }
-    
-    public Boolean deleteCouple(int coupleId){
+
+    public Boolean deleteCouple(int coupleId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -72,8 +79,9 @@ public class CoupleDAO {
             int i = query.executeUpdate();
             session.getTransaction().commit();
             session.close();
-            if(i>0)
+            if (i > 0) {
                 return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
@@ -81,8 +89,8 @@ public class CoupleDAO {
         }
         return false;
     }
-    
-    public Couple getCoupleById(int coupleId){
+
+    public Couple getCoupleById(int coupleId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Couple p = null;
         try {
@@ -100,6 +108,38 @@ public class CoupleDAO {
         }
         return null;
     }
-    
 
+    public Boolean updateStartDate(int coupleID, Date startdate) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            String str = "update Couple c set c.start=:startdate where c.coupleID =:coupleID";
+            Query query = session.createQuery(str);
+            query.setParameter("coupleID", coupleID);
+            query.setParameter("startdate", startdate);
+            int i = query.executeUpdate();
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+
+        }
+        return false;
+    }
+
+//    public static void main(String[] args) {
+//        String date = "05-01-2019";
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//        java.util.Date startdate;
+//        try {
+//            startdate = simpleDateFormat.parse(date);
+//            java.sql.Date sqlDate = new java.sql.Date(startdate.getTime());
+//            System.out.println("value:"+new CoupleDAO().updateStartDate(1, sqlDate));
+//        } catch (ParseException ex) {
+//            Logger.getLogger(CoupleDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 }

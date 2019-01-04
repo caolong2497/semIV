@@ -51,21 +51,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 email = Ed_Email.getText().toString().trim();
                 password = Ed_Password.getText().toString();
-                password=Utils.encodeText(password);
                 if(Validate.validateLogin(email,password)){
-
+                    password=Utils.encodeText(password);
+                    Log.e("login", "password "+password );
                     String url = Constant.URL_HOSTING + Constant.URL_LOGIN + "/" + email + "/" + password;
                     Login(url);
                 }else{
                     Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
                 }
-//                if ("caolong".equals(email) && "123".equals(password)) {
-//                    Intent intent = new Intent(LoginActivity.this, PairingActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                    Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
-//                }
-
 
             }
         });
