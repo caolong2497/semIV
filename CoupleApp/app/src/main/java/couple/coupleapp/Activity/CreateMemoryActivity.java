@@ -8,12 +8,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,9 +31,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
 
 public class CreateMemoryActivity extends AppCompatActivity {
@@ -38,13 +60,18 @@ public class CreateMemoryActivity extends AppCompatActivity {
     long selectedDate, timenow;
     TextView dateofMemory;
     SimpleDateFormat simpleDateFormat;
-    ImageButton memory_close_btn;
+    ImageButton memory_close_btn, memory_save_btn, clear_image_btn;
     LinearLayout open_option_upload;
     Dialog dialog;
+    EditText caption;
     ImageView imageOfMemory;
     Button open_gallery_btn, open_capture_btn, exit_btn;
     private static final int REQUEST_CODE_ALBUM = 200;
     private static final int REQUEST_CODE_CAMERA = 100;
+    StorageReference storageRef;
+    String url_create_memory;
+    String str_caption, str_createDate, linkImage;
+    int flag_image; //=0:không có ảnh được chọn, =1 có ảnh được chọn
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +97,28 @@ public class CreateMemoryActivity extends AppCompatActivity {
                 showDialogOptionUpload();
             }
         });
+        clear_image_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flag_image = 0;
+                imageOfMemory.setImageResource(R.drawable.icon_picture_2);
+                imageOfMemory.setScaleType(ImageView.ScaleType.CENTER);
+            }
+        });
+        memory_save_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                str_caption = caption.getText().toString();
+                str_createDate = dateofMemory.getText().toString();
+                if(flag_image==0){
+                    createMemory(url_create_memory);
+                }else{
+                    uploadimage();
+
+                }
+
+            }
+        });
     }
 
     private void anhxa() {
@@ -77,9 +126,14 @@ public class CreateMemoryActivity extends AppCompatActivity {
         memory_close_btn = (ImageButton) findViewById(R.id.memory_close);
         open_option_upload = (LinearLayout) findViewById(R.id.memory_addImage);
         imageOfMemory = (ImageView) findViewById(R.id.memory_image);
+        caption = (EditText) findViewById(R.id.memory_caption);
+        memory_save_btn = (ImageButton) findViewById(R.id.memory_save);
+        clear_image_btn = (ImageButton) findViewById(R.id.clear_image);
     }
 
     private void init() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
         cal = Calendar.getInstance();
         year_lastchoise = cal.get(Calendar.YEAR);
         month_lastchoise = cal.get(Calendar.MONTH);
@@ -87,10 +141,14 @@ public class CreateMemoryActivity extends AppCompatActivity {
         timenow = cal.getTimeInMillis();
         simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateofMemory.setText(simpleDateFormat.format(timenow));
+        url_create_memory = Constant.URL_HOSTING + Constant.URL_CREATE_MEMORY;
+        str_caption = "";
+        str_createDate = "";
+        linkImage = "";
+        flag_image = 0;
     }
 
     private void getDatePicker() {
-
         DatePickerDialog pickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -173,6 +231,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     Bitmap img = (Bitmap) data.getExtras().get("data");
                     imageOfMemory.setImageBitmap(img);
                     imageOfMemory.setScaleType(ImageView.ScaleType.FIT_XY);
+                    flag_image = 1;
                 }
                 break;
             case REQUEST_CODE_ALBUM:
@@ -180,9 +239,109 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     Uri uri = data.getData();
                     imageOfMemory.setImageURI(uri);
                     imageOfMemory.setScaleType(ImageView.ScaleType.FIT_XY);
+                    flag_image = 1;
                 }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void uploadimage() {
+        Calendar cal = Calendar.getInstance();
+        // Get the data from an ImageView as bytes
+        StorageReference mountainsRef = storageRef.child("memory/image" + cal.getTimeInMillis() + ".png");
+
+        imageOfMemory.setDrawingCacheEnabled(true);
+        imageOfMemory.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) imageOfMemory.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("memory", "upload anh: upload ảnh thất bại");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Log.e("memory", "upload anh: upload ảnh thành công");
+                Task<Uri> result = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        linkImage = uri.toString();
+                        Log.e("memory", "link image: "+linkImage );
+                        createMemory(url_create_memory);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Log.e("long", "get link fail ");
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * gọi service tạo kỉ niệm
+     *
+     * @param url link api create memory post method
+     */
+    private void createMemory(String url) {
+
+        JSONObject postparams = new JSONObject();
+        try {
+            Log.e("uploadDB", "url : "+linkImage );
+            if(flag_image==0){
+                linkImage=Constant.STATE_IMAGE_DEFAULT;
+            }
+            postparams.put("image", linkImage);
+            postparams.put("time", str_createDate);
+            postparams.put("caption", str_caption);
+            postparams.put("userId", Constant.MY_USER_ID);
+            JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, postparams, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    try {
+                        String result = response.getString("result");
+                        if (Constant.RESULT_TRUE.equals(result)) {
+                            Toast.makeText(CreateMemoryActivity.this, "Tạo kỉ niệm thành công", Toast.LENGTH_SHORT).show();
+
+                            // nếu tạo kỉ niệm thành công quay về trang timeline
+                            onBackPressed();
+                        } else {
+                            Toast.makeText(CreateMemoryActivity.this, "Có lỗi xảy ra, thử lại sau", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("memmory", "onResponse: Lỗi json");
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(CreateMemoryActivity.this, "Lỗi server thử lại sau", Toast.LENGTH_SHORT).show();
+                }
+            });
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void goToTimelineFragment(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        TimelineFragment timelineFragment = new TimelineFragment();
+        fragmentTransaction.replace(R.id.frame_content, timelineFragment);
+        fragmentTransaction.commit();
     }
 }

@@ -51,15 +51,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 email = Ed_Email.getText().toString().trim();
                 password = Ed_Password.getText().toString();
-                if(Validate.validateLogin(email,password)){
+                String message=Validate.validateLogin(email,password);
+                if("".equals(message)){
                     password=Utils.encodeText(password);
                     Log.e("login", "password "+password );
-                    String url = Constant.URL_HOSTING + Constant.URL_LOGIN + "/" + email + "/" + password;
-                    Login(url);
+                    String url = Constant.URL_HOSTING + Constant.URL_LOGIN ;
+                    Login(url,email,password);
                 }else{
-                    Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         txt_regis.setOnClickListener(new View.OnClickListener() {
@@ -79,80 +79,61 @@ public class LoginActivity extends AppCompatActivity {
         btn_login = (Button) findViewById(R.id.btn_login);
         txt_regis = (TextView) findViewById(R.id.txt_register);
     }
+    private void Login(String url,String email,String password) {
+        JSONObject postparams = new JSONObject();
+        try {
+            postparams.put("gmail", email);
+            postparams.put("password", password);
+            JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, postparams, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
 
-
-    private void Login(String url) {
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-                            int userId = response.getInt("userID");
-                            int coupleid = response.getInt("coupleID");
-                                //check xem là người dùng mới hay cũ,người dùng mới sẽ chưa có coupleid => coupleid= default
-                                if (coupleid == Constant.DEFEAULT_COUPLEID) {
-                                    // người dùng mơi đi đến màn hình ghép cặp
-                                    Intent intent = new Intent(LoginActivity.this, PairingActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    //người dùng cũ đi đến màn hình chính(countDate)
-
-                                    //Lưu thông tin coupleid vào file Shared
-                                    SharedPreferences.Editor editor = login.edit();
-                                    editor.putInt(Constant.COUPLE_ID_SHARED, coupleid);
-                                    editor.putInt(Constant.MY_USERID_SHARED, userId);
-                                    editor.commit();
-
-                                    //chuyển màn hình
-                                    Intent intent = new Intent(LoginActivity.this, CountDateActivity.class);
-                                    startActivity(intent);
-                                }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(LoginActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-                        }
-
+                    try {
+                        int userId = response.getInt("userID");
+                        int coupleid = response.getInt("coupleID");
+                        checkToGoActivity(coupleid,userId);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
-                    }
+
                 }
-        );
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(LoginActivity.this, "Sai Tên Đăng Nhập Hoặc Mật Khẩu", Toast.LENGTH_SHORT).show();
+                }
+            });
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+
+    }
+
+    private void checkToGoActivity(int coupleid,int userId){
+        //check xem là người dùng mới hay cũ,người dùng mới sẽ chưa có coupleid => coupleid= default
+        if (coupleid == Constant.DEFEAULT_COUPLEID) {
+            // người dùng mơi đi đến màn hình ghép cặp
+            Intent intent = new Intent(LoginActivity.this, PairingActivity.class);
+            startActivity(intent);
+        } else {
+            //người dùng cũ đi đến màn hình chính(countDate)
+
+            //Lưu thông tin coupleid vào file Shared
+            SharedPreferences.Editor editor = login.edit();
+            editor.putInt(Constant.COUPLE_ID_SHARED, coupleid);
+            editor.putInt(Constant.MY_USERID_SHARED, userId);
+            editor.commit();
+
+            //chuyển màn hình
+            Intent intent = new Intent(LoginActivity.this, CountDateActivity.class);
+            startActivity(intent);
+        }
     }
 }
 
-//    private void Login(String url) {
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                            Toast.makeText(LoginActivity.this, "login thanh cong", Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(LoginActivity.this, "login that bai", Toast.LENGTH_SHORT).show();
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params=new HashMap<String,String>();
-//                params.put("gmail",email);
-//                params.put("password",password);
-//                return params;
-//            }
-//        };
-//                RequestQueue requestQueue=Volley.newRequestQueue(this);
-//            requestQueue.add(stringRequest);
-//    }
 
 
 //    Button regGet = (Button) findViewById(R.id.btnRegisterGet);

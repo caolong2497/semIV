@@ -6,6 +6,8 @@
 package service;
 
 import Common.Constant;
+import Common.Utils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.CoupleDAO;
@@ -13,8 +15,7 @@ import dao.UserInfoDAO;
 import entity.Couple;
 import entity.UserInfo;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +24,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+
 import javax.ws.rs.core.MediaType;
+
 import model.DetailCoupleInfor_Model;
+import model.result_model;
 
 /**
  *
@@ -53,15 +57,24 @@ public class CoupleService {
         String result = son.toJson(bl);
         return result;
     }
-//    
 
+    /**
+     *
+     * @param couple
+     * @return "0" thành công "1" thất bại
+     */
     @POST
-    @Path(value = "/updateCouple")
+    @Path(value = "/updatecoupleimage")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String updateCouple(Couple couple) {
-        Boolean bl = new CoupleDAO().updateCouple(couple);
+    public String updateCoupleImage(Couple couple) {
+        result_model result_object = new result_model();
+        String message = Constant.FALSE;
+        if (new CoupleDAO().updateCoupleImage(couple)) {
+            message = Constant.TRUE;
+        }
+        result_object.setResult(message);
         Gson son = new Gson();
-        String result = son.toJson(bl);
+        String result = son.toJson(result_object);
         return result;
     }
 
@@ -116,27 +129,21 @@ public class CoupleService {
         String result = son.toJson(detailCoupleInfor_Model);
         return result;
     }
+
     /**
-     * 
+     *
      * @param coupleid mã couple muốn cập nhật
      * @param startDate ngày start mới
-     * @return  "0" update thành công
-     *          "1" update thất bại
-     */ 
+     * @return "0" update thành công "1" update thất bại
+     */
     @GET
     @Path(value = "/updateStartDate/{coupleid}/{startdate}")
     @Consumes(MediaType.APPLICATION_JSON)
     public String updateStartDate(@PathParam("coupleid") String coupleid, @PathParam("startdate") String startDate) {
-        try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            Date date = simpleDateFormat.parse(startDate);
-            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-            boolean result = new CoupleDAO().updateStartDate(Integer.parseInt(coupleid), sqlDate);
-            if (result) {
-                return Constant.TRUE;
-            }
-        } catch (ParseException ex) {
-            Logger.getLogger(CoupleService.class.getName()).log(Level.SEVERE, null, ex);
+        java.sql.Date sqlDate = Utils.StringToSQLDate(startDate);
+        boolean result = new CoupleDAO().updateStartDate(Integer.parseInt(coupleid), sqlDate);
+        if (result) {
+            return Constant.TRUE;
         }
         return Constant.FALSE;
     }

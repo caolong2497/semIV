@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "848876036794",
+    "firebase_url": "https://coupleapp-f5251.firebaseio.com",
+    "project_id": "coupleapp-f5251",
+    "storage_bucket": "coupleapp-f5251.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848876036794:android:ecf7706edb615dbe",
+        "android_client_info": {
+          "package_name": "couple.coupleapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848876036794-i6ti7h6ei05kbdgcvf548ip7d2gjo3cq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3AzUBaq8i4tCKCXTW896IOVPKcmU5wFQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

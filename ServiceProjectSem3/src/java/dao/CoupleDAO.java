@@ -130,6 +130,29 @@ public class CoupleDAO {
         return false;
     }
 
+    public Boolean updateCoupleImage(Couple couple) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            String str = "update Couple c set c.image=:imagelink where c.coupleID =:coupleID";
+            Query query = session.createQuery(str);
+            query.setParameter("coupleID", couple.getCoupleID());
+            query.setParameter("imagelink", couple.getImage());
+            int i = query.executeUpdate();
+            session.getTransaction().commit();
+            if (i > 0) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return false;
+    }
+
 //    public static void main(String[] args) {
 //        String date = "05-01-2019";
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");

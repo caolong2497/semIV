@@ -153,14 +153,14 @@ public class UserInfoDAO {
         return null;
     }
     
-    public UserInfo getUserInfoByIDAndPassword(String userid, String password) {
+    public UserInfo getUserInfoByIDAndPassword(int userid, String password) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         UserInfo p = null;
         try {
             session.beginTransaction();
             Query query = session.createQuery("from UserInfo where userID= :userID and password = :password");
-            query.setParameter("userID", Integer.parseInt(userid));
+            query.setParameter("userID", userid);
             query.setParameter("password", password);
             p = (UserInfo) query.uniqueResult();
             session.getTransaction().commit();

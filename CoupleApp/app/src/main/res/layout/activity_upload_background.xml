@@ -26,7 +26,14 @@
         android:textStyle="bold"
 
         />
-
+    <ImageButton
+        android:id="@+id/image_save"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/icon_save" />
     <LinearLayout
         android:id="@+id/uploadbackground_open"
         android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package couple.coupleapp.Common;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,20 +11,37 @@ public class Validate {
      *
      * @param email tên đăng nhập
      * @param password mật khẩu đăng nhập
-     * @return Danh sách lỗi ,nếu không có lỗi trả về mảng rỗng
+     * @return Thông tin lỗi ,không lỗi trả về rỗng;
      */
-    public static boolean validateLogin(String email, String password) {
-
-        if (!checkIsEmpty(email) && !checkIsEmpty(password)) {
-            if(checkFormat(email,Constant.REGEX_EMAIL)) {
-                return true;
-            }
+    public static String validateLogin(String email, String password) {
+            String message="";
+        if (checkIsEmpty(email)||checkIsEmpty(password)) {
+            message="Email và Mật Khẩu không được để trống";
+        }else if (!checkLength(password,6,20)){
+            message="Mật khẩu không được nhỏ hơn 6 và lớn hơn 20 kí tự";
+        }else if (!checkLength(email,6,100)){
+            message="Email không được nhỏ hơn 6 và lớn hơn 50 kí tự";
+        }else if(!checkFormat(email,Constant.REGEX_EMAIL)){
+            message="Email không đúng định dạng";
         }
 
-        return false;
-
+        return message;
     }
 
+    /**
+     * check độ dài
+     * @param value chuỗi cần check độ dài
+     * @param minlength độ dài tối tiểu
+     * @param maxlength độ dài tối đa
+     * @return true ,false
+     */
+    public static boolean checkLength(String value,int minlength,int maxlength){
+        int length=value.length();
+        if(minlength<=length&&length<=maxlength){
+            return true;
+        }
+        return false;
+    }
     /**
      * kiểm tra format của value với biểu thức chính quy regex
      *
