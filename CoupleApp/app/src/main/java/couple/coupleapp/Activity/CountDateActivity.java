@@ -43,12 +43,14 @@ public class CountDateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_count_date);
         anhxa();
         init();
+        intent=getIntent();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CountdateFragment fragmentC = new CountdateFragment();
         fragmentTransaction.replace(R.id.frame_content, fragmentC);
         fragmentTransaction.commit();
     }
+
 
     private void init() {
         lastItemSelected = R.id.home_menu;

@@ -2,9 +2,11 @@ package couple.coupleapp.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.MenuItem;
@@ -16,8 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import couple.coupleapp.Activity.CountDateActivity;
+import couple.coupleapp.Activity.CreateMemoryActivity;
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
 
@@ -71,6 +81,7 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
         if(Constant.STATE_IMAGE_DEFAULT.equals(linkimage)){
             myViewHolder.imagepost.setVisibility(View.GONE);
         }else{
+            myViewHolder.imagepost.setVisibility(View.VISIBLE);
             Picasso.get().load(list.get(position).getImage()).into(myViewHolder.imagepost);
         }
         myViewHolder.caption.setText(list.get(position).getCaption());
@@ -113,15 +124,41 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
             int id = item.getItemId();
             switch (id) {
                 case R.id.menu_edit:
-                    //code something
+                    Intent intent =new Intent(getContext(),CreateMemoryActivity.class);
+                    intent.putExtra("memoryid",list.get(position).getMemoryId());
+                    getContext().startActivity(intent);
                     break;
                 case R.id.menu_delete:
-                    //code somthing
+                    deleteMemory(position);
                     break;
                 default:
                     break;
             }
             return false;
         }
+    }
+    private void deleteMemory(final int position){
+        int memoryid=list.get(position).getMemoryId();
+        String url=Constant.URL_HOSTING+Constant.URL_DEL_MEMORY+"/"+memoryid;
+        Log.e("hello", "deleteMemory: "+url );
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (Constant.RESULT_TRUE.equals(response)) {
+                    list.remove(position);
+                    notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "Có lỗi xảy ra,thử lại sau", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "Có lỗi xảy ra,thử lại sau", Toast.LENGTH_SHORT).show();
+            }
+        }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
     }
 }

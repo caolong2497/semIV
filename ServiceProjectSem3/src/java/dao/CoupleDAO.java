@@ -5,14 +5,9 @@
  */
 package dao;
 
-import Common.Constant;
 import entity.Couple;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -118,8 +113,10 @@ public class CoupleDAO {
             query.setParameter("coupleID", coupleID);
             query.setParameter("startdate", startdate);
             int i = query.executeUpdate();
-            session.getTransaction().commit();
-            return true;
+            if (i > 0) {
+                session.getTransaction().commit();
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();

@@ -7,6 +7,7 @@ package dao;
 
 import Common.Utils;
 import entity.Memory;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import model.Memory_Model;
@@ -55,17 +56,24 @@ public class MemoryDAO {
         return false;
     }
 
-    public Boolean updateMemory(Memory memory) {
+    public Boolean updateMemory(int memoryId, String caption, Date time) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
-            session.update(memory);
-            session.getTransaction().commit();
-            session.close();
-            return true;
+            String sql = "update Memory m set m.caption=:caption , m.time=:time where m.memoryId =:memoryId";
+            Query query = session.createQuery(sql);
+            query.setParameter("memoryId", memoryId);
+            query.setParameter("caption", caption);
+            query.setParameter("time", time);
+            int i = query.executeUpdate();
+            if (i > 0) {
+                session.getTransaction().commit();
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return false;
@@ -75,17 +83,20 @@ public class MemoryDAO {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
+            Query query2 = session.createQuery("delete from Comment where memoryId= :memoryId");
+            query2.setParameter("memoryId", memoryId);
+            query2.executeUpdate();
             Query query = session.createQuery("delete from Memory where memoryId= :memoryId");
             query.setParameter("memoryId", memoryId);
             int i = query.executeUpdate();
-            session.getTransaction().commit();
-            session.close();
             if (i > 0) {
+                session.getTransaction().commit();
                 return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return false;

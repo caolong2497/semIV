@@ -9,13 +9,13 @@ package model;
  *
  * @author Long
  */
-public class result_model {
+public class Result_model {
     String result;
 
-    public result_model() {
+    public Result_model() {
     }
 
-    public result_model(String result) {
+    public Result_model(String result) {
         this.result = result;
     }
 

@@ -28,7 +28,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import model.DetailCoupleInfor_Model;
-import model.result_model;
+import model.Result_model;
 
 /**
  *
@@ -67,7 +67,7 @@ public class CoupleService {
     @Path(value = "/updatecoupleimage")
     @Consumes(MediaType.APPLICATION_JSON)
     public String updateCoupleImage(Couple couple) {
-        result_model result_object = new result_model();
+        Result_model result_object = new Result_model();
         String message = Constant.FALSE;
         if (new CoupleDAO().updateCoupleImage(couple)) {
             message = Constant.TRUE;

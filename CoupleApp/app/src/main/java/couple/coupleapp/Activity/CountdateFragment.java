@@ -83,6 +83,9 @@ public class CountdateFragment extends Fragment {
         link_myAvatar="";
         link_partnerAvatar="";
     }
+
+
+
     private void anhxa() {
         result_date = 0;
         countDate = (TextView) view.findViewById(R.id.count_date);

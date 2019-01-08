@@ -18,7 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import model.ChangePass_Model;
 import model.Login_Model;
-import model.result_model;
+import model.Result_model;
 
 /**
  *
@@ -53,7 +53,7 @@ public class UserInforService {
     @Path(value = "/changepass")
     @Consumes(MediaType.APPLICATION_JSON)
     public String changePassword(ChangePass_Model model) {
-        result_model result_object=new result_model();
+        Result_model result_object=new Result_model();
         UserInfoDAO uidao = new UserInfoDAO();
         String kq=Constant.FALSE;  //1
         UserInfo ui = uidao.getUserInfoByIDAndPassword(model.getUserid(), model.getCurrentpass());

@@ -43,6 +43,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,13 +73,22 @@ public class CreateMemoryActivity extends AppCompatActivity {
     String url_create_memory;
     String str_caption, str_createDate, linkImage;
     int flag_image; //=0:không có ảnh được chọn, =1 có ảnh được chọn
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_memory);
         anhxa();
         init();
+
+        clear_image_btn.setVisibility(View.GONE);
+        Intent intent = getIntent();
+        final int id = intent.getIntExtra("memoryid", 0);
+        if (id != 0) {
+            getMemoryById(id);
+            open_option_upload.setVisibility(View.GONE);
+        } else {
+            //trang thái create chưa có ảnh ẩn nút clear ảnh
+        }
         dateofMemory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,15 +104,20 @@ public class CreateMemoryActivity extends AppCompatActivity {
         open_option_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialogOptionUpload();
+                    showDialogOptionUpload();
             }
         });
         clear_image_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //gán flag = 0 thể hiện trạng thái memory đang k có ảnh
                 flag_image = 0;
+                //set ảnh về nền null
                 imageOfMemory.setImageResource(R.drawable.icon_picture_2);
                 imageOfMemory.setScaleType(ImageView.ScaleType.CENTER);
+
+                //ẩn nút xóa ảnh
+                clear_image_btn.setVisibility(View.GONE);
             }
         });
         memory_save_btn.setOnClickListener(new View.OnClickListener() {
@@ -110,13 +125,21 @@ public class CreateMemoryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 str_caption = caption.getText().toString();
                 str_createDate = dateofMemory.getText().toString();
-                if(flag_image==0){
-                    createMemory(url_create_memory);
-                }else{
-                    uploadimage();
+                if (id == 0) {
+                    if ("".equals(str_caption) && flag_image == 0) {
+                        Toast.makeText(CreateMemoryActivity.this, "Hãy nhập nội dung cho kỉ niệm", Toast.LENGTH_SHORT).show();
+                    } else {
 
+                        if (flag_image == 0) {
+                            createMemory(url_create_memory);
+                        } else {
+                            uploadimage();
+
+                        }
+                    }
+                } else {
+                    updateMemory(id);
                 }
-
             }
         });
     }
@@ -232,6 +255,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     imageOfMemory.setImageBitmap(img);
                     imageOfMemory.setScaleType(ImageView.ScaleType.FIT_XY);
                     flag_image = 1;
+                    clear_image_btn.setVisibility(View.VISIBLE);
                 }
                 break;
             case REQUEST_CODE_ALBUM:
@@ -240,6 +264,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     imageOfMemory.setImageURI(uri);
                     imageOfMemory.setScaleType(ImageView.ScaleType.FIT_XY);
                     flag_image = 1;
+                    clear_image_btn.setVisibility(View.VISIBLE);
                 }
                 break;
         }
@@ -273,7 +298,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         linkImage = uri.toString();
-                        Log.e("memory", "link image: "+linkImage );
+                        Log.e("memory", "link image: " + linkImage);
                         createMemory(url_create_memory);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -295,10 +320,10 @@ public class CreateMemoryActivity extends AppCompatActivity {
 
         JSONObject postparams = new JSONObject();
         try {
-            Log.e("uploadDB", "url : "+linkImage );
+            Log.e("uploadDB", "url : " + linkImage);
             //check nếu memory không có ảnh thì gán giá trị mặc định
-            if(flag_image==0){
-                linkImage=Constant.STATE_IMAGE_DEFAULT;
+            if (flag_image == 0) {
+                linkImage = Constant.STATE_IMAGE_DEFAULT;
             }
             //set variable to post
             postparams.put("image", linkImage);
@@ -315,7 +340,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                             Toast.makeText(CreateMemoryActivity.this, "Tạo kỉ niệm thành công", Toast.LENGTH_SHORT).show();
 
                             // nếu tạo kỉ niệm thành công quay về trang timeline
-                            onBackPressed();
+                            goToTimelineFragment();
                         } else {
 
                             Toast.makeText(CreateMemoryActivity.this, "Có lỗi xảy ra, thử lại sau", Toast.LENGTH_SHORT).show();
@@ -341,7 +366,96 @@ public class CreateMemoryActivity extends AppCompatActivity {
         }
     }
 
-    private void goToTimelineFragment(){
+
+    /**
+     * cập nhật thông tin memory
+     *
+     * @param memoryId mã memory
+     */
+    private void updateMemory(int memoryId) {
+        String url = Constant.URL_HOSTING + Constant.URL_UPDATE_MEMORY;
+        JSONObject postparams = new JSONObject();
+        try {
+            //set variable to post
+            postparams.put("memoryId", memoryId);
+            postparams.put("time", str_createDate);
+            postparams.put("caption", str_caption);
+            JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, postparams, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    try {
+                        String result = response.getString("result");
+                        if (Constant.RESULT_TRUE.equals(result)) {
+                            Toast.makeText(CreateMemoryActivity.this, "update kỉ niệm thành công", Toast.LENGTH_SHORT).show();
+
+                            // nếu tạo kỉ niệm thành công quay về trang timeline
+                            onBackPressed();
+                        } else {
+                            Toast.makeText(CreateMemoryActivity.this, "Có lỗi xảy ra, thử lại sau", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("memmory", "onResponse: Lỗi json");
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(CreateMemoryActivity.this, "Lỗi server thử lại sau", Toast.LENGTH_SHORT).show();
+                }
+            });
+            //đẩy request
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param memoryid id của kỉ niệm
+     */
+    private void getMemoryById(int memoryid) {
+
+        String url = Constant.URL_HOSTING + Constant.URL_GET_MEMORY_BYID + "/" + memoryid;
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+                    String res_caption = response.getString("caption");
+                    String res_imagelink = response.getString("image");
+                    String res_time = response.getString("time");
+                    caption.setText(res_caption);
+                    dateofMemory.setText(res_time);
+                    if (!Constant.STATE_IMAGE_DEFAULT.equals(res_imagelink)) {
+                        Picasso.get().load(res_imagelink).into(imageOfMemory);
+                        imageOfMemory.setScaleType(ImageView.ScaleType.FIT_XY);
+                        clear_image_btn.setVisibility(View.VISIBLE);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("memmory", "onResponse: Lỗi json");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(CreateMemoryActivity.this, "Lỗi Load memory thử lại sau", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //đẩy request
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+    private void goToTimelineFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         TimelineFragment timelineFragment = new TimelineFragment();
