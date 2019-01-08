@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
 
 import java.util.ArrayList;
@@ -54,12 +57,24 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
         } else {
             myViewHolder = (MyViewHolder) view.getTag();
         }
-        myViewHolder.avatar.setImageResource(R.drawable.avatar_boy);
-        myViewHolder.name.setText(list.get(position).getName());
         myViewHolder.date.setText(list.get(position).getDate());
-        myViewHolder.imagepost.setImageResource(R.drawable.backgroundlove);
+
+        //check xem ai la nguoi dang memory
+        if(list.get(position).getUserid()==Constant.MYSELF.getUserid()){
+            myViewHolder.avatar.setImageDrawable(Constant.MYSELF.getAvatar());
+            myViewHolder.name.setText(Constant.MYSELF.getName());
+        }else{
+            myViewHolder.avatar.setImageDrawable(Constant.PARTNER.getAvatar());
+            myViewHolder.name.setText(Constant.PARTNER.getName());
+        }
+        String linkimage=list.get(position).getImage();
+        if(Constant.STATE_IMAGE_DEFAULT.equals(linkimage)){
+            myViewHolder.imagepost.setVisibility(View.GONE);
+        }else{
+            Picasso.get().load(list.get(position).getImage()).into(myViewHolder.imagepost);
+        }
         myViewHolder.caption.setText(list.get(position).getCaption());
-        myViewHolder.countCmt.setText(list.get(position).getCountcommnet() + "");
+        myViewHolder.countCmt.setText(list.get(position).getCountcommnet() + " Comments");
         ImageButton timeline_option_btn = (ImageButton) view.findViewById(R.id.timeline_option);
         timeline_option_btn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("RestrictedApi")
@@ -81,6 +96,7 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
     private static class MyViewHolder {
         TextView name, date, caption, countCmt;
         ImageView imagepost;
+
         CircleImageView avatar;
 
     }
@@ -97,10 +113,10 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
             int id = item.getItemId();
             switch (id) {
                 case R.id.menu_edit:
-                    Toast.makeText(mcontext, "choise edit" + list.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    //code something
                     break;
                 case R.id.menu_delete:
-                    Toast.makeText(mcontext, "choise remove" + list.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    //code somthing
                     break;
                 default:
                     break;

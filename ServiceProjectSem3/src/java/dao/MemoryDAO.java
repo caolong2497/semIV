@@ -5,17 +5,25 @@
  */
 package dao;
 
+import Common.Utils;
 import entity.Memory;
+import java.util.ArrayList;
 import java.util.List;
+import model.Memory_Model;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.type.DateType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 
 /**
  *
  * @author chinam
  */
 public class MemoryDAO {
-    public List<Memory> getMemorys(){
+
+    public List<Memory> getMemorys() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -30,8 +38,8 @@ public class MemoryDAO {
         }
         return null;
     }
-    
-    public Boolean addMemory(Memory memory){
+
+    public Boolean addMemory(Memory memory) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -46,8 +54,8 @@ public class MemoryDAO {
         }
         return false;
     }
-    
-    public Boolean updateMemory(Memory memory){
+
+    public Boolean updateMemory(Memory memory) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -62,8 +70,8 @@ public class MemoryDAO {
         }
         return false;
     }
-    
-    public Boolean deleteMemory(int memoryId){
+
+    public Boolean deleteMemory(int memoryId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -72,8 +80,9 @@ public class MemoryDAO {
             int i = query.executeUpdate();
             session.getTransaction().commit();
             session.close();
-            if(i>0)
+            if (i > 0) {
                 return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
@@ -81,8 +90,8 @@ public class MemoryDAO {
         }
         return false;
     }
-    
-    public Memory getMemoryById(int memoryId){
+
+    public Memory getMemoryById(int memoryId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Memory p = null;
         try {
@@ -91,13 +100,57 @@ public class MemoryDAO {
             query.setParameter("memoryId", memoryId);
             p = (Memory) query.uniqueResult();
             session.getTransaction().commit();
-            session.close();
             return p;
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return null;
     }
+
+    public List<Memory_Model> getMemoryByCoupleId(int coupleid) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Memory_Model> listMemorys = new ArrayList<Memory_Model>();
+        try {
+            session.beginTransaction();
+            SQLQuery query = session.createSQLQuery("select M.memoryId as memoryId,M.image as image,M.time as timepost,\n"
+                    + "M.caption as caption,ISNULL(C.countComment,0) as totalComment,M.userId as userId\n"
+                    + " from tbl_memory M left join\n"
+                    + "(select memoryId,count(commentId) as countComment from tbl_comment  group by memoryId ) C\n"
+                    + "on M.memoryId = C.memoryId where userId in (select U.userid from tbl_userInfor U where U.coupleID=:coupleid)\n"
+                    + "order by timepost desc ,memoryId desc")
+                    .addScalar("memoryId", new IntegerType())
+                    .addScalar("image", new StringType())
+                    .addScalar("timepost", new DateType())
+                    .addScalar("caption", new StringType())
+                    .addScalar("totalComment", new IntegerType())
+                    .addScalar("userId", new IntegerType());
+            query.setParameter("coupleid", coupleid);
+            List<Object[]> rows = query.list();
+            for (Object[] row : rows) {
+                Memory_Model memory = new Memory_Model();
+                memory.setMemoryId(Integer.parseInt(row[0].toString()));
+                memory.setImage(row[1].toString());
+                String time = Utils.convertFormatStringDate(row[2].toString(), "yyyy-MM-dd", "dd/MM/yyyy");
+                memory.setTime(time);
+                memory.setCaption(row[3].toString());
+                memory.setCountComment(Integer.parseInt(row[4].toString()));
+                memory.setUserId(Integer.parseInt(row[5].toString()));
+                listMemorys.add(memory);
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return listMemorys;
+    }
+//
+//    public static void main(String[] args) {
+//            System.out.println(new MemoryDAO().getMemoryByCoupleId(1));
+//    }
 }

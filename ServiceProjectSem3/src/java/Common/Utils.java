@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class Utils {
     /**
      * convert string to sqldate
-     * @param str_Date chuỗi ngày tháng năm định dạng dd-MM-yyyy
+     * @param str_Date chuỗi ngày tháng năm định dạng dd/MM/yyyy
      * @return đối tượng java.sql.Date
      * @throws ParseException 
      */
@@ -33,5 +33,22 @@ public class Utils {
             Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sqlDate;
+    }
+    /**
+     * convert dinh dang chuoi ngay thang nam
+     * @param time chuoi time
+     * @param oldFormat format hien tai
+     * @param newFormat format mong muon
+     * @return chuoi ngay thang nam da duoc format lai
+     */
+    public static String convertFormatStringDate(String time,String oldFormat,String newFormat){
+        String ResultDate=null;
+        try {
+            Date date1=new SimpleDateFormat(oldFormat).parse(time);  
+            ResultDate =  new SimpleDateFormat(newFormat).format(date1);
+        } catch (ParseException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ResultDate;
     }
 }

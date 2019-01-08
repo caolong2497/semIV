@@ -47,6 +47,7 @@ Contributor(s):
     <property name="hibernate.connection.password">Long123$</property>
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.current_session_context_class">thread</property>
+    <property name="hibernate.dialect">dao.SQlServerDBDialect</property>
     <mapping class="entity.Couple"/>
     <mapping class="entity.UserInfo"/>
     <mapping class="entity.Chat"/>

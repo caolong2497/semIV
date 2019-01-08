@@ -84,12 +84,12 @@ public class MemoryService {
 //    
 
     @GET
-    @Path(value = "/getMemory/{memoryID}")
+    @Path(value = "/getMemoryByCoupleId/{coupleId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String getMemoryById(@PathParam("memoryID") Integer memoryId) {
-        Memory c = new MemoryDAO().getMemoryById(memoryId);
+    public String getMemoryByCoupleId(@PathParam("coupleId") Integer coupleId) {
+        List<Memory_Model> list = new MemoryDAO().getMemoryByCoupleId(coupleId);
         Gson son = new Gson();
-        String result = son.toJson(c);
+        String result = son.toJson(list);
         return result;
     }
 }

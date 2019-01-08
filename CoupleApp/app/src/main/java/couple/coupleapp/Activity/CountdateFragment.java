@@ -41,6 +41,7 @@ import java.util.Date;
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
+import couple.coupleapp.entity.UserComon;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CountdateFragment extends Fragment {
@@ -123,6 +124,8 @@ public class CountdateFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+
+                            //Lấy thông tin từ response
                             Constant.STARTDATE = response.getString("start");
                             link_image_background=response.getString("coupleImage");
                             str_name=response.getString("myname");
@@ -130,16 +133,30 @@ public class CountdateFragment extends Fragment {
                             partner_id=response.getInt("partneruserID");
                             link_myAvatar=response.getString("myimage");
                             link_partnerAvatar=response.getString("partnerimage");
-                            myName.setText(str_name);
 
+                            //set hiển thị tên
+                            myName.setText(str_name);
+                            //hiển thị tên partner lên activity
+                            partnerName.setText(str_partnername);
+                            //Lấy tổng số ngày yêu
+                            result_date = Utils.countDate(Constant.STARTDATE);
+                            //Hiển thị tổng số ngày lên acitivity
+                            countDate.setText(result_date + "");
                             //check xem link ảnh trên db là mặc định hay đã được người dùng thay đổi
                             //nếu link ảnh đã được update thì set ảnh là ảnh load từ link
                             if(!Constant.STATE_IMAGE_DEFAULT.equals(link_myAvatar)){
                                 Picasso.get().load(link_myAvatar).into(myAvatar);
                             }
+
                             if(!Constant.STATE_IMAGE_DEFAULT.equals(link_partnerAvatar)){
                                 Picasso.get().load(link_partnerAvatar).into(partnerAvatar);
                             }
+
+                            //khởi tạo đối tượng User static
+                            Constant.MYSELF=new UserComon(Constant.MY_USER_ID,str_name,myAvatar.getDrawable());
+                            Constant.PARTNER=new UserComon(partner_id,str_partnername,partnerAvatar.getDrawable());
+
+
                             if(!Constant.STATE_IMAGE_DEFAULT.equals(link_image_background)){
 
                                 Picasso.get().load(link_image_background).into(image, new Callback() {
@@ -147,6 +164,7 @@ public class CountdateFragment extends Fragment {
                                     public void onSuccess() {
                                         //nếu thành công thì set source cho background từ imageview
                                         countdate_background.setBackgroundDrawable(image.getDrawable());
+
                                     }
 
                                     @Override
@@ -157,12 +175,7 @@ public class CountdateFragment extends Fragment {
                                 });
                             }
 
-                            //hiển thị tên partner lên activity
-                            partnerName.setText(str_partnername);
-                            //Lấy tổng số ngày yêu
-                            result_date = Utils.countDate(Constant.STARTDATE);
-                            //Hiển thị tổng số ngày lên acitivity
-                            countDate.setText(result_date + "");
+
                         } catch (JSONException e) {
                             Log.e("countdate", "exceptions" );
                         }

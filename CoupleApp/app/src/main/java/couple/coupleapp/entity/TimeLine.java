@@ -1,49 +1,31 @@
 package couple.coupleapp.entity;
 
+
 public class TimeLine {
-    private int id;
-    private String avatar;
-    private String name;
+    private int memoryId;
     private String date;
     private String image;
     private String caption;
     private int countcommnet;
-
+    private int userid;
     public TimeLine() {
     }
 
-    public TimeLine(int id, String avatar, String name, String date, String image, String caption, int countcommnet) {
-        this.id = id;
-        this.avatar = avatar;
-        this.name = name;
+    public TimeLine(int memoryId, String date, String image, String caption, int countcommnet, int userid) {
+        this.memoryId = memoryId;
         this.date = date;
         this.image = image;
         this.caption = caption;
         this.countcommnet = countcommnet;
+        this.userid = userid;
     }
 
-    public int getId() {
-        return id;
+    public int getMemoryId() {
+        return memoryId;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setMemoryId(int memoryId) {
+        this.memoryId = memoryId;
     }
 
     public String getDate() {
@@ -76,5 +58,13 @@ public class TimeLine {
 
     public void setCountcommnet(int countcommnet) {
         this.countcommnet = countcommnet;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 }

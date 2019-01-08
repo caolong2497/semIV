@@ -1,5 +1,8 @@
 package couple.coupleapp.Common;
 
+import couple.coupleapp.entity.UserComon;
+import couple.coupleapp.entity.UserInfor;
+
 public class Constant {
     public static final String REGEX_EMAIL = "^[_A-Za-z0-9-\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     public static final String REGEX_PASS="^[\\\\p{ASCII}\\\\s]*$";
@@ -22,6 +25,8 @@ public class Constant {
 
     //URL MEMORY API
     public static final String URL_CREATE_MEMORY="memory/addMemory";
+    public static final String URL_GETMEMORY_ONCOUPLE="memory/getMemoryByCoupleId";   //link lấy memory theo coupleid
+
 
     public static String STARTDATE = "0";
     public static int PARTNER_ID = 0;
@@ -41,4 +46,7 @@ public class Constant {
     public static final String RESULT_TRUE="0";
     public static final String RESULT_FALSE="1";
     public static final String STATE_IMAGE_DEFAULT="default";
+    //------------------------
+    public static UserComon MYSELF=new UserComon();
+    public static UserComon PARTNER=new UserComon();
 }

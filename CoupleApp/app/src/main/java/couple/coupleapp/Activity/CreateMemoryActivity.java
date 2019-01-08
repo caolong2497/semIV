@@ -296,9 +296,11 @@ public class CreateMemoryActivity extends AppCompatActivity {
         JSONObject postparams = new JSONObject();
         try {
             Log.e("uploadDB", "url : "+linkImage );
+            //check nếu memory không có ảnh thì gán giá trị mặc định
             if(flag_image==0){
                 linkImage=Constant.STATE_IMAGE_DEFAULT;
             }
+            //set variable to post
             postparams.put("image", linkImage);
             postparams.put("time", str_createDate);
             postparams.put("caption", str_caption);
@@ -315,6 +317,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                             // nếu tạo kỉ niệm thành công quay về trang timeline
                             onBackPressed();
                         } else {
+
                             Toast.makeText(CreateMemoryActivity.this, "Có lỗi xảy ra, thử lại sau", Toast.LENGTH_SHORT).show();
                         }
 
@@ -330,6 +333,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     Toast.makeText(CreateMemoryActivity.this, "Lỗi server thử lại sau", Toast.LENGTH_SHORT).show();
                 }
             });
+            //đẩy request
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
