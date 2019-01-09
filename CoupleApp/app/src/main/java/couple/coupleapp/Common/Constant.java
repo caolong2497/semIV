@@ -9,7 +9,7 @@ public class Constant {
     public static final String REGEX_NAME="[a-zA-Z][a-zA-Z0-9_ ]*";
         //home:15247
         //cty:12794
-    public static final String URL_HOSTING = "http://10.0.3.2:12794/ServiceProjectSem3/rest/"; //lưu hosting service
+    public static final String URL_HOSTING = "http://10.0.3.2:15247/ServiceProjectSem3/rest/"; //lưu hosting service
 
     // URL COUPLE API
     public static final String URL_GETCOUPLEBYID = "couple/getCouple/"; //url getcouplebyid
@@ -30,10 +30,12 @@ public class Constant {
     public static final String URL_DEL_MEMORY="memory/deleteMemory";
     public static final String URL_GET_MEMORY_BYID="memory/getMemoryById";
     public static final String URL_UPDATE_MEMORY="memory/updateMemory";
-    public static final String URL_GET_DETAIL_MEMORY="memory/getDetailMemory";
+//    public static final String URL_GET_DETAIL_MEMORY="memory/getDetailMemory";
 
     //URL COMMENT API
     public static final String URL_CREATE_COMMENT="comment/addComment";
+    public static final String URL_GET_COMMENT="comment/getCommentByMemory";
+    public static final String URL_DEL_COMMENT="comment/deleteComment";
 
     public static String STARTDATE = "0";
     public static int PARTNER_ID = 0;

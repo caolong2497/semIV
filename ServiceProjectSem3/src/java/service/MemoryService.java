@@ -108,7 +108,23 @@ public class MemoryService {
         String result = son.toJson(memory);
         return result;
     }
-
+//    @GET
+//    @Path(value = "/getDetailMemory/{memonryId}")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public String getDetailMemory(@PathParam("memonryId") Integer memoryId) {
+//        Memory memory = new MemoryDAO().getMemoryById(memoryId);
+//        List<Comment> list = new CommentDAO().getCommentByMemoryId(memoryId);
+//        List<Comment_Model> list_Comment = new ArrayList<>();
+//        if (!list.isEmpty()) {
+//            for (int i = 0; i < list.size(); i++) {
+//                list_Comment.add(new Comment_Model(list.get(i).getCommentId(), list.get(i).getContent(), list.get(i).getUserId(), list.get(i).getTime()));
+//            }
+//        }
+//        Detail_Memory_Model detailMemory = new Detail_Memory_Model(memory.getMemoryId(), memory.getImage(), memory.getTime(), memory.getCaption(), list_Comment, memory.getUserId());
+//        Gson son = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+//        String result = son.toJson(detailMemory);
+//        return result;
+//    }
     @GET
     @Path(value = "/getMemoryByCoupleId/{coupleId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -119,22 +135,5 @@ public class MemoryService {
         return result;
     }
 
-    @GET
-    @Path(value = "/getDetailMemory/{memonryId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String getDetailMemory(@PathParam("memonryId") Integer memoryId) {
-        Memory memory = new MemoryDAO().getMemoryById(memoryId);
-        List<Comment> list = new CommentDAO().getCommentByMemoryId(memoryId);
-        List<Comment_Model> list_Comment = new ArrayList<>();
-        if (!list.isEmpty()) {
-            for (int i = 0; i < list.size(); i++) {
-                list_Comment.add(new Comment_Model(list.get(i).getCommentId(), list.get(i).getContent(), list.get(i).getUserId(), list.get(i).getTime()));
-            }
-        }
-        Detail_Memory_Model detailMemory = new Detail_Memory_Model(memory.getMemoryId(), memory.getImage(), memory.getTime(), memory.getCaption(), list_Comment, memory.getUserId());
-        Gson son = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
-        String result = son.toJson(detailMemory);
-        return result;
-    }
 
 }

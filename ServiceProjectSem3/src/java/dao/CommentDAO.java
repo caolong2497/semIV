@@ -72,14 +72,14 @@ public class CommentDAO {
             Query query = session.createQuery("delete from Comment where commentID= :commentID");
             query.setParameter("commentID", commentID);
             int i = query.executeUpdate();
-            session.getTransaction().commit();
-            session.close();
             if (i > 0) {
+                session.getTransaction().commit();
                 return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return false;
@@ -106,7 +106,7 @@ public class CommentDAO {
 
     public List<Comment> getCommentByMemoryId(Integer memoryId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Comment> list=null;
+        List<Comment> list = null;
         try {
             session.beginTransaction();
             Query query = session.createQuery("from Comment where memoryId= :memoryId order by time");

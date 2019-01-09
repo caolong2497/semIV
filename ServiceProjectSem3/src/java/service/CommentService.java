@@ -8,6 +8,7 @@ package service;
 import Common.Constant;
 import Common.Utils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dao.CommentDAO;
 import entity.Comment;
 import java.util.List;
@@ -73,9 +74,11 @@ public class CommentService {
     @Consumes(MediaType.APPLICATION_JSON)
     public String deleteComment(@PathParam("commentID") Integer commentID) {
         Boolean c = new CommentDAO().deleteComment(commentID);
-        Gson son = new Gson();
-        String result = son.toJson(c);
-        return result;
+        String message = Constant.FALSE;
+        if (c) {
+            message = Constant.TRUE;
+        }
+        return message;
     }
 //    
 
@@ -86,6 +89,16 @@ public class CommentService {
         Comment c = new CommentDAO().getCommentById(commentID);
         Gson son = new Gson();
         String result = son.toJson(c);
+        return result;
+    }
+
+    @GET
+    @Path(value = "/getCommentByMemory/{memoryId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String getCommentByMemoryId(@PathParam("memoryId") Integer memoryId) {
+        List<Comment> list = new CommentDAO().getCommentByMemoryId(memoryId);
+        Gson son = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+        String result = son.toJson(list);
         return result;
     }
 }
