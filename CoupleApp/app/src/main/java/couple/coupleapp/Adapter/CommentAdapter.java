@@ -1,25 +1,26 @@
 package couple.coupleapp.Adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
-import couple.coupleapp.entity.Comment;
+import couple.coupleapp.entity.Comment_Model;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CommentAdapter extends ArrayAdapter<Comment> {
+public class CommentAdapter extends ArrayAdapter<Comment_Model> {
     Context mcontext;
     int ResId;
-    ArrayList<Comment> list;
-    public CommentAdapter(Context context, int resource,ArrayList<Comment> objects) {
+    List<Comment_Model> list;
+    public CommentAdapter(Context context, int resource,ArrayList<Comment_Model> objects) {
         super(context, resource, objects);
         this.mcontext=context;
         this.ResId=resource;
@@ -43,9 +44,19 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         } else {
             myViewHolder = (MyViewHolder) view.getTag();
         }
-        myViewHolder.avatar.setImageResource(R.drawable.avatar_boy);
-        myViewHolder.username.setText(list.get(position).getUsername());
-        myViewHolder.date.setText(list.get(position).getDate());
+
+        //modify nội dung hiển thị thông tin user
+        Drawable avatar=Constant.MYSELF.getAvatar();
+        String name=Constant.MYSELF.getName();
+        int id=list.get(position).getUserId();
+        if(id!=Constant.MY_USER_ID){
+            avatar=Constant.PARTNER.getAvatar();
+            name=Constant.PARTNER.getName();
+        }
+        //set nội dung lấy được lên màn hình
+        myViewHolder.avatar.setImageDrawable(avatar);
+        myViewHolder.username.setText(name);
+        myViewHolder.date.setText(list.get(position).getTime());
         myViewHolder.content.setText(list.get(position).getContent());
         return view;
     }

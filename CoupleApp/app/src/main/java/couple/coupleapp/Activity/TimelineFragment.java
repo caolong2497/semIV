@@ -64,6 +64,7 @@ public class TimelineFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 intent = new Intent(getContext(), DetailMemoryActivity.class);
+                intent.putExtra("memoryId",list.get(position).getMemoryId());
                 startActivity(intent);
             }
         });

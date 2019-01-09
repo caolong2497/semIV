@@ -70,7 +70,7 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
         myViewHolder.date.setText(list.get(position).getDate());
 
         //check xem ai la nguoi dang memory
-        if(list.get(position).getUserid()==Constant.MYSELF.getUserid()){
+        if(list.get(position).getUserid()==Constant.MY_USER_ID){
             myViewHolder.avatar.setImageDrawable(Constant.MYSELF.getAvatar());
             myViewHolder.name.setText(Constant.MYSELF.getName());
         }else{
@@ -121,18 +121,20 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            int id = item.getItemId();
-            switch (id) {
-                case R.id.menu_edit:
-                    Intent intent =new Intent(getContext(),CreateMemoryActivity.class);
-                    intent.putExtra("memoryid",list.get(position).getMemoryId());
-                    getContext().startActivity(intent);
-                    break;
-                case R.id.menu_delete:
-                    deleteMemory(position);
-                    break;
-                default:
-                    break;
+            if(Constant.MYSELF.getUserid()== list.get(position).getUserid()){
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.menu_edit:
+                        Intent intent =new Intent(getContext(),CreateMemoryActivity.class);
+                        intent.putExtra("memoryid",list.get(position).getMemoryId());
+                        getContext().startActivity(intent);
+                        break;
+                    case R.id.menu_delete:
+                        deleteMemory(position);
+                        break;
+                    default:
+                        break;
+                }
             }
             return false;
         }

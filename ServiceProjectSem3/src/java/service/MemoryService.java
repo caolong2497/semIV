@@ -9,8 +9,11 @@ import Common.Constant;
 import Common.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dao.CommentDAO;
 import dao.MemoryDAO;
+import entity.Comment;
 import entity.Memory;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,6 +21,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import model.Comment_Model;
+import model.Detail_Memory_Model;
 import model.Memory_Model;
 import model.Result_model;
 
@@ -27,7 +32,7 @@ import model.Result_model;
  */
 @Path(value = "/memory")
 public class MemoryService {
-    
+
     //Process for tbl_memory
     @GET
     @Path(value = "/memoris")
@@ -39,8 +44,10 @@ public class MemoryService {
         return data;
     }
 //    
+
     /**
-     *  create memory
+     * create memory
+     *
      * @param model Memory hạng mục time là chuỗi định dạng dd/MM/yyyy
      * @return "0" nếu thành công, "1" nếu thất bại
      */
@@ -48,14 +55,14 @@ public class MemoryService {
     @Path(value = "/addMemory")
     @Consumes(MediaType.APPLICATION_JSON)
     public String AddNewMemory(Memory_Model model) {
-        java.sql.Date createDate=Utils.StringToSQLDate(model.getTime());
-        
-        Memory memory=new Memory(0, model.getImage(), createDate, model.getCaption(), model.getUserId());
-        Result_model result_ob=new Result_model();
-        String message="1";
+        java.sql.Date createDate = Utils.StringToSQLDate(model.getTime());
+
+        Memory memory = new Memory(0, model.getImage(), createDate, model.getCaption(), model.getUserId());
+        Result_model result_ob = new Result_model();
+        String message = "1";
         Boolean bl = new MemoryDAO().addMemory(memory);
-        if(bl){
-            message="0";
+        if (bl) {
+            message = "0";
         }
         result_ob.setResult(message);
         Gson son = new Gson();
@@ -68,12 +75,12 @@ public class MemoryService {
     @Path(value = "/updateMemory")
     @Consumes(MediaType.APPLICATION_JSON)
     public String updateMemory(Memory_Model memory) {
-        Result_model result_model=new Result_model();
-        String message=Constant.FALSE;
+        Result_model result_model = new Result_model();
+        String message = Constant.FALSE;
         java.sql.Date sqlDate = Utils.StringToSQLDate(memory.getTime());
-        Boolean bl = new MemoryDAO().updateMemory(memory.getMemoryId(),memory.getCaption(),sqlDate);
+        Boolean bl = new MemoryDAO().updateMemory(memory.getMemoryId(), memory.getCaption(), sqlDate);
         if (bl) {
-            message=Constant.TRUE;
+            message = Constant.TRUE;
         }
         result_model.setResult(message);
         Gson son = new Gson();
@@ -85,13 +92,13 @@ public class MemoryService {
     @Path(value = "/deleteMemory/{memoryID}")
     public String deleteMemory(@PathParam("memoryID") Integer memoryId) {
         Boolean c = new MemoryDAO().deleteMemory(memoryId);
-        String message=Constant.FALSE;
-        if(c){
-            message=Constant.TRUE;
+        String message = Constant.FALSE;
+        if (c) {
+            message = Constant.TRUE;
         }
         return message;
     }
-//    
+
     @GET
     @Path(value = "/getMemoryById/{memoryId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -101,7 +108,7 @@ public class MemoryService {
         String result = son.toJson(memory);
         return result;
     }
-    
+
     @GET
     @Path(value = "/getMemoryByCoupleId/{coupleId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -111,4 +118,23 @@ public class MemoryService {
         String result = son.toJson(list);
         return result;
     }
+
+    @GET
+    @Path(value = "/getDetailMemory/{memonryId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String getDetailMemory(@PathParam("memonryId") Integer memoryId) {
+        Memory memory = new MemoryDAO().getMemoryById(memoryId);
+        List<Comment> list = new CommentDAO().getCommentByMemoryId(memoryId);
+        List<Comment_Model> list_Comment = new ArrayList<>();
+        if (!list.isEmpty()) {
+            for (int i = 0; i < list.size(); i++) {
+                list_Comment.add(new Comment_Model(list.get(i).getCommentId(), list.get(i).getContent(), list.get(i).getUserId(), list.get(i).getTime()));
+            }
+        }
+        Detail_Memory_Model detailMemory = new Detail_Memory_Model(memory.getMemoryId(), memory.getImage(), memory.getTime(), memory.getCaption(), list_Comment, memory.getUserId());
+        Gson son = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+        String result = son.toJson(detailMemory);
+        return result;
+    }
+
 }

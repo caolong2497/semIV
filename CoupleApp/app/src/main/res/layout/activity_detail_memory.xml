@@ -28,10 +28,9 @@
         android:id="@+id/memory_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/content_comment"
+        android:layout_above="@+id/layout_comment"
         android:layout_below="@+id/detail_back"
-        android:fillViewport="true"
-        >
+        android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/detail_layout"
@@ -154,10 +153,31 @@
 
     </ScrollView>
 
-    <EditText
-        android:id="@+id/content_comment"
+    <LinearLayout
+        android:id="@+id/layout_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:hint="Write Somethings" />
+        android:orientation="horizontal"
+        android:weightSum="9">
+
+        <EditText
+            android:id="@+id/content_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:hint="Write Somethings" />
+
+        <ImageButton
+            android:id="@+id/post_comment"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_send" />
+    </LinearLayout>
+
+
 </RelativeLayout>

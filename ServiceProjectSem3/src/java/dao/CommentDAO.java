@@ -7,6 +7,7 @@ package dao;
 
 import entity.Comment;
 import java.util.List;
+import model.Comment_Model;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -15,7 +16,8 @@ import org.hibernate.Session;
  * @author chinam
  */
 public class CommentDAO {
-    public List<Comment> getComments(){
+
+    public List<Comment> getComments() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -30,8 +32,8 @@ public class CommentDAO {
         }
         return null;
     }
-    
-    public Boolean addComment(Comment comment){
+
+    public Boolean addComment(Comment comment) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -46,8 +48,8 @@ public class CommentDAO {
         }
         return false;
     }
-    
-    public Boolean updateComment(Comment comment){
+
+    public Boolean updateComment(Comment comment) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -62,8 +64,8 @@ public class CommentDAO {
         }
         return false;
     }
-    
-    public Boolean deleteComment(int commentID){
+
+    public Boolean deleteComment(int commentID) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -72,8 +74,9 @@ public class CommentDAO {
             int i = query.executeUpdate();
             session.getTransaction().commit();
             session.close();
-            if(i>0)
+            if (i > 0) {
                 return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
@@ -81,8 +84,8 @@ public class CommentDAO {
         }
         return false;
     }
-    
-    public Comment getCommentById(int commentID){
+
+    public Comment getCommentById(int commentID) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Comment p = null;
         try {
@@ -99,5 +102,23 @@ public class CommentDAO {
             session.close();
         }
         return null;
+    }
+
+    public List<Comment> getCommentByMemoryId(Integer memoryId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Comment> list=null;
+        try {
+            session.beginTransaction();
+            Query query = session.createQuery("from Comment where memoryId= :memoryId order by time");
+            query.setParameter("memoryId", memoryId);
+            list = query.list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return list;
     }
 }
