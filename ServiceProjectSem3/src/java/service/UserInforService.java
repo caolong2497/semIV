@@ -70,28 +70,6 @@ public class UserInforService {
         String result = son.toJson(result_object);
         return result; //1
     }
-//    @POST
-//    @Path(value = "/changepass")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public String changePassword(@PathParam("gmail") String gmail, @PathParam("currentpass") String current_password, @PathParam("newpass") String new_password) {
-//        String message = "";
-//        Boolean result = false;
-//        UserInfoDAO uidao = new UserInfoDAO();
-//        UserInfo ui = uidao.getUserInfoByGmailAndPassword(gmail, current_password);
-//        if (ui == null) {
-//            message = "Mật khẩu hiện tại không đúng";
-//        } else {
-//            ui.setPassword(new_password);
-//            result = uidao.updateUserInfo(ui);
-//            if (result) {
-//                message = "Update mật khẩu thành công";
-//            } else {
-//                message = "Update mật khẩu thất bại";
-//            }
-//
-//        }
-//        return message;
-//    }
 
     @POST
     @Path(value = "/addUser")
@@ -143,6 +121,8 @@ public class UserInforService {
         String result = son.toJson(u);
         return result;
     }
+    
+    
     /**
      * hủy kết nối cặp đôi
      * @param coupleid mã cặp đôi

@@ -38,7 +38,6 @@ public class CommentService {
         String data = son.toJson(listC);
         return data;
     }
-//    
 
     @POST
     @Path(value = "/addComment")
@@ -57,15 +56,20 @@ public class CommentService {
         String result = son.toJson(result_model);
         return result;
     }
-//    
 
     @POST
     @Path(value = "/updateComment")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String updateComment(Comment comment) {
-        Boolean bl = new CommentDAO().updateComment(comment);
+    public String updateComment(Comment model) {
+        Result_model result_object = new Result_model();
+        String message = Constant.FALSE;
+        Boolean bl = new CommentDAO().updateComment(model.getCommentId(), model.getContent());
+        if (bl) {
+            message = Constant.TRUE;
+        }
+        result_object.setResult(message);
         Gson son = new Gson();
-        String result = son.toJson(bl);
+        String result = son.toJson(result_object);
         return result;
     }
 

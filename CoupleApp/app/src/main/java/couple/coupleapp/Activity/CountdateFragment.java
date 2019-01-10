@@ -45,8 +45,8 @@ import couple.coupleapp.entity.UserComon;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CountdateFragment extends Fragment {
-    TextView countDate,myName,partnerName;
-    CircleImageView myAvatar,partnerAvatar;
+    TextView countDate, myName, partnerName;
+    CircleImageView myAvatar, partnerAvatar;
     int partner_id;
     View view;
     long result_date;
@@ -54,16 +54,21 @@ public class CountdateFragment extends Fragment {
     Button update_btn;
     Dialog dialog;
     String url;
-    String str_name,str_partnername,link_myAvatar,link_partnerAvatar;
+    String str_name, str_partnername, link_myAvatar, link_partnerAvatar;
     String link_image_background;
     RelativeLayout countdate_background;
     ImageView image;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_countdate, container, false);
         anhxa();
         init();
+        //check xem có phải hiển thị lần đầu không,nếu không phải lần đầu thì hiển thị trước bằng dữ liệu lưu trong static
+        if (!"0".equals(Constant.STARTDATE)) {
+            intialUI();
+        }
         getData(url);
         //khi click vào ảnh đại diện thì hiển thị dialog
         myAvatar.setOnClickListener(new View.OnClickListener() {
@@ -74,28 +79,45 @@ public class CountdateFragment extends Fragment {
         });
         return view;
     }
-    private void init(){
-        url = Constant.URL_HOSTING + Constant.URL_GET_DETAIL_COUPLE + Constant.MY_USER_ID+"/"+Constant.MY_COUPLE_ID;
-        str_name="";
-        str_partnername="";
-        partner_id=0;
-        link_image_background="";
-        link_myAvatar="";
-        link_partnerAvatar="";
+
+    private void init() {
+        url = Constant.URL_HOSTING + Constant.URL_GET_DETAIL_COUPLE + Constant.MY_USER_ID + "/" + Constant.MY_COUPLE_ID;
+        str_name = "";
+        str_partnername = "";
+        partner_id = 0;
+        link_image_background = "";
+        link_myAvatar = "";
+        link_partnerAvatar = "";
     }
 
+    private void intialUI() {
+        //set hiển thị tên
+        myName.setText(Constant.MYSELF.getName());
+        //hiển thị tên partner lên activity
+        partnerName.setText(Constant.PARTNER.getName());
+        //Lấy tổng số ngày yêu
+        result_date = Utils.countDate(Constant.STARTDATE);
+        //Hiển thị tổng số ngày lên acitivity
+        countDate.setText(result_date + "");
+        //set anh
+        myAvatar.setImageDrawable(Constant.MYSELF.getAvatar());
+        partnerAvatar.setImageDrawable(Constant.PARTNER.getAvatar());
 
+        //set anh bia
+        countdate_background.setBackgroundDrawable(Constant.IMG_BACKGROUND);
+    }
 
     private void anhxa() {
         result_date = 0;
         countDate = (TextView) view.findViewById(R.id.count_date);
         myAvatar = (CircleImageView) view.findViewById(R.id.count_myimg);
-        partnerAvatar=(CircleImageView) view.findViewById(R.id.count_partnerimg);
-        myName=(TextView) view.findViewById(R.id.count_myname);
-        partnerName=(TextView) view.findViewById(R.id.count_partnername);
-        countdate_background=(RelativeLayout) view.findViewById(R.id.background_countdate);
-        image=(ImageView) view.findViewById(R.id.image_holder);
+        partnerAvatar = (CircleImageView) view.findViewById(R.id.count_partnerimg);
+        myName = (TextView) view.findViewById(R.id.count_myname);
+        partnerName = (TextView) view.findViewById(R.id.count_partnername);
+        countdate_background = (RelativeLayout) view.findViewById(R.id.background_countdate);
+        image = (ImageView) view.findViewById(R.id.image_holder);
     }
+
     // hiển thị dialog thông tin người dùng
     private void showDialogUser() {
         dialog = new Dialog(getContext());
@@ -130,12 +152,12 @@ public class CountdateFragment extends Fragment {
 
                             //Lấy thông tin từ response
                             Constant.STARTDATE = response.getString("start");
-                            link_image_background=response.getString("coupleImage");
-                            str_name=response.getString("myname");
-                            str_partnername=response.getString("partnername");
-                            partner_id=response.getInt("partneruserID");
-                            link_myAvatar=response.getString("myimage");
-                            link_partnerAvatar=response.getString("partnerimage");
+                            link_image_background = response.getString("coupleImage");
+                            str_name = response.getString("myname");
+                            str_partnername = response.getString("partnername");
+                            partner_id = response.getInt("partneruserID");
+                            link_myAvatar = response.getString("myimage");
+                            link_partnerAvatar = response.getString("partnerimage");
 
                             //set hiển thị tên
                             myName.setText(str_name);
@@ -147,27 +169,25 @@ public class CountdateFragment extends Fragment {
                             countDate.setText(result_date + "");
                             //check xem link ảnh trên db là mặc định hay đã được người dùng thay đổi
                             //nếu link ảnh đã được update thì set ảnh là ảnh load từ link
-                            if(!Constant.STATE_IMAGE_DEFAULT.equals(link_myAvatar)){
+                            if (!Constant.STATE_IMAGE_DEFAULT.equals(link_myAvatar)) {
                                 Picasso.get().load(link_myAvatar).into(myAvatar);
                             }
 
-                            if(!Constant.STATE_IMAGE_DEFAULT.equals(link_partnerAvatar)){
+                            if (!Constant.STATE_IMAGE_DEFAULT.equals(link_partnerAvatar)) {
                                 Picasso.get().load(link_partnerAvatar).into(partnerAvatar);
                             }
 
                             //khởi tạo đối tượng User static
-                            Constant.MYSELF=new UserComon(Constant.MY_USER_ID,str_name,myAvatar.getDrawable());
-                            Constant.PARTNER=new UserComon(partner_id,str_partnername,partnerAvatar.getDrawable());
+                            Constant.MYSELF = new UserComon(Constant.MY_USER_ID, str_name, myAvatar.getDrawable());
+                            Constant.PARTNER = new UserComon(partner_id, str_partnername, partnerAvatar.getDrawable());
 
-
-                            if(!Constant.STATE_IMAGE_DEFAULT.equals(link_image_background)){
+                            if (!Constant.STATE_IMAGE_DEFAULT.equals(link_image_background)) {
 
                                 Picasso.get().load(link_image_background).into(image, new Callback() {
                                     @Override
                                     public void onSuccess() {
                                         //nếu thành công thì set source cho background từ imageview
                                         countdate_background.setBackgroundDrawable(image.getDrawable());
-
                                     }
 
                                     @Override
@@ -177,10 +197,10 @@ public class CountdateFragment extends Fragment {
                                     }
                                 });
                             }
-
-
+                            //set image static
+                            Constant.IMG_BACKGROUND = image.getDrawable();
                         } catch (JSONException e) {
-                            Log.e("countdate", "exceptions" );
+                            Log.e("countdate", "exceptions");
                         }
                     }
                 },

@@ -1,5 +1,7 @@
 package couple.coupleapp.Common;
 
+import android.graphics.drawable.Drawable;
+
 import couple.coupleapp.entity.UserComon;
 import couple.coupleapp.entity.UserInfor;
 
@@ -36,6 +38,7 @@ public class Constant {
     public static final String URL_CREATE_COMMENT="comment/addComment";
     public static final String URL_GET_COMMENT="comment/getCommentByMemory";
     public static final String URL_DEL_COMMENT="comment/deleteComment";
+    public static final String URL_UPDATE_COMMENT = "comment/updateComment";
 
     public static String STARTDATE = "0";
     public static int PARTNER_ID = 0;
@@ -56,6 +59,7 @@ public class Constant {
     public static final String RESULT_FALSE="1";
     public static final String STATE_IMAGE_DEFAULT="default";
     //------------------------
-    public static UserComon MYSELF=new UserComon();
-    public static UserComon PARTNER=new UserComon();
+    public static UserComon MYSELF;
+    public static UserComon PARTNER;
+    public static Drawable IMG_BACKGROUND;
 }

@@ -64,6 +64,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
     ImageButton close_dialog_btn;
     Button update_btn;
     int MemoryId=0;
+    RequestQueue requestQueue ;
     //    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +109,6 @@ public class DetailMemoryActivity extends AppCompatActivity {
 
     private void loadData(final int memoryid) {
         String url = Constant.URL_HOSTING + Constant.URL_GET_MEMORY_BYID + "/" + memoryid;
-        RequestQueue requestQueue = Volley.newRequestQueue(DetailMemoryActivity.this);
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -199,7 +199,6 @@ public class DetailMemoryActivity extends AppCompatActivity {
                 }
             });
             //đẩy request
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -207,6 +206,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
     }
 
     private void anhxa() {
+        requestQueue= Volley.newRequestQueue(this);
         avatar = (CircleImageView) findViewById(R.id.detail_avatar);
         name = (TextView) findViewById(R.id.detail_name);
         createDate = (TextView) findViewById(R.id.detail_datecreate);
@@ -304,7 +304,6 @@ public class DetailMemoryActivity extends AppCompatActivity {
             }
         }
         );
-        RequestQueue requestQueue = Volley.newRequestQueue(DetailMemoryActivity.this);
         requestQueue.add(stringRequest);
     }
 
@@ -315,9 +314,38 @@ public class DetailMemoryActivity extends AppCompatActivity {
      * @param commentId
      */
     private void updateComment(int commentId){
-
+        String url=Constant.URL_HOSTING+Constant.URL_UPDATE_COMMENT;
+        String content=old_content_comment.getText().toString();
         //load lại list Comment
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("commentId", commentId);
+            jsonBody.put("content", content);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        String kq = response.getString("result");
+                        if (Constant.RESULT_TRUE.equals(kq)) {
+                            loadComment(MemoryId);
+                        }else{
+                            Log.e("comment", "onResponse: update comment false" );
+                        }
+                    } catch (JSONException e) {
+                        Log.e("comment", "onResponse: get json fail" );
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("comment", "onErrorResponse:error server " );
+                }
+            });
 
+            requestQueue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         loadComment(MemoryId);
     }
 
@@ -327,7 +355,6 @@ public class DetailMemoryActivity extends AppCompatActivity {
      */
     private void loadComment(int memoryid) {
         String url = Constant.URL_HOSTING + Constant.URL_GET_COMMENT + "/" + memoryid;
-        RequestQueue requestQueue = Volley.newRequestQueue(DetailMemoryActivity.this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

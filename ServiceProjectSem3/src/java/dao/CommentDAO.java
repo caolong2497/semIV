@@ -49,17 +49,22 @@ public class CommentDAO {
         return false;
     }
 
-    public Boolean updateComment(Comment comment) {
+    public Boolean updateComment(int commentId, String content) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
-            session.update(comment);
-            session.getTransaction().commit();
-            session.close();
-            return true;
+            Query query = session.createQuery("update Comment m set m.content=:content where m.commentId =:commentId");
+            query.setParameter("commentId", commentId);
+            query.setParameter("content", content);
+            int i = query.executeUpdate();
+            if (i > 0) {
+                session.getTransaction().commit();
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return false;

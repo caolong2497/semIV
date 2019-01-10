@@ -54,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
                 String message=Validate.validateLogin(email,password);
                 if("".equals(message)){
                     password=Utils.encodeText(password);
-                    Log.e("login", "password "+password );
                     String url = Constant.URL_HOSTING + Constant.URL_LOGIN ;
                     Login(url,email,password);
                 }else{
