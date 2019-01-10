@@ -50,7 +50,7 @@ public class TimelineFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_timeline, container, false);
         anhxa();
-        getDate(url_getTimeline);
+//        getDate(url_getTimeline);
         add_memory_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +69,12 @@ public class TimelineFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        getDate(url_getTimeline);
+        super.onStart();
     }
 
     private void anhxa() {

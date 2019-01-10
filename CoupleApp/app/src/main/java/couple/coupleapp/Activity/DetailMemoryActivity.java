@@ -63,8 +63,9 @@ public class DetailMemoryActivity extends AppCompatActivity {
     Dialog dialog;
     ImageButton close_dialog_btn;
     Button update_btn;
-    int MemoryId=0;
-    RequestQueue requestQueue ;
+    int MemoryId = 0;
+    RequestQueue requestQueue;
+
     //    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
             Toast.makeText(this, "Có Lỗi xảy ra", Toast.LENGTH_SHORT).show();
         } else {
             loadData(memoryid);
-            MemoryId=memoryid;
+            MemoryId = memoryid;
 
         }
         commentAdapter = new CommentAdapter(this, R.layout.comment_layout, list);
@@ -206,7 +207,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
     }
 
     private void anhxa() {
-        requestQueue= Volley.newRequestQueue(this);
+        requestQueue = Volley.newRequestQueue(this);
         avatar = (CircleImageView) findViewById(R.id.detail_avatar);
         name = (TextView) findViewById(R.id.detail_name);
         createDate = (TextView) findViewById(R.id.detail_datecreate);
@@ -228,13 +229,17 @@ public class DetailMemoryActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
+
+    //bắt sự kiện cho menuContext
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        //lấy id của button người dùng đã chọn
         int id = item.getItemId();
+
         //lấy dối tượng info
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        //lấy thông tin id và nội dung
+        //lấy thông tin id và nội dung từ đối tượng info
         int commentId = list.get(info.position).getCommentId();
         String content = list.get(info.position).getContent();
 
@@ -261,6 +266,8 @@ public class DetailMemoryActivity extends AppCompatActivity {
         update_btn = (Button) dialog.findViewById(R.id.dialog_updateinfor);
         old_content_comment = (EditText) dialog.findViewById(R.id.old_content_comment_edt);
         old_content_comment.setText(content);
+
+        //bắt sự kiện cho các button trong dialog
         //đóng dialog
         close_dialog_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,21 +280,24 @@ public class DetailMemoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //gọi service update nội dung
-
                 updateComment(commentid);
-
+                //đóng dialog
+                dialog.hide();
             }
         });
+
+        //hiển thị dialog
         dialog.show();
     }
 
 
     /**
      * delete Comment
+     *
      * @param commentId
      */
     private void deleteComment(int commentId) {
-        String url=Constant.URL_HOSTING+Constant.URL_DEL_COMMENT+"/"+commentId;
+        String url = Constant.URL_HOSTING + Constant.URL_DEL_COMMENT + "/" + commentId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -308,15 +318,15 @@ public class DetailMemoryActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * update nội dung comment
+     *
      * @param commentId
      */
-    private void updateComment(int commentId){
-        String url=Constant.URL_HOSTING+Constant.URL_UPDATE_COMMENT;
-        String content=old_content_comment.getText().toString();
-        //load lại list Comment
+    private void updateComment(int commentId) {
+        String url = Constant.URL_HOSTING + Constant.URL_UPDATE_COMMENT;
+        String content = old_content_comment.getText().toString();
+        //set object json để post lên server
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("commentId", commentId);
@@ -328,17 +338,17 @@ public class DetailMemoryActivity extends AppCompatActivity {
                         String kq = response.getString("result");
                         if (Constant.RESULT_TRUE.equals(kq)) {
                             loadComment(MemoryId);
-                        }else{
-                            Log.e("comment", "onResponse: update comment false" );
+                        } else {
+                            Log.e("comment", "onResponse: update comment false");
                         }
                     } catch (JSONException e) {
-                        Log.e("comment", "onResponse: get json fail" );
+                        Log.e("comment", "onResponse: get json fail");
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("comment", "onErrorResponse:error server " );
+                    Log.e("comment", "onErrorResponse:error server ");
                 }
             });
 
@@ -351,31 +361,44 @@ public class DetailMemoryActivity extends AppCompatActivity {
 
     /**
      * load comment trong memory
+     *
      * @param memoryid
      */
     private void loadComment(int memoryid) {
+        //khởi tạo link api
         String url = Constant.URL_HOSTING + Constant.URL_GET_COMMENT + "/" + memoryid;
+
+        //tạo đối tượng để yêu cầu nhận 1 jsonarrayobject
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 int countComment = response.length();
+                //hiển thị số lượng comment của memory lên màn hình
                 count_comment_memory.setText(countComment + " Comments");
+
+                //reset lại list
                 list.clear();
+
+                //check lại số lượng comment
                 if (countComment > 0) {
-                        for (int i = 0; i < countComment; i++) {
-                            try {
-
-                                JSONObject object = response.getJSONObject(i);
-
-                                Comment_Model comment = new Comment_Model(object.getInt("commentId"), object.getString("content"), object.getInt("userId"), object.getString("time"));
-                                list.add(comment);
-                                Log.e("loaddetailmemory ", "onResponse: " + object.getString("content"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Log.e("getcomment", "onResponse: lỗi parse json");
-                            }
-                            commentAdapter.notifyDataSetChanged();
+                    //nếu lớn hơn 0 thì lặp để gán lại đối tượng vào list
+                    for (int i = 0; i < countComment; i++) {
+                        try {
+                            //khởi tạo 1 jsonobject gán từ jsonAraay ở phần tử thứ i
+                            JSONObject object = response.getJSONObject(i);
+                            //gán json vào Comment Model
+                            Comment_Model comment = new Comment_Model(object.getInt("commentId"), object.getString("content"), object.getInt("userId"), object.getString("time"));
+                            //add vào list
+                            list.add(comment);
+                            Log.e("loaddetailmemory ", "onResponse: " + object.getString("content"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("getcomment", "onResponse: lỗi parse json");
                         }
+
+                        //reset lại adapter
+                        commentAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         }, new Response.ErrorListener() {

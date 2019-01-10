@@ -88,6 +88,11 @@ public class firstdayActivity extends AppCompatActivity {
         if (Constant.FLAG_STARTDATE == Constant.CONSTANT_UPDATE) {
             //trạng thái update thì lấy ngày bắt đầu là ngày trong DB
             firstday_edit.setText(Constant.STARTDATE);
+            //khởi tạo ngày bắt đầu cho chọn
+            String[] date = Constant.STARTDATE.split("/");
+            day_lastchoise=Integer.parseInt(date[0]);
+            month_lastchoise=Integer.parseInt(date[1]);
+            year_lastchoise=Integer.parseInt(date[2]);
         } else {
             //trạng thái create thì lấy ngày bắt đầu là ngày hiện tại
             firstday_edit.setText(simpleDateFormat.format(cal.getTime()));

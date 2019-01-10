@@ -85,9 +85,6 @@ public class CreateMemoryActivity extends AppCompatActivity {
         final int id = intent.getIntExtra("memoryid", 0);
         if (id != 0) {
             getMemoryById(id);
-            open_option_upload.setVisibility(View.GONE);
-        } else {
-            //trang thái create chưa có ảnh ẩn nút clear ảnh
         }
         dateofMemory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -340,7 +337,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                             Toast.makeText(CreateMemoryActivity.this, "Tạo kỉ niệm thành công", Toast.LENGTH_SHORT).show();
 
                             // nếu tạo kỉ niệm thành công quay về trang timeline
-                            goToTimelineFragment();
+                            onBackPressed();
                         } else {
 
                             Toast.makeText(CreateMemoryActivity.this, "Có lỗi xảy ra, thử lại sau", Toast.LENGTH_SHORT).show();
@@ -429,6 +426,10 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     String res_caption = response.getString("caption");
                     String res_imagelink = response.getString("image");
                     String res_time = response.getString("time");
+                    String[] date = res_time.split("/");
+                    day_lastchoise=Integer.parseInt(date[0]);
+                    month_lastchoise=Integer.parseInt(date[1]);
+                    year_lastchoise=Integer.parseInt(date[2]);
                     caption.setText(res_caption);
                     dateofMemory.setText(res_time);
                     if (!Constant.STATE_IMAGE_DEFAULT.equals(res_imagelink)) {
@@ -453,13 +454,5 @@ public class CreateMemoryActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
-    }
-
-    private void goToTimelineFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        TimelineFragment timelineFragment = new TimelineFragment();
-        fragmentTransaction.replace(R.id.frame_content, timelineFragment);
-        fragmentTransaction.commit();
     }
 }
