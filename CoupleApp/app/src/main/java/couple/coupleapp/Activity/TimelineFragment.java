@@ -86,9 +86,11 @@ public class TimelineFragment extends Fragment {
 
     private void getDate(String url) {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                list.clear();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject object = response.getJSONObject(i);

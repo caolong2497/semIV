@@ -428,7 +428,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     String res_time = response.getString("time");
                     String[] date = res_time.split("/");
                     day_lastchoise=Integer.parseInt(date[0]);
-                    month_lastchoise=Integer.parseInt(date[1]);
+                    month_lastchoise=Integer.parseInt(date[1])-1;
                     year_lastchoise=Integer.parseInt(date[2]);
                     caption.setText(res_caption);
                     dateofMemory.setText(res_time);

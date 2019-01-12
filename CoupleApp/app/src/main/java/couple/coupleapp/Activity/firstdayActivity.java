@@ -83,24 +83,33 @@ public class firstdayActivity extends AppCompatActivity {
         //khởi tạo đối tượng calendar
         cal = Calendar.getInstance();
         //lấy thời gian hiện tại
-        getCurrentTime();
+        timenow = cal.getTimeInMillis();
+        Log.e("lastchoisefirsy", "init: "+day_lastchoise+"/"+month_lastchoise+"/"+year_lastchoise );
+        Log.e("date", "init: "+Constant.FLAG_STARTDATE );
         //check trạng thái màn hình
         if (Constant.FLAG_STARTDATE == Constant.CONSTANT_UPDATE) {
+            Log.e("date", "init:to here " );
+
             //trạng thái update thì lấy ngày bắt đầu là ngày trong DB
             firstday_edit.setText(Constant.STARTDATE);
-            //khởi tạo ngày bắt đầu cho chọn
-            String[] date = Constant.STARTDATE.split("/");
+            //khởi tạo ngày để chọn cho dialog là ngày từ db
+            String[] date = Constant.STARTDATE.split("-");
             day_lastchoise=Integer.parseInt(date[0]);
-            month_lastchoise=Integer.parseInt(date[1]);
+            month_lastchoise=Integer.parseInt(date[1])-1;
             year_lastchoise=Integer.parseInt(date[2]);
         } else {
             //trạng thái create thì lấy ngày bắt đầu là ngày hiện tại
             firstday_edit.setText(simpleDateFormat.format(cal.getTime()));
+            //khởi tạo ngày để chọn cho dialog là ngày từ hiện tại
+            year_lastchoise = cal.get(Calendar.YEAR);
+            month_lastchoise = cal.get(Calendar.MONTH);
+            day_lastchoise = cal.get(Calendar.DAY_OF_MONTH);
         }
-
+        Log.e("lastchoise", "init: "+day_lastchoise+"/"+month_lastchoise+"/"+year_lastchoise );
     }
 
     private void getDatePicker() {
+        Log.e("getDatePicker", "init: "+day_lastchoise+"/"+month_lastchoise+"/"+year_lastchoise );
         DatePickerDialog pickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -111,6 +120,7 @@ public class firstdayActivity extends AppCompatActivity {
                 firstday_edit.setText(simpleDateFormat.format(cal.getTime()));
             }
         }, year_lastchoise, month_lastchoise, day_lastchoise);
+        Log.e("getDatePicker", "init2: "+day_lastchoise+"/"+month_lastchoise+"/"+year_lastchoise );
         //giới hạn lớn nhất có thể chọn là ngày hiện tại
         pickerDialog.getDatePicker().setMaxDate(timenow);
         pickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -151,15 +161,7 @@ public class firstdayActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    /**
-     * lấy ngày hiện tại
-     */
-    private void getCurrentTime() {
-        year_lastchoise = cal.get(Calendar.YEAR);
-        month_lastchoise = cal.get(Calendar.MONTH);
-        day_lastchoise = cal.get(Calendar.DAY_OF_MONTH);
-        timenow = cal.getTimeInMillis();
-    }
+
 
 
 }

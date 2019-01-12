@@ -62,4 +62,7 @@ public class Constant {
     public static UserComon MYSELF;
     public static UserComon PARTNER;
     public static Drawable IMG_BACKGROUND;
+    // code fix bug tạm thời lỗi load lần đầu getdrawable null
+
+    public static int CHECK_FIRST_COUNTDATE=0;
 }

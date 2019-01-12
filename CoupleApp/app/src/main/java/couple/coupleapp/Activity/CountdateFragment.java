@@ -2,22 +2,19 @@ package couple.coupleapp.Activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,10 +31,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
@@ -45,19 +38,18 @@ import couple.coupleapp.entity.UserComon;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CountdateFragment extends Fragment {
-    TextView countDate, myName, partnerName;
-    CircleImageView myAvatar, partnerAvatar;
-    int partner_id;
-    View view;
-    long result_date;
-    ImageButton close_dialog_btn;
-    Button update_btn;
-    Dialog dialog;
-    String url;
-    String str_name, str_partnername, link_myAvatar, link_partnerAvatar;
-    String link_image_background;
-    RelativeLayout countdate_background;
-    ImageView image;
+    private TextView countDate, myName, partnerName;
+    private CircleImageView myAvatar, partnerAvatar;
+    private int partner_id;
+    private View view;
+    private long result_date;
+    private ImageButton close_dialog_btn;
+    private Button update_btn;
+    private Dialog dialog;
+    private String str_name, str_partnername, link_myAvatar, link_partnerAvatar;
+    private String link_image_background;
+    private RelativeLayout countdate_background;
+    private ImageView image;
 
     @Nullable
     @Override
@@ -65,11 +57,7 @@ public class CountdateFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_countdate, container, false);
         anhxa();
         init();
-        //check xem có phải hiển thị lần đầu không,nếu không phải lần đầu thì hiển thị trước bằng dữ liệu lưu trong static
-        if (!"0".equals(Constant.STARTDATE)) {
-            intialUI();
-        }
-        getData(url);
+
         //khi click vào ảnh đại diện thì hiển thị dialog
         myAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,11 +65,26 @@ public class CountdateFragment extends Fragment {
                 showDialogUser();
             }
         });
+
         return view;
     }
 
+    @Override
+    public void onStart() {
+        //check xem ứng dụng được bật do start ứng dụng hay do chuyển qua lại màn hình
+        if (Constant.CHECK_FIRST_COUNTDATE!=0) {
+            //nếu ứng dụng được bật do chuyển qua lại màn hình thì khởi tạo giao diện bằng dữ liệu static trước
+            //để người dùng chuyển qua lại không bị hiển thị giao diện mặc định
+            intialUI();
+        }
+        //sau đó lấy dữ liệu trên service về trả lại vào giao diện
+        //nếu có update data thì gán lại vào biến static
+        getData();
+        super.onStart();
+    }
+
     private void init() {
-        url = Constant.URL_HOSTING + Constant.URL_GET_DETAIL_COUPLE + Constant.MY_USER_ID + "/" + Constant.MY_COUPLE_ID;
+
         str_name = "";
         str_partnername = "";
         partner_id = 0;
@@ -89,7 +92,7 @@ public class CountdateFragment extends Fragment {
         link_myAvatar = "";
         link_partnerAvatar = "";
     }
-
+    //khởi tạo hiển thị giao diện
     private void intialUI() {
         //set hiển thị tên
         myName.setText(Constant.MYSELF.getName());
@@ -142,7 +145,8 @@ public class CountdateFragment extends Fragment {
         dialog.show();
     }
 
-    private void getData(String url) {
+    private void getData() {
+        String url = Constant.URL_HOSTING + Constant.URL_GET_DETAIL_COUPLE + Constant.MY_USER_ID + "/" + Constant.MY_COUPLE_ID;
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -177,9 +181,8 @@ public class CountdateFragment extends Fragment {
                                 Picasso.get().load(link_partnerAvatar).into(partnerAvatar);
                             }
 
-                            //khởi tạo đối tượng User static
-                            Constant.MYSELF = new UserComon(Constant.MY_USER_ID, str_name, myAvatar.getDrawable());
-                            Constant.PARTNER = new UserComon(partner_id, str_partnername, partnerAvatar.getDrawable());
+
+
 
                             if (!Constant.STATE_IMAGE_DEFAULT.equals(link_image_background)) {
 
@@ -197,8 +200,22 @@ public class CountdateFragment extends Fragment {
                                     }
                                 });
                             }
-                            //set image static
+                            //khởi tạo đối tượng User static
+                            Constant.MYSELF = new UserComon(Constant.MY_USER_ID, str_name, myAvatar.getDrawable());
+                            Constant.PARTNER = new UserComon(partner_id, str_partnername, partnerAvatar.getDrawable());
+                            Log.e("haha", "My image: "+myAvatar.getDrawable() );
+                            Log.e("haha", "Partner image: "+partnerAvatar.getDrawable() );
+                            //set image vào biến static
                             Constant.IMG_BACKGROUND = image.getDrawable();
+                            Log.e("haha", "background image: "+image.getDrawable() );
+
+
+                            //code fix tạm thời lỗi load màn hình lần đầu,drawable null
+                            if(Constant.CHECK_FIRST_COUNTDATE==0){
+                                Constant.CHECK_FIRST_COUNTDATE=1;
+                                CountdateFragment fragmentC = new CountdateFragment();
+                                getFragmentManager().beginTransaction().replace(R.id.frame_content, fragmentC).commit();
+                            }
                         } catch (JSONException e) {
                             Log.e("countdate", "exceptions");
                         }

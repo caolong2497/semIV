@@ -140,7 +140,7 @@ public class CoupleService {
     @Path(value = "/updateStartDate/{coupleid}/{startdate}")
     @Consumes(MediaType.APPLICATION_JSON)
     public String updateStartDate(@PathParam("coupleid") String coupleid, @PathParam("startdate") String startDate) {
-        java.sql.Date sqlDate = Utils.StringToSQLDate(startDate);
+        java.sql.Date sqlDate = Utils.StringToSQLDateFormat2(startDate);
         boolean result = new CoupleDAO().updateStartDate(Integer.parseInt(coupleid), sqlDate);
         if (result) {
             return Constant.TRUE;

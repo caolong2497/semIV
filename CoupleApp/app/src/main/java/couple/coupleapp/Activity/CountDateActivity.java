@@ -31,19 +31,17 @@ import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
 
 public class CountDateActivity extends AppCompatActivity {
-    int lastItemSelected;
-    FrameLayout setting_layout, disconnect_layout;
-    ImageButton home_btn, timeline_btn;
-    Intent intent;
-    SharedPreferences sharedPreferences;
-    String url;
+    private int lastItemSelected;
+    private FrameLayout setting_layout, disconnect_layout;
+    private ImageButton home_btn, timeline_btn;
+    private Intent intent;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count_date);
         anhxa();
         init();
-        intent=getIntent();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CountdateFragment fragmentC = new CountdateFragment();
@@ -57,7 +55,6 @@ public class CountDateActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(Constant.SHARED_FILENAME_LOGIN, MODE_PRIVATE);
         Constant.MY_USER_ID = sharedPreferences.getInt(Constant.MY_USERID_SHARED, 0);
         Constant.MY_COUPLE_ID = sharedPreferences.getInt(Constant.COUPLE_ID_SHARED, 0);
-        url=Constant.URL_HOSTING+Constant.URL_DISCONNECT+"/"+Constant.MY_COUPLE_ID;
         lastItemSelected = 0;
     }
 
@@ -110,7 +107,7 @@ public class CountDateActivity extends AppCompatActivity {
                 Toast.makeText(this, "back disconnect", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.disconnect_accept:
-                disconnectPartner(url);
+                disconnectPartner();
                 break;
             case R.id.setting_disconnect:
                 disconnect_layout.setVisibility(View.VISIBLE);
@@ -140,11 +137,12 @@ public class CountDateActivity extends AppCompatActivity {
         }
     }
 
-    private void disconnectPartner(String url) {
+    private void disconnectPartner() {
+        String url=Constant.URL_HOSTING+Constant.URL_DISCONNECT+"/"+Constant.MY_COUPLE_ID;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if ("0".equals(response)) {
+                if (Constant.RESULT_TRUE.equals(response)) {
                     logout();
                 } else {
                     Toast.makeText(CountDateActivity.this, "Có lỗi xảy ra,thử lại sau", Toast.LENGTH_SHORT).show();

@@ -55,18 +55,18 @@ public class DetailMemoryActivity extends AppCompatActivity {
     ScrollView scrollView;
     EditText content_comment_edt, old_content_comment;
     CommentAdapter commentAdapter;
-    private ArrayList<Comment_Model> list = new ArrayList<>();
-    ExpandedListView listView;
+    private ArrayList<Comment_Model> list ;
     CircleImageView avatar;
     TextView name, createDate, caption_memory, count_comment_memory;
     ImageView image_memory;
     Dialog dialog;
     ImageButton close_dialog_btn;
     Button update_btn;
-    int MemoryId = 0;
+    int MemoryId ;
     RequestQueue requestQueue;
+//    ExpandedListView listView;
 
-    //    ListView listView;
+        ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,18 +74,27 @@ public class DetailMemoryActivity extends AppCompatActivity {
         anhxa();
 
         //set scrollview bắt đầu từ vị trí 0,0
-//        scrollView.smoothScrollTo(0,0);
+        scrollView.smoothScrollTo(0,0);
         //set độ cao cho listview
 //        Utils.setListViewHeightBasedOnChildren(listView);
+//        ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) listView.getLayoutParams();
+//        lp.height = 1000;
+//            listView.setLayoutParams(lp);
+
+        //Lấy thông tin từ màn hình trước gửi sang
         Intent intent = getIntent();
         final int memoryid = intent.getIntExtra("memoryId", 0);
+
+        //chẹck xem có láy được giá trị memoryid không
         if (memoryid == 0) {
             Toast.makeText(this, "Có Lỗi xảy ra", Toast.LENGTH_SHORT).show();
         } else {
+            //lấy được thì thực hiện load data
             loadData(memoryid);
             MemoryId = memoryid;
-
         }
+
+        //tạo adapter hiển thị comment lên list view
         commentAdapter = new CommentAdapter(this, R.layout.comment_layout, list);
         listView.setAdapter(commentAdapter);
 
@@ -105,6 +114,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        //đăg
         registerForContextMenu(listView);
     }
 
@@ -162,7 +172,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
 
     private void createComment(final int memoryid) {
         String url = Constant.URL_HOSTING + Constant.URL_CREATE_COMMENT;
-        String content = content_comment_edt.getText().toString();
+        String content = content_comment_edt.getText().toString().trim();
         JSONObject postparams = new JSONObject();
         String timeStamp = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
         try {
@@ -216,10 +226,11 @@ public class DetailMemoryActivity extends AppCompatActivity {
         image_memory = (ImageView) findViewById(R.id.detail_imagepost);
         content_comment_edt = (EditText) findViewById(R.id.content_comment);
         scrollView = (ScrollView) findViewById(R.id.memory_scroll);
-        listView = (ExpandedListView) findViewById(R.id.detail_listview_comment);
+//        listView = (ExpandedListView) findViewById(R.id.detail_listview_comment);
         detail_back_btn = (ImageButton) findViewById(R.id.detail_back);
         post_comment_btn = (ImageButton) findViewById(R.id.post_comment);
-//        listView=(ListView) findViewById(R.id.detail_listview_comment);
+        list = new ArrayList<>();
+        listView=(ListView) findViewById(R.id.detail_listview_comment);
     }
 
     @Override
@@ -296,7 +307,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
      *
      * @param commentId
      */
-    private void deleteComment(int commentId) {
+    private void deleteComment(final int commentId) {
         String url = Constant.URL_HOSTING + Constant.URL_DEL_COMMENT + "/" + commentId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -325,7 +336,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
      */
     private void updateComment(int commentId) {
         String url = Constant.URL_HOSTING + Constant.URL_UPDATE_COMMENT;
-        String content = old_content_comment.getText().toString();
+        String content = old_content_comment.getText().toString().trim();
         //set object json để post lên server
         JSONObject jsonBody = new JSONObject();
         try {
@@ -367,7 +378,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
     private void loadComment(int memoryid) {
         //khởi tạo link api
         String url = Constant.URL_HOSTING + Constant.URL_GET_COMMENT + "/" + memoryid;
-
+        Log.e("comment", "loadComment: "+url );
         //tạo đối tượng để yêu cầu nhận 1 jsonarrayobject
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -390,16 +401,15 @@ public class DetailMemoryActivity extends AppCompatActivity {
                             Comment_Model comment = new Comment_Model(object.getInt("commentId"), object.getString("content"), object.getInt("userId"), object.getString("time"));
                             //add vào list
                             list.add(comment);
-                            Log.e("loaddetailmemory ", "onResponse: " + object.getString("content"));
+                            Log.e("loaddcmt ", "onResponse: " + object.getString("content"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("getcomment", "onResponse: lỗi parse json");
                         }
-
-                        //reset lại adapter
-                        commentAdapter.notifyDataSetChanged();
                     }
                 }
+                //reset lại adapter
+                commentAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override

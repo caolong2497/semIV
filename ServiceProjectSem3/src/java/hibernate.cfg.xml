@@ -44,7 +44,7 @@ Contributor(s):
     <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
     <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=sem3_DB</property>
     <property name="hibernate.connection.username">sa</property>
-    <property name="hibernate.connection.password">Long123$</property>
+    <property name="hibernate.connection.password">1234$</property>
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="hibernate.dialect">dao.SQlServerDBDialect</property>
