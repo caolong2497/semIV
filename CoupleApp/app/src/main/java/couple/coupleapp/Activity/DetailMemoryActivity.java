@@ -30,6 +30,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
@@ -49,6 +51,7 @@ import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
 import couple.coupleapp.entity.Comment;
 import couple.coupleapp.entity.Comment_Model;
+import couple.coupleapp.entity.Notification_Model;
 import couple.coupleapp.entity.TimeLine;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -67,14 +70,16 @@ public class DetailMemoryActivity extends AppCompatActivity {
     int MemoryId ;
     RequestQueue requestQueue;
     ExpandedListView listView;
-
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mNotificationReference;
 //        ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_memory);
         anhxa();
-
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mNotificationReference = mFirebaseDatabase.getReference().child("notification");
         //set scrollview bắt đầu từ vị trí 0,0
         scrollView.smoothScrollTo(0,0);
         //set độ cao cho listview
@@ -193,7 +198,7 @@ public class DetailMemoryActivity extends AppCompatActivity {
 
     private void createComment(final int memoryid) {
         String url = Constant.URL_HOSTING + Constant.URL_CREATE_COMMENT;
-        String content = content_comment_edt.getText().toString().trim();
+        final String content = content_comment_edt.getText().toString().trim();
         JSONObject postparams = new JSONObject();
         String timeStamp = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
         try {
@@ -210,6 +215,9 @@ public class DetailMemoryActivity extends AppCompatActivity {
                         String result = response.getString("result");
                         if (Constant.RESULT_TRUE.equals(result)) {
                             Log.e("createComment", "onResponse: success");
+                            long time=Utils.getCurrentTime();
+                            Notification_Model notification_model =  new Notification_Model(Constant.MY_USER_ID, Constant.NOTIFICATION_ACTION_COMMENT, content,time,MemoryId);
+                            mNotificationReference.push().setValue(notification_model);
                             loadComment(memoryid);
                             //reset form
                             content_comment_edt.setText("");

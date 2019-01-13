@@ -69,14 +69,15 @@ public class ChatFragment extends Fragment {
 //    private static final int REQUEST_CODE_ALBUM = 200;
 //    private static final int REQUEST_CODE_CAMERA = 100;
 //    String linkimage;
-    StorageReference storageRef;
+//    StorageReference storageRef;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMessageDatabaseReference;
     private ChildEventListener mChildEventListener;
+    List<MessageModel> friendlyMessages;
     View view;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
-        //Firebase instance variable
+        //Firebase intial
         init();
         IntialAction();
 
@@ -88,7 +89,8 @@ public class ChatFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 MessageModel friendlyMessage = dataSnapshot.getValue(MessageModel.class);
-                mMessageAdapter.add(friendlyMessage);
+                friendlyMessages.add(friendlyMessage);
+                mMessageAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -113,12 +115,6 @@ public class ChatFragment extends Fragment {
         };
         Query data = mMessageDatabaseReference.orderByChild("coupleid").equalTo(Constant.MY_COUPLE_ID);
         data.addChildEventListener(mChildEventListener);
-
-
-        // Initialize message ListView and its adapter
-        List<MessageModel> friendlyMessages = new ArrayList<>();
-        mMessageAdapter = new MessageAdapter(getActivity(), R.layout.item_message, friendlyMessages);
-        mMessageListView.setAdapter(mMessageAdapter);
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -171,15 +167,20 @@ public class ChatFragment extends Fragment {
     }
 
     private void init() {
+        friendlyMessages = new ArrayList<>();
+
         // Initialize references to views
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         mMessageListView = (ListView) view.findViewById(R.id.messageListView);
         mPhotoPickerButton = (ImageButton) view.findViewById(R.id.photoPickerButton);
         mMessageEditText = (EditText) view.findViewById(R.id.messageEditText);
         mSendButton = (Button) view.findViewById(R.id.sendButton);
+        // Initialize message ListView and its adapter
+        mMessageAdapter = new MessageAdapter(getActivity(), R.layout.item_message, friendlyMessages);
+        mMessageListView.setAdapter(mMessageAdapter);
 //        image_post=(ImageView) view.findViewById(R.id.);
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
+//        FirebaseStorage storage = FirebaseStorage.getInstance();
+//        storageRef = storage.getReference();
     }
 
 //

@@ -37,7 +37,7 @@ public class MessageAdapter extends ArrayAdapter<MessageModel> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        MessageAdapter.MyViewHolder myViewHolder = new MessageAdapter.MyViewHolder();
+        MyViewHolder myViewHolder = new MyViewHolder();
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(this.ResId, null);

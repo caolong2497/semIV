@@ -75,18 +75,15 @@ public class CountDateActivity extends AppCompatActivity {
             switch (id) {
                 case R.id.home_menu:
                     fragment = new CountdateFragment();
-                    Log.e("Long", "selectedMenu: home");
                     break;
                 case R.id.timline_menu:
                     fragment = new TimelineFragment();
-                    Log.e("Long", "selectedMenu: timeline");
                     break;
                 case R.id.chat_menu:
-                    Toast.makeText(this, "chat", Toast.LENGTH_SHORT).show();
                     fragment = new ChatFragment();
                     break;
                 case R.id.notification_menu:
-                    Toast.makeText(this, "notification", Toast.LENGTH_SHORT).show();
+                    fragment = new NotificationFragment();
                     break;
             }
             lastItemSelected = id;
@@ -102,11 +99,9 @@ public class CountDateActivity extends AppCompatActivity {
         switch (id) {
             case R.id.count_setting:
                 setting_layout.setVisibility(View.VISIBLE);
-                Toast.makeText(this, "setting touch", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.disconnect_back:
                 disconnect_layout.setVisibility(View.GONE);
-                Toast.makeText(this, "back disconnect", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.disconnect_accept:
                 disconnectPartner();
@@ -116,7 +111,6 @@ public class CountDateActivity extends AppCompatActivity {
                 break;
             case R.id.setting_close:
                 setting_layout.setVisibility(View.INVISIBLE);
-                Toast.makeText(this, "touch close", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_logout:
                 logout();

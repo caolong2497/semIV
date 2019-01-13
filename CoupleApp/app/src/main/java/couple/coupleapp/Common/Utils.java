@@ -124,7 +124,16 @@ public class Utils {
         String result=new SimpleDateFormat("HH:mm aa").format(time);
         return result;
     }
+    /**
+     *
+     * @param time thoi gian milisecond
+     * @return chuoi dinh dang HH:mm
+     */
+    public static String formatLongTimeToddMMyyyyHHmmaa(long time){
 
+        String result=new SimpleDateFormat("dd/MM/yyyy HH:mm aa").format(time);
+        return result;
+    }
 
     /**
      *

@@ -40,6 +40,8 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -53,25 +55,30 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import couple.coupleapp.Common.Constant;
+import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
+import couple.coupleapp.entity.MessageModel;
+import couple.coupleapp.entity.Notification_Model;
 
 public class CreateMemoryActivity extends AppCompatActivity {
-    int year_lastchoise, month_lastchoise, day_lastchoise;
-    Calendar cal;
-    long selectedDate, timenow;
-    TextView dateofMemory;
-    SimpleDateFormat simpleDateFormat;
-    ImageButton memory_close_btn, memory_save_btn, clear_image_btn;
-    LinearLayout open_option_upload;
-    Dialog dialog;
-    EditText caption;
-    ImageView imageOfMemory;
-    Button open_gallery_btn, open_capture_btn, exit_btn;
+    private int year_lastchoise, month_lastchoise, day_lastchoise;
+    private Calendar cal;
+    private long selectedDate, timenow;
+    private TextView dateofMemory;
+    private SimpleDateFormat simpleDateFormat;
+    private ImageButton memory_close_btn, memory_save_btn, clear_image_btn;
+    private LinearLayout open_option_upload;
+    private Dialog dialog;
+    private EditText caption;
+    private ImageView imageOfMemory;
+    private Button open_gallery_btn, open_capture_btn, exit_btn;
     private static final int REQUEST_CODE_ALBUM = 200;
     private static final int REQUEST_CODE_CAMERA = 100;
-    StorageReference storageRef;
-    String url_create_memory;
-    String str_caption, str_createDate, linkImage;
+    private StorageReference storageRef;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mNotificationReference;
+    private String url_create_memory;
+    private String str_caption, str_createDate, linkImage;
     int flag_image; //=0:không có ảnh được chọn, =1 có ảnh được chọn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +86,20 @@ public class CreateMemoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_memory);
         anhxa();
         init();
-
+        //sự kiện lắng nghe
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mNotificationReference = mFirebaseDatabase.getReference().child("notification");
         clear_image_btn.setVisibility(View.GONE);
         Intent intent = getIntent();
         final int id = intent.getIntExtra("memoryid", 0);
         if (id != 0) {
             getMemoryById(id);
         }
+        action(id);
+    }
+
+    private void action(final int id){
+
         dateofMemory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +115,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
         open_option_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    showDialogOptionUpload();
+                showDialogOptionUpload();
             }
         });
         clear_image_btn.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +154,6 @@ public class CreateMemoryActivity extends AppCompatActivity {
             }
         });
     }
-
     private void anhxa() {
         dateofMemory = (TextView) findViewById(R.id.memory_date);
         memory_close_btn = (ImageButton) findViewById(R.id.memory_close);
@@ -333,9 +346,11 @@ public class CreateMemoryActivity extends AppCompatActivity {
 
                     try {
                         String result = response.getString("result");
-                        if (Constant.RESULT_TRUE.equals(result)) {
+                        if (!"0".equals(result)) {
                             Toast.makeText(CreateMemoryActivity.this, "Tạo kỉ niệm thành công", Toast.LENGTH_SHORT).show();
-
+                            long time=Utils.getCurrentTime();
+                            Notification_Model notification_model =  new Notification_Model(Constant.MY_USER_ID, Constant.NOTIFICATION_ACTION_POST, str_caption,time, Integer.parseInt(result));
+                            mNotificationReference.push().setValue(notification_model);
                             // nếu tạo kỉ niệm thành công quay về trang timeline
                             onBackPressed();
                         } else {

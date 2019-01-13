@@ -49,20 +49,21 @@ public class MemoryService {
      * create memory
      *
      * @param model Memory hạng mục time là chuỗi định dạng dd/MM/yyyy
-     * @return "0" nếu thành công, "1" nếu thất bại
+     * @return "0" nếu thất bại,!= "0" neu thanh cong
      */
     @POST
     @Path(value = "/addMemory")
     @Consumes(MediaType.APPLICATION_JSON)
     public String AddNewMemory(Memory_Model model) {
         java.sql.Date createDate = Utils.StringToSQLDate(model.getTime());
-
+        MemoryDAO memorydao=new MemoryDAO();
         Memory memory = new Memory(0, model.getImage(), createDate, model.getCaption(), model.getUserId());
         Result_model result_ob = new Result_model();
         String message = "1";
-        Boolean bl = new MemoryDAO().addMemory(memory);
+        Boolean bl = memorydao.addMemory(memory);
         if (bl) {
-            message = "0";
+            int lastid=memorydao.getLastId(); 
+            message = lastid+"";
         }
         result_ob.setResult(message);
         Gson son = new Gson();

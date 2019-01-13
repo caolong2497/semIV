@@ -164,4 +164,12 @@ public class MemoryDAO {
 //    public static void main(String[] args) {
 //            System.out.println(new MemoryDAO().getMemoryByCoupleId(1));
 //    }
+
+    public int getLastId() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+         session.beginTransaction();
+         SQLQuery query = session.createSQLQuery("select max(memoryid) from tbl_memory");
+         int id=(Integer)query.uniqueResult();
+         return id;
+    }
 }

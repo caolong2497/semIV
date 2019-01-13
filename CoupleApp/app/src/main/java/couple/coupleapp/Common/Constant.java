@@ -65,4 +65,7 @@ public class Constant {
 
     public static int CHECK_FIRST_COUNTDATE=0;
 
+    public static final int NOTIFICATION_ACTION_POST=1;
+    public static final int NOTIFICATION_ACTION_COMMENT=2;
+
 }
