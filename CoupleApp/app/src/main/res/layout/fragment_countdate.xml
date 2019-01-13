@@ -4,18 +4,17 @@
     android:id="@+id/background_countdate"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroundlove"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
-    android:paddingRight="10dp"
-    android:background="@drawable/backgroundlove"
-    >
-<ImageView
-    android:id="@+id/image_holder"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:src="@drawable/backgroundlove"
-    android:visibility="invisible"
-    />
+    android:paddingRight="10dp">
+
+    <ImageView
+        android:id="@+id/image_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/backgroundlove"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/count_label"

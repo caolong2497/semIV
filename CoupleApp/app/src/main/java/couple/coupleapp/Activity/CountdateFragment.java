@@ -119,6 +119,9 @@ public class CountdateFragment extends Fragment {
         partnerName = (TextView) view.findViewById(R.id.count_partnername);
         countdate_background = (RelativeLayout) view.findViewById(R.id.background_countdate);
         image = (ImageView) view.findViewById(R.id.image_holder);
+        myAvatar.setImageResource(R.drawable.avatar_boy);
+        partnerAvatar.setImageResource(R.drawable.avatar_boy);
+        countdate_background.setBackgroundResource(R.drawable.backgroundlove);
     }
 
     // hiển thị dialog thông tin người dùng

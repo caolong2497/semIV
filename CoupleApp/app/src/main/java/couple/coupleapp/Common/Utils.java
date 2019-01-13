@@ -12,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Utils {
@@ -111,5 +112,27 @@ public class Utils {
             System.out.println("Lỗi đếm ngày");
         }
         return result;
+    }
+
+    /**
+     *
+     * @param time thoi gian milisecond
+     * @return chuoi dinh dang HH:mm
+     */
+    public static String formatLongTimeToHHmm(long time){
+
+        String result=new SimpleDateFormat("HH:mm aa").format(time);
+        return result;
+    }
+
+
+    /**
+     *
+     * @return thoi gian
+     */
+    public static long getCurrentTime(){
+        Calendar cal=Calendar.getInstance();
+        Long time=cal.getTimeInMillis();
+        return time;
     }
 }

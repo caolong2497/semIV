@@ -12,25 +12,26 @@
  <FrameLayout
      android:id="@+id/frame_content"
      android:layout_width="match_parent"
-     android:layout_height="match_parent">
-
-
+     android:layout_height="match_parent"
+     android:layout_above="@+id/frame_footer"
+     >
  </FrameLayout>
 
 
 
-    <!--<FrameLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom"-->
-        <!--&gt;-->
+    <FrameLayout
+        android:id="@+id/frame_footer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
     <include layout="@layout/menu_footer"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
 
         android:layout_alignParentBottom="true"
         />
-    <!--</FrameLayout>-->
+    </FrameLayout>
     <FrameLayout
         android:id="@+id/setting_frame"
         android:layout_width="match_parent"

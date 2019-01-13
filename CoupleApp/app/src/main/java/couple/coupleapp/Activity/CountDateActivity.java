@@ -56,6 +56,7 @@ public class CountDateActivity extends AppCompatActivity {
         Constant.MY_USER_ID = sharedPreferences.getInt(Constant.MY_USERID_SHARED, 0);
         Constant.MY_COUPLE_ID = sharedPreferences.getInt(Constant.COUPLE_ID_SHARED, 0);
         lastItemSelected = 0;
+        Constant.CHECK_FIRST_COUNTDATE=0;
     }
 
     private void anhxa() {
@@ -82,6 +83,7 @@ public class CountDateActivity extends AppCompatActivity {
                     break;
                 case R.id.chat_menu:
                     Toast.makeText(this, "chat", Toast.LENGTH_SHORT).show();
+                    fragment = new ChatFragment();
                     break;
                 case R.id.notification_menu:
                     Toast.makeText(this, "notification", Toast.LENGTH_SHORT).show();
@@ -125,7 +127,7 @@ public class CountDateActivity extends AppCompatActivity {
                 break;
             case R.id.setting_firstday:
                 intent =new Intent(this,firstdayActivity.class);
-                Constant.FLAG_STARTDATE=Constant.CONSTANT_UPDATE;
+                intent.putExtra("flag",Constant.CONSTANT_UPDATE);
                 startActivity(intent);
                 break;
             case R.id.setting_password:

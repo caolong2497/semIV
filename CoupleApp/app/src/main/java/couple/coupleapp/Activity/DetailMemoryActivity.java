@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -64,9 +66,9 @@ public class DetailMemoryActivity extends AppCompatActivity {
     Button update_btn;
     int MemoryId ;
     RequestQueue requestQueue;
-//    ExpandedListView listView;
+    ExpandedListView listView;
 
-        ListView listView;
+//        ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +118,25 @@ public class DetailMemoryActivity extends AppCompatActivity {
         });
         //đăg
         registerForContextMenu(listView);
+        content_comment_edt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().trim().length() > 0) {
+                    post_comment_btn.setEnabled(true);
+                } else {
+                    post_comment_btn.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
     private void loadData(final int memoryid) {
@@ -226,11 +247,11 @@ public class DetailMemoryActivity extends AppCompatActivity {
         image_memory = (ImageView) findViewById(R.id.detail_imagepost);
         content_comment_edt = (EditText) findViewById(R.id.content_comment);
         scrollView = (ScrollView) findViewById(R.id.memory_scroll);
-//        listView = (ExpandedListView) findViewById(R.id.detail_listview_comment);
+        listView = (ExpandedListView) findViewById(R.id.detail_listview_comment);
         detail_back_btn = (ImageButton) findViewById(R.id.detail_back);
         post_comment_btn = (ImageButton) findViewById(R.id.post_comment);
         list = new ArrayList<>();
-        listView=(ListView) findViewById(R.id.detail_listview_comment);
+//        listView=(ListView) findViewById(R.id.detail_listview_comment);
     }
 
     @Override
@@ -419,64 +440,5 @@ public class DetailMemoryActivity extends AppCompatActivity {
         });
         requestQueue.add(jsonArrayRequest);
     }
-//    private void loadData(int memoryid) {
-//        String url = Constant.URL_HOSTING + Constant.URL_GET_DETAIL_MEMORY + "/" + memoryid;
-//        RequestQueue requestQueue = Volley.newRequestQueue(DetailMemoryActivity.this);
-//        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    String res_caption = response.getString("caption");
-//                    String res_imagelink = response.getString("image");
-//                    String res_time = response.getString("time");
-//                    int res_userId = response.getInt("userId");
-//
-//                    //lấy mảng comment trong đối tượng jsoon
-//                    JSONArray listComment = response.getJSONArray("Comment");
-//                    //lấy tổng số comment
-//                    int countComment = listComment.length();
-//                    //check số lượng comment nếu >0 thì add vào list
-//                    if (countComment > 0) {
-//                        list.clear();
-//                        for (int i = 0; i < listComment.length(); i++) {
-//                            JSONObject object = listComment.getJSONObject(i);
-//                            Comment_Model comment = new Comment_Model(object.getInt("commentId"), object.getString("content"), object.getInt("userId"), object.getString("time"));
-//                            list.add(comment);
-//                            Log.e("loaddetailmemory ", "onResponse: " + object.getString("content"));
-//                        }
-//                        commentAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    //set nội dung hiển thị lên màn hình
-//                    if (res_userId == Constant.MY_USER_ID) {
-//                        avatar.setImageDrawable(Constant.MYSELF.getAvatar());
-//                        name.setText(Constant.MYSELF.getName());
-//                    } else {
-//                        avatar.setImageDrawable(Constant.PARTNER.getAvatar());
-//                        name.setText(Constant.PARTNER.getName());
-//                    }
-//                    createDate.setText(res_time);
-//                    caption_memory.setText(res_caption);
-//                    count_comment_memory.setText(countComment + "Comments");
-//                    if (!Constant.STATE_IMAGE_DEFAULT.equals(res_imagelink)) {
-//                        image_memory.setVisibility(View.VISIBLE);
-//                        Picasso.get().load(res_imagelink).into(image_memory);
-//                        image_memory.setScaleType(ImageView.ScaleType.FIT_XY);
-//                    } else {
-//                        image_memory.setVisibility(View.GONE);
-//                    }
-//                    Log.e("loaddetailmemory", "onResponse: " + res_time + "\t" + res_caption + "\t" + res_imagelink + "\t" + res_userId);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e("load detail memory", "onResponse: error response");
-//            }
-//        });
-//        requestQueue.add(jsonArrayRequest);
-//    }
+
 }

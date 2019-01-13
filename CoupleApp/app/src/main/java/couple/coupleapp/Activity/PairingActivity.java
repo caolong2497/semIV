@@ -20,7 +20,6 @@ public class PairingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pairing);
         anhxa();
-        Constant.FLAG_STARTDATE=Constant.CONSTANT_CREATE;
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,6 +28,7 @@ public class PairingActivity extends AppCompatActivity {
 
                 editor.commit();
                 Intent intent=new Intent(PairingActivity.this,firstdayActivity.class);
+                intent.putExtra("flag",Constant.CONSTANT_CREATE);
                 startActivity(intent);
             }
         });

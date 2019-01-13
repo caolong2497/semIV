@@ -35,15 +35,17 @@ public class firstdayActivity extends AppCompatActivity {
     SimpleDateFormat simpleDateFormat;
     long timenow;
     String url;
-
+    int flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstday);
         anhxa();
         init();
+        Intent intent=getIntent();
+        flag=intent.getIntExtra("flag",3);
         //check xem màn hình ở trạng thái chỉnh sửa hay tạo mới
-        if (Constant.FLAG_STARTDATE == Constant.CONSTANT_CREATE) {
+        if (flag == Constant.CONSTANT_CREATE) {
             //chỉnh sửa thì hiện nút back
             back_btn.setVisibility(View.GONE);
         }
@@ -84,10 +86,9 @@ public class firstdayActivity extends AppCompatActivity {
         cal = Calendar.getInstance();
         //lấy thời gian hiện tại
         timenow = cal.getTimeInMillis();
-        Log.e("lastchoisefirsy", "init: "+day_lastchoise+"/"+month_lastchoise+"/"+year_lastchoise );
-        Log.e("date", "init: "+Constant.FLAG_STARTDATE );
+
         //check trạng thái màn hình
-        if (Constant.FLAG_STARTDATE == Constant.CONSTANT_UPDATE) {
+        if (flag == Constant.CONSTANT_UPDATE) {
             Log.e("date", "init:to here " );
 
             //trạng thái update thì lấy ngày bắt đầu là ngày trong DB
@@ -160,8 +161,4 @@ public class firstdayActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-
-
-
 }

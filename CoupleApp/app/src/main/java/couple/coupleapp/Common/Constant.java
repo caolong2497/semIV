@@ -50,7 +50,6 @@ public class Constant {
     public static final String MY_USERID_SHARED = "myuser";//tên tag lưu giá trị cho user_id
 
     // biến check màn hình sửa ngày đi đến activity hay ...
-    public static int FLAG_STARTDATE=0;
     public static final int CONSTANT_CREATE=0;
     public static final int CONSTANT_UPDATE=1;
     //----------------------------------------------------
@@ -65,4 +64,5 @@ public class Constant {
     // code fix bug tạm thời lỗi load lần đầu getdrawable null
 
     public static int CHECK_FIRST_COUNTDATE=0;
+
 }

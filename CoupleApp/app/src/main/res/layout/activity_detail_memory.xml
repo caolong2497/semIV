@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -131,23 +131,23 @@
                     android:textStyle="italic" />
             </LinearLayout>
 
-            <ListView
-            android:id="@+id/detail_listview_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animationCache="false"
-            android:divider="@null"
-            android:scrollingCache="false"
-            android:smoothScrollbar="true"></ListView>
+            <!--<ListView-->
+            <!--android:id="@+id/detail_listview_comment"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:animationCache="false"-->
+            <!--android:divider="@null"-->
+            <!--android:scrollingCache="false"-->
+            <!--android:smoothScrollbar="true"></ListView>-->
 
-            <!--<couple.coupleapp.Common.ExpandedListView-->
-                <!--android:id="@+id/detail_listview_comment"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:divider="@null"-->
-                <!--android:padding="0px"-->
-                <!--android:scrollbars="none"-->
-                <!--android:smoothScrollbar="true" />-->
+            <couple.coupleapp.Common.ExpandedListView
+                android:id="@+id/detail_listview_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                android:padding="0px"
+                android:scrollbars="none"
+                android:smoothScrollbar="true" />
         </LinearLayout>
 
 
