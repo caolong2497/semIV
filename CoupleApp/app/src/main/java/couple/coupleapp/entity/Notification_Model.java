@@ -1,6 +1,7 @@
 package couple.coupleapp.entity;
 
 public class Notification_Model implements  Comparable<Notification_Model> {
+    String notificationId;
     int userid;
     int type_action;
     String content;

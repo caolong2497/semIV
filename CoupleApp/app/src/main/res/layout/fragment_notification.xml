@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     >
     <TextView
         android:id="@+id/title_notification"
@@ -12,7 +13,7 @@
         android:gravity="center"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:text="Kỷ niệm"
+        android:text="Thông báo"
         android:textColor="#fff"
         android:textSize="18dp"
         android:textStyle="bold" />
@@ -24,5 +25,6 @@
         android:layout_below="@+id/title_notification"
         android:dividerHeight="1dp"
         android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         tools:listitem="@layout/item_notification"/>
 </RelativeLayout>

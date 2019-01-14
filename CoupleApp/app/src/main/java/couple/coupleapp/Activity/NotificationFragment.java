@@ -1,12 +1,17 @@
 package couple.coupleapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -15,10 +20,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import couple.coupleapp.Adapter.NotificationAdapter;
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
@@ -32,13 +39,12 @@ public class NotificationFragment extends Fragment {
     private ListView Notification_listview;
     List<Notification_Model> list_notification;
     View view;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_notification, container, false);
-//        init();
-        list_notification= new ArrayList<>();
-        Notification_listview=(ListView) view.findViewById(R.id.notification_listview);
-
+        list_notification = new ArrayList<>();
+        Notification_listview = (ListView) view.findViewById(R.id.notification_listview);
         notificationAdapter = new NotificationAdapter(getActivity(), R.layout.item_notification, list_notification);
         Notification_listview.setAdapter(notificationAdapter);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -72,18 +78,17 @@ public class NotificationFragment extends Fragment {
 
             }
         };
-        Query data = mNotificationReference.orderByChild("userid").equalTo(Constant.PARTNER.getUserid()).limitToLast(15);
+        Query data = mNotificationReference.orderByChild("userid").equalTo(Constant.PARTNER.getUserid()).limitToLast(20);
         data.addChildEventListener(mChildEventListener);
-
+        Notification_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(getActivity(),DetailMemoryActivity.class);
+                intent.putExtra("memoryId",list_notification.get(position).getMemoryid());
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
-//    private void init(){
-//        list_notification.add(new Notification_Model(1, 1, "helloword",1547313537656L, 1));
-//        list_notification.add(new Notification_Model(1, 2, "helloword",1547313537656L, 1));
-//        list_notification.add(new Notification_Model(1, 2, "helloword",1547313537656L, 1));
-//        list_notification.add(new Notification_Model(1, 1, "helloword",1547313537656L, 1));
-//        list_notification.add(new Notification_Model(1, 2, "chao em",1547313537656L, 1));
-//        list_notification.add(new Notification_Model(1, 1, "helloword",1547313537656L, 1));
-//    }
 }
