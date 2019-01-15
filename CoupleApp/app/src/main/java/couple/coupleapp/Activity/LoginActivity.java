@@ -12,20 +12,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.Common.Utils;
@@ -51,13 +47,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 email = Ed_Email.getText().toString().trim();
                 password = Ed_Password.getText().toString();
-                String message=Validate.validateLogin(email,password);
-                if("".equals(message)){
+                Log.e("sdfsdf", "onClick: "+email+"/"+password );
+                String message_error=Validate.validateLogin(email,password);
+                Log.e("error", "onClick: "+message_error );
+                if("".equals(message_error)){
                     password=Utils.encodeText(password);
-                    String url = Constant.URL_HOSTING + Constant.URL_LOGIN ;
-                    Login(url,email,password);
+                    Log.e("sdfsdf", "massage: "+email+"/"+password );
+
+
+                    Login(email,password);
                 }else{
-                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, message_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -78,7 +78,8 @@ public class LoginActivity extends AppCompatActivity {
         btn_login = (Button) findViewById(R.id.btn_login);
         txt_regis = (TextView) findViewById(R.id.txt_register);
     }
-    private void Login(String url,String email,String password) {
+    private void Login(String email,String password) {
+        String url = Constant.URL_HOSTING + Constant.URL_LOGIN ;
         JSONObject postparams = new JSONObject();
         try {
             postparams.put("gmail", email);
@@ -90,7 +91,25 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         int userId = response.getInt("userID");
                         int coupleid = response.getInt("coupleID");
-                        checkToGoActivity(coupleid,userId);
+                        String code=null;
+                        Intent intent;
+                        if(Constant.DEFEAULT_COUPLEID==coupleid) {
+                            code = response.getString("code");
+                            // người dùng mơi đi đến màn hình ghép cặp
+                            intent= new Intent(LoginActivity.this, PairingActivity.class);
+                            intent.putExtra("code",code);
+                        }else{
+                            //người dùng cũ đi đến màn hình chính(countDate)
+
+                            //Lưu thông tin coupleid vào file Shared
+                            SharedPreferences.Editor editor = login.edit();
+                            editor.putInt(Constant.COUPLE_ID_SHARED, coupleid);
+                            editor.putInt(Constant.MY_USERID_SHARED, userId);
+                            editor.commit();
+                            //chuyển màn hình
+                             intent = new Intent(LoginActivity.this, CountDateActivity.class);
+                        }
+                        startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -111,49 +130,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void checkToGoActivity(int coupleid,int userId){
-        //check xem là người dùng mới hay cũ,người dùng mới sẽ chưa có coupleid => coupleid= default
-        if (coupleid == Constant.DEFEAULT_COUPLEID) {
-            // người dùng mơi đi đến màn hình ghép cặp
-            Intent intent = new Intent(LoginActivity.this, PairingActivity.class);
-            startActivity(intent);
-        } else {
-            //người dùng cũ đi đến màn hình chính(countDate)
-
-            //Lưu thông tin coupleid vào file Shared
-            SharedPreferences.Editor editor = login.edit();
-            editor.putInt(Constant.COUPLE_ID_SHARED, coupleid);
-            editor.putInt(Constant.MY_USERID_SHARED, userId);
-            editor.commit();
-
-            //chuyển màn hình
-            Intent intent = new Intent(LoginActivity.this, CountDateActivity.class);
-            startActivity(intent);
-        }
-    }
 }
-
-
-
-//    Button regGet = (Button) findViewById(R.id.btnRegisterGet);
-//        regGet.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            StringRequest stringRequest=new StringRequest(Request.Method.GET, getall,
-//                    new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String response) {
-//                            content.setText(response);
-//                        }
-//                    },new Response.ErrorListener(){
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    Toast.makeText(MainActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            RequestQueue requestQueue=Volley.newRequestQueue(MainActivity.this);
-//            requestQueue.add(stringRequest);
-//        }
-//    });
 
 

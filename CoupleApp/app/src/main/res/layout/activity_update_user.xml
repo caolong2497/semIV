@@ -20,58 +20,104 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Change Password"
+        android:text="Information"
         android:textColor="#000"
         android:textSize="18dp"
         android:textStyle="bold" />
+
     <ImageButton
         android:id="@+id/userinfor_save"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_alignParentRight="true"
         android:background="@null"
         android:scaleType="fitXY"
-        android:layout_alignParentRight="true"
         android:src="@drawable/icon_save" />
 
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/userinfor_back"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/update_user_avatar"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/avatar_boy"
             android:layout_gravity="center"
             app:civ_border_color="#c2c2c2"
-            app:civ_border_width="2dp"
-            />
+            app:civ_border_width="2dp" />
+
         <TextView
+            android:id="@+id/label_uploadimg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tap images to change"
-            android:textColor="#0186ce"
             android:textAlignment="center"
-            />
-        <EditText
-            android:layout_marginTop="10dp"
+            android:textColor="#0186ce" />
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Full Name" />
-        <EditText
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Birthday" />
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Full Name"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_gravity="center"
+                android:textSize="17dp"></TextView>
+
+            <EditText
+                android:id="@+id/username_edittext"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Full Name" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
-            >
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Email"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_gravity="center"
+                android:textSize="17dp"></TextView>
+            <EditText
+                android:id="@+id/gmail_edittext"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Gmail" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:weightSum="4"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
@@ -80,22 +126,24 @@
                 android:layout_weight="1"
                 android:text="Gender"
                 android:textSize="17dp"
-
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_gravity="center"
                 />
 
             <RadioGroup
                 android:id="@+id/rd_gender"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="3"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:checked="true"
                     android:id="@+id/rd_male"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:checked="true"
                     android:text="Nam" />
 
                 <RadioButton
@@ -109,25 +157,32 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="5dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:weightSum="4"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="17dp"
-                android:text="Birthday"></TextView>
+                android:text="Birthday"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_gravity="center"
+                android:textSize="17dp"></TextView>
+
             <TextView
-                android:id="@+id/regis_birthday"
+                android:id="@+id/birthday_edittext"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
+
+                android:gravity="center"
                 android:hint="dd/mm/yyyy"
-                android:textSize="16dp"
-                />
+                android:textSize="20dp" />
 
 
         </LinearLayout>

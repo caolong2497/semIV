@@ -33,9 +33,9 @@ import couple.coupleapp.R;
 public class CountDateActivity extends AppCompatActivity {
     private int lastItemSelected;
     private FrameLayout setting_layout, disconnect_layout;
-    private ImageButton home_btn, timeline_btn;
     private Intent intent;
     private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,19 +51,15 @@ public class CountDateActivity extends AppCompatActivity {
 
 
     private void init() {
-        lastItemSelected = R.id.home_menu;
         sharedPreferences = getSharedPreferences(Constant.SHARED_FILENAME_LOGIN, MODE_PRIVATE);
         Constant.MY_USER_ID = sharedPreferences.getInt(Constant.MY_USERID_SHARED, 0);
         Constant.MY_COUPLE_ID = sharedPreferences.getInt(Constant.COUPLE_ID_SHARED, 0);
         lastItemSelected = 0;
-        Constant.CHECK_FIRST_COUNTDATE=0;
     }
 
     private void anhxa() {
         setting_layout = (FrameLayout) findViewById(R.id.setting_frame);
         disconnect_layout = (FrameLayout) findViewById(R.id.disconnect_frame);
-        home_btn = (ImageButton) findViewById(R.id.home_menu);
-        timeline_btn = (ImageButton) findViewById(R.id.timline_menu);
     }
 
     public void selectedMenu(View v) {
@@ -159,6 +155,7 @@ public class CountDateActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
+        //set lại biến static
         intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }

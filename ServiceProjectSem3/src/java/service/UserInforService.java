@@ -6,7 +6,9 @@
 package service;
 
 import Common.Constant;
+import Common.Utils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dao.UserInfoDAO;
 import entity.UserInfo;
 import java.util.List;
@@ -19,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import model.ChangePass_Model;
 import model.Login_Model;
 import model.Result_model;
+import model.Userinfor_Model;
 
 /**
  *
@@ -37,32 +40,29 @@ public class UserInforService {
         String data = son.toJson(listU);
         return data;
     }
-    
-    
-    
+
     /**
-     * 
+     *
      * @param userid mã user
      * @param current_password mật khẩu cũ
      * @param new_password mật khẩu mới
-     * @return String 0:update mật khẩu thành công
-     *                1:Mật khẩu hiện tại không đúng
-     *                2:update mật khẩu thất bại
+     * @return String 0:update mật khẩu thành công 1:Mật khẩu hiện tại không
+     * đúng 2:update mật khẩu thất bại
      */
     @POST
     @Path(value = "/changepass")
     @Consumes(MediaType.APPLICATION_JSON)
     public String changePassword(ChangePass_Model model) {
-        Result_model result_object=new Result_model();
+        Result_model result_object = new Result_model();
         UserInfoDAO uidao = new UserInfoDAO();
-        String kq=Constant.FALSE;  //1
+        String kq = Constant.FALSE;  //1
         UserInfo ui = uidao.getUserInfoByIDAndPassword(model.getUserid(), model.getCurrentpass());
         if (ui != null) {
             ui.setPassword(model.getNewpass());
             if (uidao.updateUserInfo(ui)) {
-               kq=Constant.TRUE; //0
+                kq = Constant.TRUE; //0
             } else {
-               kq=Constant.RESULT_FAIL; //2
+                kq = Constant.RESULT_FAIL; //2
             }
         }
         result_object.setResult(kq);
@@ -85,10 +85,22 @@ public class UserInforService {
     @POST
     @Path(value = "/updateUser")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String updateUser(UserInfo user) {
-        Boolean bl = new UserInfoDAO().updateUserInfo(user);
+    public String updateUser(Userinfor_Model userinfor_Model) {
+        UserInfo user = new UserInfo();
+        user.setUserID(userinfor_Model.getUserID());
+        user.setName(userinfor_Model.getName());
+        user.setGender(userinfor_Model.isGender());
+        user.setAvatar(userinfor_Model.getAvatar());
+        user.setBirthday(Utils.StringToSQLDate(userinfor_Model.getBirthday()));
+        Result_model result_model = new Result_model();
+        String message = Constant.FALSE;
+        Boolean bl = new UserInfoDAO().updateUserCustom(user);
+        if (bl) {
+            message = Constant.TRUE;
+        }
+        result_model.setResult(message);
         Gson son = new Gson();
-        String result = son.toJson(bl);
+        String result = son.toJson(result_model);
         return result;
     }
 
@@ -107,7 +119,7 @@ public class UserInforService {
     @Consumes(MediaType.APPLICATION_JSON)
     public String getUserById(@PathParam("userId") Integer userId) {
         UserInfo u = new UserInfoDAO().getUserInfoById(userId);
-        Gson son = new Gson();
+        Gson son = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
         String result = son.toJson(u);
         return result;
     }
@@ -121,20 +133,20 @@ public class UserInforService {
         String result = son.toJson(u);
         return result;
     }
-    
-    
+
     /**
      * hủy kết nối cặp đôi
+     *
      * @param coupleid mã cặp đôi
      * @return "0" nếu hủy thành công,"1" nếu thất bại
      */
     @GET
     @Path(value = "/disconnect/{coupleid}")
     public String DisconnectPartner(@PathParam("coupleid") String coupleid) {
-        UserInfoDAO userInfoDAO=new UserInfoDAO();
-        if(userInfoDAO.disconnectPartner(Integer.parseInt(coupleid))){
+        UserInfoDAO userInfoDAO = new UserInfoDAO();
+        if (userInfoDAO.disconnectPartner(Integer.parseInt(coupleid))) {
             return Constant.TRUE;
-        }else{
+        } else {
             return Constant.FALSE;
         }
     }

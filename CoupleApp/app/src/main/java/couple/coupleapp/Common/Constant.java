@@ -24,6 +24,8 @@ public class Constant {
     public static final String URL_UPDATE_PASS="user/changepass";
     public static final String URL_DISCONNECT ="user/disconnect"; //url hủy cặp đôi disconnect/{coupleid}
     public static final String URL_LOGIN = "user/login";             //url login
+    public static final String URL_GETUSERINFOR = "user/getUser";             //url login
+    public static final String URL_UPDATEUSER = "user/updateUser";             //url login
     //--------------------------
 
     //URL MEMORY API
@@ -41,7 +43,6 @@ public class Constant {
     public static final String URL_UPDATE_COMMENT = "comment/updateComment";
 
     public static String STARTDATE = "0";
-    public static int PARTNER_ID = 0;
     public static int MY_USER_ID = 0;
     public static int MY_COUPLE_ID = 0;
     public static final int DEFEAULT_COUPLEID = 6;
@@ -63,7 +64,7 @@ public class Constant {
     public static Drawable IMG_BACKGROUND;
     // code fix bug tạm thời lỗi load lần đầu getdrawable null
 
-    public static int CHECK_FIRST_COUNTDATE=0;
+//    public static int CHECK_FIRST_COUNTDATE=0;
 
     public static final int NOTIFICATION_ACTION_POST=1;
     public static final int NOTIFICATION_ACTION_COMMENT=2;

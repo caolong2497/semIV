@@ -6,6 +6,7 @@
 package dao;
 
 import Common.Constant;
+import Common.Utils;
 import entity.UserInfo;
 import java.util.List;
 import org.hibernate.Query;
@@ -55,9 +56,9 @@ public class UserInfoDAO {
         try {
             session.beginTransaction();
             //update coupleid=6(mã coupleid mặc định) 
-            String str="update UserInfo u set u.coupleID = "+Constant.DEFEAULT_COUPLEID+" where u.coupleID = :coupleID";
+            String str = "update UserInfo u set u.coupleID = " + Constant.DEFEAULT_COUPLEID + " where u.coupleID = :coupleID";
             Query query = session.createQuery(str);
-             query.setParameter("coupleID", coupleID);
+            query.setParameter("coupleID", coupleID);
             int i = query.executeUpdate();
             //Xóa đối tượng couple có coupleid=:coupleid
             //.....
@@ -76,7 +77,7 @@ public class UserInfoDAO {
         }
         return false;
     }
-    
+
     public Boolean updateUserInfo(UserInfo userInfo) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
@@ -152,7 +153,7 @@ public class UserInfoDAO {
         }
         return null;
     }
-    
+
     public UserInfo getUserInfoByIDAndPassword(int userid, String password) {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -191,6 +192,30 @@ public class UserInfoDAO {
         } finally {
             session.close();
         }
+    }
+
+    public Boolean updateUserCustom(UserInfo userInfo) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            Query query = session.createQuery("update UserInfo set name=:username , birthday=:birthday,gender=:gender,avatar=:avatar where userId =:userId");
+            query.setParameter("username", userInfo.getName());
+            query.setParameter("birthday", userInfo.getBirthday());
+            query.setParameter("gender", userInfo.isGender());
+            query.setParameter("avatar", userInfo.getAvatar());
+            query.setParameter("userId", userInfo.getUserID());
+            int i = query.executeUpdate();
+            if (i > 0) {
+                session.getTransaction().commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return false;
     }
 
 }

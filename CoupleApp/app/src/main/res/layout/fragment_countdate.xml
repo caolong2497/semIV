@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/backgroundlove"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/count_label"
@@ -61,7 +61,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:src="@drawable/avatar_girl"
+                android:src="@drawable/no_avatar"
                 app:civ_border_color="#fff"
                 app:civ_border_width="1dp" />
 
@@ -116,7 +116,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:src="@drawable/avatar_boy"
+                android:src="@drawable/no_avatar"
                 app:civ_border_color="#fff"
                 app:civ_border_width="1dp" />
 

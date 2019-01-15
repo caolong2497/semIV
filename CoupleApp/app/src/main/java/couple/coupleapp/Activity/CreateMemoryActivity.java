@@ -57,13 +57,12 @@ import java.util.Calendar;
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
-import couple.coupleapp.entity.MessageModel;
 import couple.coupleapp.entity.Notification_Model;
 
 public class CreateMemoryActivity extends AppCompatActivity {
     private int year_lastchoise, month_lastchoise, day_lastchoise;
     private Calendar cal;
-    private long selectedDate, timenow;
+    private long  timenow;
     private TextView dateofMemory;
     private SimpleDateFormat simpleDateFormat;
     private ImageButton memory_close_btn, memory_save_btn, clear_image_btn;
@@ -77,9 +76,9 @@ public class CreateMemoryActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mNotificationReference;
-    private String url_create_memory;
     private String str_caption, str_createDate, linkImage;
     int flag_image; //=0:không có ảnh được chọn, =1 có ảnh được chọn
+    RequestQueue requestQueue ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +141,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     } else {
 
                         if (flag_image == 0) {
-                            createMemory(url_create_memory);
+                            createMemory();
                         } else {
                             uploadimage();
 
@@ -174,11 +173,11 @@ public class CreateMemoryActivity extends AppCompatActivity {
         timenow = cal.getTimeInMillis();
         simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateofMemory.setText(simpleDateFormat.format(timenow));
-        url_create_memory = Constant.URL_HOSTING + Constant.URL_CREATE_MEMORY;
         str_caption = "";
         str_createDate = "";
         linkImage = "";
         flag_image = 0;
+        requestQueue = Volley.newRequestQueue(this);
     }
 
     private void getDatePicker() {
@@ -189,7 +188,6 @@ public class CreateMemoryActivity extends AppCompatActivity {
                 year_lastchoise = year;
                 month_lastchoise = month;
                 day_lastchoise = dayOfMonth;
-                selectedDate = cal.getTimeInMillis();
                 dateofMemory.setText(simpleDateFormat.format(cal.getTime()));
             }
         }, year_lastchoise, month_lastchoise, day_lastchoise);
@@ -309,7 +307,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         linkImage = uri.toString();
                         Log.e("memory", "link image: " + linkImage);
-                        createMemory(url_create_memory);
+                        createMemory();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -324,10 +322,10 @@ public class CreateMemoryActivity extends AppCompatActivity {
     /**
      * gọi service tạo kỉ niệm
      *
-     * @param url link api create memory post method
+     *
      */
-    private void createMemory(String url) {
-
+    private void createMemory() {
+       String  url = Constant.URL_HOSTING + Constant.URL_CREATE_MEMORY;
         JSONObject postparams = new JSONObject();
         try {
             Log.e("uploadDB", "url : " + linkImage);
@@ -347,14 +345,15 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     try {
                         String result = response.getString("result");
                         if (!"0".equals(result)) {
-                            Toast.makeText(CreateMemoryActivity.this, "Tạo kỉ niệm thành công", Toast.LENGTH_SHORT).show();
+
+                            //tạo notification
                             long time=Utils.getCurrentTime();
                             Notification_Model notification_model =  new Notification_Model(Constant.MY_USER_ID, Constant.NOTIFICATION_ACTION_POST, str_caption,time, Integer.parseInt(result));
                             mNotificationReference.push().setValue(notification_model);
+
                             // nếu tạo kỉ niệm thành công quay về trang timeline
                             onBackPressed();
                         } else {
-
                             Toast.makeText(CreateMemoryActivity.this, "Có lỗi xảy ra, thử lại sau", Toast.LENGTH_SHORT).show();
                         }
 
@@ -370,8 +369,8 @@ public class CreateMemoryActivity extends AppCompatActivity {
                     Toast.makeText(CreateMemoryActivity.this, "Lỗi server thử lại sau", Toast.LENGTH_SHORT).show();
                 }
             });
+
             //đẩy request
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -420,7 +419,6 @@ public class CreateMemoryActivity extends AppCompatActivity {
                 }
             });
             //đẩy request
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -452,7 +450,6 @@ public class CreateMemoryActivity extends AppCompatActivity {
                         imageOfMemory.setScaleType(ImageView.ScaleType.FIT_XY);
                         clear_image_btn.setVisibility(View.VISIBLE);
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e("memmory", "onResponse: Lỗi json");
@@ -466,7 +463,7 @@ public class CreateMemoryActivity extends AppCompatActivity {
             }
         });
         //đẩy request
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
         requestQueue.add(stringRequest);
 
     }

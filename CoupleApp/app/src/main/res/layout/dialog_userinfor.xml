@@ -21,15 +21,16 @@
         android:layout_below="@+id/dialog_close">
 
         <ImageView
+            android:id="@+id/dialog_user_background"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:cropToPadding="true"
+            android:layout_height="180dp"
             android:scaleType="centerCrop"
             android:src="@drawable/backgroundlove" />
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/dialog_user_avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="5dp"
             android:background="#FFFFFF"
@@ -45,15 +46,15 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/dialog_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Boy's name"
-            android:gravity="center"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="02/04/1997"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_marginBottom="10dp"/>
+
         <Button
             android:id="@+id/dialog_updateinfor"
             android:background="@drawable/custom_imageview"
