@@ -71,13 +71,30 @@ public class UserInforService {
         return result; //1
     }
 
+    /**
+     *
+     * @param user
+     * @return "0" thành công "1" thất bại "2" email đã tồn tại
+     */
     @POST
     @Path(value = "/addUser")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String addNewUser(UserInfo user) {
-        Boolean bl = new UserInfoDAO().addUserInfo(user);
+    public String addNewUser(Userinfor_Model user) {
+        Result_model result_object = new Result_model();
+        String kq = Constant.FALSE;
+        UserInfoDAO userInfoDAO = new UserInfoDAO();
+        UserInfo u = new UserInfo(0, user.getName(), user.getGmail(), user.getPassword(), user.isGender(), Utils.StringToSQLDate(user.getBirthday()), user.getCoupleID(), user.getAvatar(), user.getCode());
+        if (userInfoDAO.validateMail(user.getGmail()) == null) {
+
+            if (userInfoDAO.addUserInfo(u)) {
+                kq = Constant.TRUE;
+            }
+        } else {
+            kq = "2";
+        }
+        result_object.setResult(kq);
         Gson son = new Gson();
-        String result = son.toJson(bl);
+        String result = son.toJson(result_object);
         return result;
     }
 //    
@@ -150,5 +167,22 @@ public class UserInforService {
             return Constant.FALSE;
         }
     }
+    /**
+     * 
+     * @param userid ma user
+     * @param code ma ghep cap
+     * @return newcoupleid neu ghep thanh cong ,6 neu that bai
+     */
+    @GET
+    @Path(value = "/pairingUser/{userid}/{code}")
+    public String pairingUser(@PathParam("userid") int userid, @PathParam("code") String code) {
+        UserInfoDAO userInfoDAO = new UserInfoDAO();
+        int idPartner = userInfoDAO.getUserIdByCode(userid, code);
+        int newCoupleId=Constant.DEFEAULT_COUPLEID;
+        if (idPartner != 0) {
+            newCoupleId=userInfoDAO.createCouple(userid, idPartner);
+        }
+        return newCoupleId+"";
 
+    }
 }

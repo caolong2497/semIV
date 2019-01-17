@@ -9,6 +9,7 @@
     android:padding="10dp"
     tools:context=".Activity.RegisterActivity">
     <ImageButton
+        android:id="@+id/register_back_btn"
         android:layout_width="35dp"
         android:layout_height="25dp"
         android:src="@drawable/icon_previous"
@@ -33,6 +34,12 @@
             android:textStyle="bold" />
 
 
+        <TextView
+            android:id="@+id/noti_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@android:color/holo_red_dark"/>
         <EditText
             android:id="@+id/regis_email"
             android:layout_width="match_parent"
@@ -112,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:hint="dd/mm/yyyy"
                 android:textSize="16dp"
-            />
+                />
 
 
         </LinearLayout>

@@ -3,23 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/dao/CoupleDAO.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/model/Memory_Model.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/dao/CommentDAO.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/model/DetailCoupleInfor_Model.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/entity/Memory.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/service/CommentService.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/dao/MemoryDAO.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/service/CoupleService.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/hibernate.cfg.xml</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/dao/UserInfoDAO.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/entity/Couple.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/service/MemoryService.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/model/Comment_Model.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/Common/Utils.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/entity/Comment.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/model/Result_model.java</file>
-            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/src/java/service/UserInforService.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/service/ChatService.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/model/Userinfor_Model.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/service/MemoryService.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/entity/UserInfo.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/service/UserInforService.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/entity/Memory.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/Common/Utils.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/model/Update_comment_model.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/model/Detail_Memory_Model.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/dao/UserInfoDAO.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/model/DetailCoupleInfor_Model.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/Common/Constant.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/dao/MemoryDAO.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/entity/Chat.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/service/CommentService.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/entity/Couple.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/dao/CoupleDAO.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/entity/Comment.java</file>
+            <file>file:/D:/project%20git/semIV/ServiceProjectSem3/semIV/ServiceProjectSem3/src/java/service/CoupleService.java</file>
         </group>
     </open-files>
 </project-private>

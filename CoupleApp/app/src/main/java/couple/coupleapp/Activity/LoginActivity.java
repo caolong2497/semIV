@@ -47,14 +47,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 email = Ed_Email.getText().toString().trim();
                 password = Ed_Password.getText().toString();
-                Log.e("sdfsdf", "onClick: "+email+"/"+password );
                 String message_error=Validate.validateLogin(email,password);
-                Log.e("error", "onClick: "+message_error );
                 if("".equals(message_error)){
                     password=Utils.encodeText(password);
-                    Log.e("sdfsdf", "massage: "+email+"/"+password );
-
-
                     Login(email,password);
                 }else{
                     Toast.makeText(LoginActivity.this, message_error, Toast.LENGTH_SHORT).show();
@@ -98,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                             // người dùng mơi đi đến màn hình ghép cặp
                             intent= new Intent(LoginActivity.this, PairingActivity.class);
                             intent.putExtra("code",code);
+                            intent.putExtra("userId",userId);
                         }else{
                             //người dùng cũ đi đến màn hình chính(countDate)
 

@@ -7,10 +7,12 @@ package dao;
 
 import Common.Constant;
 import Common.Utils;
+import entity.Couple;
 import entity.UserInfo;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  *
@@ -32,23 +34,6 @@ public class UserInfoDAO {
             session.close();
         }
         return null;
-    }
-
-    public Boolean addUserInfo(UserInfo userInfo) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            session.beginTransaction();
-            session.save(userInfo);
-            session.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            session.getTransaction().rollback();
-            return false;
-        } finally {
-            session.close();
-        }
-
     }
 
     public Boolean disconnectPartner(int coupleID) {
@@ -218,4 +203,94 @@ public class UserInfoDAO {
         return false;
     }
 
+    public Boolean addUserInfo(UserInfo userInfo) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            session.save(userInfo);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return false;
+    }
+
+    public UserInfo validateMail(String email) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        UserInfo p = null;
+        try {
+            session.beginTransaction();
+            Query query = session.createQuery("from UserInfo where gmail=:gmail");
+            query.setParameter("gmail", email);
+            query.setMaxResults(1).uniqueResult();
+            p = (UserInfo) query.uniqueResult();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return p;
+    }
+
+    public int getUserIdByCode(int userid, String code) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            Query query = session.createQuery("from UserInfo where code=:code and userID != :userid and coupleID=" + Constant.DEFEAULT_COUPLEID);
+            query.setParameter("code", code);
+            query.setParameter("userid", userid);
+            query.setMaxResults(1).uniqueResult();
+            UserInfo p = (UserInfo) query.uniqueResult();
+            if (p != null) {
+                session.getTransaction().commit();
+                return p.getUserID();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return 0;
+    }
+
+    /**
+     *
+     * @param userid mã user người login
+     * @param idPartner mã partner
+     * @return coupleid nếu thành công,6 nếu thất bại
+     */
+    public int createCouple(int userid, int idPartner) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tranc = null;
+        Couple couple = new Couple(0, Utils.StringToSQLDate("01/01/1900"), "default");
+        Query query;
+        try {
+            tranc = session.beginTransaction();
+            session.save(couple);
+            query = session.createSQLQuery("select max(coupleid) from tbl_couple");
+            int LastcoupleId = (Integer) query.setMaxResults(1).uniqueResult();
+            query = session.createQuery("update UserInfo set coupleID=:coupleId where userID in(:userid, :partnerId) and coupleID = " + Constant.DEFEAULT_COUPLEID);
+            query.setParameter("coupleId", LastcoupleId);
+            query.setParameter("userid", userid);
+            query.setParameter("partnerId", idPartner);
+            int i = query.executeUpdate();
+            if (i == 2) {
+                tranc.commit();
+                return LastcoupleId;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        tranc.rollback();
+        return Constant.DEFEAULT_COUPLEID;
+    }
 }

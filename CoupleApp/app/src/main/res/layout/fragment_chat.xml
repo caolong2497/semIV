@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"   android:background="#FFF">
     <!--<FrameLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent">-->
@@ -18,13 +18,16 @@
     <TextView
         android:id="@+id/tittle"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:text="CHAT"
         android:textStyle="bold"
         android:textColor="#ffffff"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:background="#0066f5"
         android:layout_marginBottom="5dp"
         android:layout_alignParentTop="true"
+        android:textSize="18dp"
         android:gravity="center"
         />
     <ListView

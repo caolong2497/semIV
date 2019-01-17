@@ -39,11 +39,11 @@ public class CoupleDAO {
             session.beginTransaction();
             session.save(couple);
             session.getTransaction().commit();
-            session.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return false;

@@ -46,7 +46,7 @@ public class firstdayActivity extends AppCompatActivity {
         flag=intent.getIntExtra("flag",3);
         //check xem màn hình ở trạng thái chỉnh sửa hay tạo mới
         if (flag == Constant.CONSTANT_CREATE) {
-            //chỉnh sửa thì hiện nút back
+            //tạo mới thì ẩn nút back
             back_btn.setVisibility(View.GONE);
         }
         //bắt sự kiện click vào chọn ngày
@@ -160,5 +160,15 @@ public class firstdayActivity extends AppCompatActivity {
         );
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //nếu khác trạng thái create thì mới cho back khi ấn nút back của thiết bị
+        if (flag != Constant.CONSTANT_CREATE) {
+            //tạo mới thì ẩn nút back
+            super.onBackPressed();
+
+        }
     }
 }

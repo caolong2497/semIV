@@ -7,39 +7,42 @@ import couple.coupleapp.entity.UserInfor;
 
 public class Constant {
     public static final String REGEX_EMAIL = "^[_A-Za-z0-9-\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    public static final String REGEX_PASS="^[\\\\p{ASCII}\\\\s]*$";
-    public static final String REGEX_NAME="[a-zA-Z][a-zA-Z0-9_ ]*";
-        //home:15247
-        //cty:12794
+    public static final String REGEX_PASS = "^[\\\\p{ASCII}\\\\s]*$";
+    public static final String REGEX_NAME = "[a-zA-Z][a-zA-Z0-9_ ]*";
+    //home:15247
+    //cty:12794
     public static final String URL_HOSTING = "http://10.0.3.2:15247/ServiceProjectSem3/rest/"; //lưu hosting service
 
     // URL COUPLE API
     public static final String URL_GETCOUPLEBYID = "couple/getCouple/"; //url getcouplebyid
     public static final String URL_GET_DETAIL_COUPLE = "couple/getdetailcouple/"; //url getdetailcouple
-    public static final String URL_UPDATE_STARTDATE="couple/updateStartDate/";
-    public static final String URL_UPDATE_IMG_COUPLE="couple/updatecoupleimage/";
+    public static final String URL_UPDATE_STARTDATE = "couple/updateStartDate/";
+    public static final String URL_UPDATE_IMG_COUPLE = "couple/updatecoupleimage/";
     //------------------------------
 
     //URL USER API
-    public static final String URL_UPDATE_PASS="user/changepass";
-    public static final String URL_DISCONNECT ="user/disconnect"; //url hủy cặp đôi disconnect/{coupleid}
-    public static final String URL_LOGIN = "user/login";             //url login
-    public static final String URL_GETUSERINFOR = "user/getUser";             //url login
-    public static final String URL_UPDATEUSER = "user/updateUser";             //url login
+    public static final String URL_UPDATE_PASS = "user/changepass";
+    public static final String URL_DISCONNECT = "user/disconnect";      //url hủy cặp đôi disconnect/{coupleid}
+    public static final String URL_LOGIN = "user/login";                //url login
+    public static final String URL_GETUSERINFOR = "user/getUser";       //url lấy thông tin user
+    public static final String URL_UPDATEUSER = "user/updateUser";      //url update date thông tin user
+    public static final String URL_CREATE_USER = "user/addUser";        //url create user
+    public static final String URL_PAIRING = "user/pairingUser";        //url ghép cặp
+
     //--------------------------
 
     //URL MEMORY API
-    public static final String URL_CREATE_MEMORY="memory/addMemory";
-    public static final String URL_GETMEMORY_ONCOUPLE="memory/getMemoryByCoupleId";   //link lấy memory theo coupleid
-    public static final String URL_DEL_MEMORY="memory/deleteMemory";
-    public static final String URL_GET_MEMORY_BYID="memory/getMemoryById";
-    public static final String URL_UPDATE_MEMORY="memory/updateMemory";
+    public static final String URL_CREATE_MEMORY = "memory/addMemory";
+    public static final String URL_GETMEMORY_ONCOUPLE = "memory/getMemoryByCoupleId";   //link lấy memory theo coupleid
+    public static final String URL_DEL_MEMORY = "memory/deleteMemory";
+    public static final String URL_GET_MEMORY_BYID = "memory/getMemoryById";
+    public static final String URL_UPDATE_MEMORY = "memory/updateMemory";
 //    public static final String URL_GET_DETAIL_MEMORY="memory/getDetailMemory";
 
     //URL COMMENT API
-    public static final String URL_CREATE_COMMENT="comment/addComment";
-    public static final String URL_GET_COMMENT="comment/getCommentByMemory";
-    public static final String URL_DEL_COMMENT="comment/deleteComment";
+    public static final String URL_CREATE_COMMENT = "comment/addComment";
+    public static final String URL_GET_COMMENT = "comment/getCommentByMemory";
+    public static final String URL_DEL_COMMENT = "comment/deleteComment";
     public static final String URL_UPDATE_COMMENT = "comment/updateComment";
 
     public static String STARTDATE = "0";
@@ -51,13 +54,13 @@ public class Constant {
     public static final String MY_USERID_SHARED = "myuser";//tên tag lưu giá trị cho user_id
 
     // biến check màn hình sửa ngày đi đến activity hay ...
-    public static final int CONSTANT_CREATE=0;
-    public static final int CONSTANT_UPDATE=1;
+    public static final int CONSTANT_CREATE = 0;
+    public static final int CONSTANT_UPDATE = 1;
     //----------------------------------------------------
 
-    public static final String RESULT_TRUE="0";
-    public static final String RESULT_FALSE="1";
-    public static final String STATE_IMAGE_DEFAULT="default";
+    public static final String RESULT_TRUE = "0";
+    public static final String RESULT_FALSE = "1";
+    public static final String STATE_IMAGE_DEFAULT = "default";
     //------------------------
     public static UserComon MYSELF;
     public static UserComon PARTNER;
@@ -66,7 +69,7 @@ public class Constant {
 
 //    public static int CHECK_FIRST_COUNTDATE=0;
 
-    public static final int NOTIFICATION_ACTION_POST=1;
-    public static final int NOTIFICATION_ACTION_COMMENT=2;
+    public static final int NOTIFICATION_ACTION_POST = 1;
+    public static final int NOTIFICATION_ACTION_COMMENT = 2;
 
 }

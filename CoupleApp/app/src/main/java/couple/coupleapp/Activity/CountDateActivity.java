@@ -155,6 +155,8 @@ public class CountDateActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
+        Constant.MYSELF=null;
+        Constant.PARTNER=null;
         //set lại biến static
         intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
