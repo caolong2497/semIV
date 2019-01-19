@@ -11,12 +11,21 @@ public class Notification_Model implements  Comparable<Notification_Model> {
     public Notification_Model() {
     }
 
-    public Notification_Model(int userid, int type_action, String content, long time, int memoryid) {
+    public Notification_Model(String notificationId, int userid, int type_action, String content, long time, int memoryid) {
+        this.notificationId = notificationId;
         this.userid = userid;
         this.type_action = type_action;
         this.content = content;
         this.time = time;
         this.memoryid = memoryid;
+    }
+
+    public String getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(String notificationId) {
+        this.notificationId = notificationId;
     }
 
     public int getUserid() {

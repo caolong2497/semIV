@@ -348,8 +348,10 @@ public class CreateMemoryActivity extends AppCompatActivity {
 
                             //tạo notification
                             long time=Utils.getCurrentTime();
-                            Notification_Model notification_model =  new Notification_Model(Constant.MY_USER_ID, Constant.NOTIFICATION_ACTION_POST, str_caption,time, Integer.parseInt(result));
-                            mNotificationReference.push().setValue(notification_model);
+                           String idNotificaiton=mNotificationReference.push().getKey();
+                            Notification_Model notification_model =  new Notification_Model(idNotificaiton,Constant.MY_USER_ID, Constant.NOTIFICATION_ACTION_POST, str_caption,time, Integer.parseInt(result));
+
+                            mNotificationReference.child(idNotificaiton).setValue(notification_model);
 
                             // nếu tạo kỉ niệm thành công quay về trang timeline
                             onBackPressed();

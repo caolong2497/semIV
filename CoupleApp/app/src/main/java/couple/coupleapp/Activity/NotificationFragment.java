@@ -7,12 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -45,10 +47,10 @@ public class NotificationFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_notification, container, false);
         list_notification = new ArrayList<>();
         Notification_listview = (ListView) view.findViewById(R.id.notification_listview);
-        notificationAdapter = new NotificationAdapter(getActivity(), R.layout.item_notification, list_notification);
-        Notification_listview.setAdapter(notificationAdapter);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mNotificationReference = mFirebaseDatabase.getReference().child("notification");
+        notificationAdapter = new NotificationAdapter(getActivity(), R.layout.item_notification, list_notification,mNotificationReference);
+        Notification_listview.setAdapter(notificationAdapter);
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -78,11 +80,13 @@ public class NotificationFragment extends Fragment {
 
             }
         };
+        Log.e("tag", "onItemClick: "+Constant.PARTNER.getUserid() );
         Query data = mNotificationReference.orderByChild("userid").equalTo(Constant.PARTNER.getUserid()).limitToLast(20);
         data.addChildEventListener(mChildEventListener);
         Notification_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "xinchao", Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(getActivity(),DetailMemoryActivity.class);
                 intent.putExtra("memoryId",list_notification.get(position).getMemoryid());
                 startActivity(intent);

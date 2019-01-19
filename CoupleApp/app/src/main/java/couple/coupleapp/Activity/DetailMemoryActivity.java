@@ -216,8 +216,10 @@ public class DetailMemoryActivity extends AppCompatActivity {
                         if (Constant.RESULT_TRUE.equals(result)) {
                             Log.e("createComment", "onResponse: success");
                             long time=Utils.getCurrentTime();
-                            Notification_Model notification_model =  new Notification_Model(Constant.MY_USER_ID, Constant.NOTIFICATION_ACTION_COMMENT, content,time,MemoryId);
-                            mNotificationReference.push().setValue(notification_model);
+                            String idNotificaiton=mNotificationReference.push().getKey();
+                            Notification_Model notification_model =  new Notification_Model(idNotificaiton,Constant.MY_USER_ID, Constant.NOTIFICATION_ACTION_COMMENT, content,time,MemoryId);
+                             mNotificationReference.child(idNotificaiton).setValue(notification_model);
+
                             loadComment(memoryid);
                             //reset form
                             content_comment_edt.setText("");

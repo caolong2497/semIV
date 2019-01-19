@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.List;
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.Common.Utils;
@@ -18,16 +21,17 @@ public class NotificationAdapter extends ArrayAdapter<Notification_Model> {
     Context mcontext;
     int ResId;
     List<Notification_Model> list;
-
-    public NotificationAdapter(Context context, int resource, List<Notification_Model> objects) {
+    DatabaseReference notificationReference;
+    public NotificationAdapter(Context context, int resource, List<Notification_Model> objects, DatabaseReference mNotificationReference) {
         super(context, resource, objects);
         this.mcontext = context;
         this.ResId = resource;
         this.list = objects;
+        this.notificationReference=mNotificationReference;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         MyViewHolder myViewHolder = new MyViewHolder();
         if (view == null) {
@@ -56,6 +60,9 @@ public class NotificationAdapter extends ArrayAdapter<Notification_Model> {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mcontext, "click delete id"+notification_model.getContent(), Toast.LENGTH_SHORT).show();
+                notificationReference.child(notification_model.getNotificationId()).removeValue();
+                list.remove(position);
+                notifyDataSetChanged();
             }
         });
         return view;
