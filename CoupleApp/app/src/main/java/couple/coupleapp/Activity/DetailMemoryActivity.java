@@ -181,7 +181,6 @@ public class DetailMemoryActivity extends AppCompatActivity {
 
                     //load Comment
                     loadComment(memoryid);
-                    Log.e("loaddetailmemory", "onResponse: " + res_time + "\t" + res_caption + "\t" + res_imagelink + "\t" + res_userId);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -280,21 +279,25 @@ public class DetailMemoryActivity extends AppCompatActivity {
 
         //lấy dối tượng info
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int useridOfCmt=list.get(info.position).getUserId();
 
-        //lấy thông tin id và nội dung từ đối tượng info
-        int commentId = list.get(info.position).getCommentId();
-        String content = list.get(info.position).getContent();
+        //neu user la nguoi dang cmt thi moi duoc phep sua xoa cmt
+        if(useridOfCmt==Constant.MY_USER_ID) {
+            //lấy thông tin id và nội dung từ đối tượng info
+            int commentId = list.get(info.position).getCommentId();
+            String content = list.get(info.position).getContent();
 
-        //bắt sự kiện click menu
-        switch (id) {
-            case R.id.menu_edit:
-                showDialogUpdateComment(commentId, content);
-                break;
-            case R.id.menu_delete:
-                deleteComment(commentId);
-                break;
-            default:
-                break;
+            //bắt sự kiện click menu
+            switch (id) {
+                case R.id.menu_edit:
+                    showDialogUpdateComment(commentId, content);
+                    break;
+                case R.id.menu_delete:
+                    deleteComment(commentId);
+                    break;
+                default:
+                    break;
+            }
         }
         return super.onContextItemSelected(item);
     }

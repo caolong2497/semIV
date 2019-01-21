@@ -116,10 +116,20 @@
     </LinearLayout>
     <TextView
 
+        android:id="@+id/checkUser"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:text="If Your's Partner Entered Code,please login again!"
+        android:gravity="bottom|center_horizontal"
+        android:textColor="#707070"
+        />
+    <TextView
+
         android:id="@+id/pairing_logout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:text="Login with a different account"
         android:gravity="bottom|center_horizontal"
         android:textColor="#0004ff"

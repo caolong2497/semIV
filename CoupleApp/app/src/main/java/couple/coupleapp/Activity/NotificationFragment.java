@@ -67,7 +67,9 @@ public class NotificationFragment extends Fragment {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                Notification_Model notification = dataSnapshot.getValue(Notification_Model.class);
+                list_notification.remove(Notification_listview.getPositionForView(view));
+                notificationAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -80,13 +82,11 @@ public class NotificationFragment extends Fragment {
 
             }
         };
-        Log.e("tag", "onItemClick: "+Constant.PARTNER.getUserid() );
         Query data = mNotificationReference.orderByChild("userid").equalTo(Constant.PARTNER.getUserid()).limitToLast(20);
         data.addChildEventListener(mChildEventListener);
         Notification_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "xinchao", Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(getActivity(),DetailMemoryActivity.class);
                 intent.putExtra("memoryId",list_notification.get(position).getMemoryid());
                 startActivity(intent);
