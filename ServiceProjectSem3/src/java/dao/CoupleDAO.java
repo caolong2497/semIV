@@ -69,9 +69,10 @@ public class CoupleDAO {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
-            Query query = session.createQuery("delete from Couple where coupleID= :coupleId");
+              Query  query = session.createQuery("delete from Couple where coupleID= :coupleId");
             query.setParameter("coupleId", coupleId);
             int i = query.executeUpdate();
+
             session.getTransaction().commit();
             session.close();
             if (i > 0) {
@@ -94,11 +95,10 @@ public class CoupleDAO {
             query.setParameter("coupleId", coupleId);
             p = (Couple) query.uniqueResult();
             session.getTransaction().commit();
-            session.close();
             return p;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return null;

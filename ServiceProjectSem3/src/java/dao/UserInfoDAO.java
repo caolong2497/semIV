@@ -38,28 +38,45 @@ public class UserInfoDAO {
 
     public Boolean disconnectPartner(int coupleID) {
         Session session = HibernateUtil.getSessionFactory().openSession();
+        Query query;
+        int i = 0;
+        List<UserInfo> list = null;
         try {
             session.beginTransaction();
-            //update coupleid=6(mã coupleid mặc định) 
-            String str = "update UserInfo u set u.coupleID = " + Constant.DEFEAULT_COUPLEID + " where u.coupleID = :coupleID";
-            Query query = session.createQuery(str);
-            query.setParameter("coupleID", coupleID);
-            int i = query.executeUpdate();
-            //Xóa đối tượng couple có coupleid=:coupleid
-            //.....
-            //Xóa record trong bảng memory,chat,comment có userid = 2 tài khoản liên kết đến couple
-            //.....
-            session.getTransaction().commit();
-            if (i > 0) {
-                return true;
+            query = session.createQuery("from UserInfo where coupleID=:coupleid");
+            query.setParameter("coupleid", coupleID);
+            list = query.list();
+            if (list.size() == 2) {
+                //update coupleid=6(mã coupleid mặc định) 
+                String str = "update UserInfo u set u.coupleID = " + Constant.DEFEAULT_COUPLEID + " where u.coupleID = :coupleID";
+                query = session.createQuery(str);
+                query.setParameter("coupleID", coupleID);
+                i = query.executeUpdate();
+
+                if (i > 0) {
+                    query = session.createQuery("delete from Couple where coupleID= :coupleId");
+                    query.setParameter("coupleId", coupleID);
+                    i = query.executeUpdate();
+                    if (i > 0) {
+                        query = session.createQuery("delete from Comment where userId in (:userId, :partnerId)");
+                        query.setParameter("userId", list.get(0).getUserID());
+                        query.setParameter("partnerId", list.get(1).getUserID());
+                        query.executeUpdate();
+                        query = session.createQuery("delete from Memory where userId in (:userId, :partnerId)");
+                        query.setParameter("userId", list.get(0).getUserID());
+                        query.setParameter("partnerId", list.get(1).getUserID());
+                        query.executeUpdate();
+                        session.getTransaction().commit();
+                        return true;
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
-
         } finally {
             session.close();
         }
+        session.getTransaction().rollback();
         return false;
     }
 
@@ -112,7 +129,6 @@ public class UserInfoDAO {
             return p;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }
@@ -132,7 +148,6 @@ public class UserInfoDAO {
             return p;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }
@@ -153,7 +168,6 @@ public class UserInfoDAO {
             return p;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }
@@ -172,7 +186,6 @@ public class UserInfoDAO {
             return list;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
             return null;
         } finally {
             session.close();
@@ -231,7 +244,6 @@ public class UserInfoDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }
@@ -253,7 +265,6 @@ public class UserInfoDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }
