@@ -41,9 +41,9 @@ public class firstdayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstday);
         anhxa();
-        init();
         Intent intent=getIntent();
         flag=intent.getIntExtra("flag",3);
+        init();
         //check xem màn hình ở trạng thái chỉnh sửa hay tạo mới
         if (flag == Constant.CONSTANT_CREATE) {
             //tạo mới thì ẩn nút back
@@ -106,11 +106,9 @@ public class firstdayActivity extends AppCompatActivity {
             month_lastchoise = cal.get(Calendar.MONTH);
             day_lastchoise = cal.get(Calendar.DAY_OF_MONTH);
         }
-        Log.e("lastchoise", "init: "+day_lastchoise+"/"+month_lastchoise+"/"+year_lastchoise );
     }
 
     private void getDatePicker() {
-        Log.e("getDatePicker", "init: "+day_lastchoise+"/"+month_lastchoise+"/"+year_lastchoise );
         DatePickerDialog pickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -121,7 +119,6 @@ public class firstdayActivity extends AppCompatActivity {
                 firstday_edit.setText(simpleDateFormat.format(cal.getTime()));
             }
         }, year_lastchoise, month_lastchoise, day_lastchoise);
-        Log.e("getDatePicker", "init2: "+day_lastchoise+"/"+month_lastchoise+"/"+year_lastchoise );
         //giới hạn lớn nhất có thể chọn là ngày hiện tại
         pickerDialog.getDatePicker().setMaxDate(timenow);
         pickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
