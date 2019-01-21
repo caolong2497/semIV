@@ -14,8 +14,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +47,7 @@ public class NotificationFragment extends Fragment {
     private ChildEventListener mChildEventListener;
     private NotificationAdapter notificationAdapter;
     private ListView Notification_listview;
+    private TextView content_no_Notification;
     List<Notification_Model> list_notification;
     View view;
 
@@ -47,9 +56,10 @@ public class NotificationFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_notification, container, false);
         list_notification = new ArrayList<>();
         Notification_listview = (ListView) view.findViewById(R.id.notification_listview);
+        content_no_Notification=(TextView) view.findViewById(R.id.content_hide);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mNotificationReference = mFirebaseDatabase.getReference().child("notification");
-        notificationAdapter = new NotificationAdapter(getActivity(), R.layout.item_notification, list_notification,mNotificationReference);
+        notificationAdapter = new NotificationAdapter(getActivity(), R.layout.item_notification, list_notification, mNotificationReference);
         Notification_listview.setAdapter(notificationAdapter);
         mChildEventListener = new ChildEventListener() {
             @Override
@@ -58,6 +68,7 @@ public class NotificationFragment extends Fragment {
                 list_notification.add(notification);
                 Collections.sort(list_notification);
                 notificationAdapter.notifyDataSetChanged();
+                checkListNotification();
             }
 
             @Override
@@ -67,9 +78,9 @@ public class NotificationFragment extends Fragment {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Notification_Model notification = dataSnapshot.getValue(Notification_Model.class);
-                list_notification.remove(Notification_listview.getPositionForView(view));
-                notificationAdapter.notifyDataSetChanged();
+//                Notification_Model notification = dataSnapshot.getValue(Notification_Model.class);
+//                list_notification.remove(notification);
+//                notificationAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -87,12 +98,51 @@ public class NotificationFragment extends Fragment {
         Notification_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(getActivity(),DetailMemoryActivity.class);
-                intent.putExtra("memoryId",list_notification.get(position).getMemoryid());
-                startActivity(intent);
+                int memoryId=list_notification.get(position).getMemoryid();
+                checkNotification(memoryId,position);
             }
         });
+
         return view;
     }
 
+    private void checkNotification(final int memoryid,final int position) {
+        String url = Constant.URL_HOSTING + Constant.URL_CHECK_NOTIFICATION + "/" + memoryid;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (Constant.RESULT_FALSE.equals(response)) {
+                    Toast.makeText(getActivity(), "Kỉ niệm này đã bị xóa", Toast.LENGTH_SHORT).show();
+                    deleteNotification(position);
+                } else {
+                    Intent intent = new Intent(getActivity(), DetailMemoryActivity.class);
+                    intent.putExtra("memoryId", memoryid);
+                    startActivity(intent);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "lỗi hệ thống thử lại sau", Toast.LENGTH_SHORT).show();
+            }
+        }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+    }
+
+    private void deleteNotification(final int position){
+        Notification_Model model=list_notification.get(position);
+        mNotificationReference.child(model.getNotificationId()).removeValue();
+        list_notification.remove(position);
+        notificationAdapter.notifyDataSetChanged();
+        checkListNotification();
+    }
+    private void checkListNotification(){
+        if(list_notification.size()==0){
+            content_no_Notification.setVisibility(View.VISIBLE);
+        }else{
+            content_no_Notification.setVisibility(View.GONE);
+        }
+    }
 }

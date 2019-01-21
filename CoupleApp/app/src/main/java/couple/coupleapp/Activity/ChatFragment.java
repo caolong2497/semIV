@@ -63,18 +63,18 @@ public class ChatFragment extends Fragment {
     private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
-//    Dialog dialog;
+    //    Dialog dialog;
 //    Button open_gallery_btn, open_capture_btn, exit_btn;
-//    ImageView image_post;
-//    private static final int REQUEST_CODE_ALBUM = 200;
-//    private static final int REQUEST_CODE_CAMERA = 100;
-//    String linkimage;
-//    StorageReference storageRef;
+    private static final int RC_PHOTO_PICKER = 2;
+    //    private static final int REQUEST_CODE_CAMERA = 100;
+    String linkimage;
+    StorageReference storageRef;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMessageDatabaseReference;
     private ChildEventListener mChildEventListener;
     List<MessageModel> friendlyMessages;
     View view;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         //Firebase intial
@@ -136,13 +136,17 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        // ImagePickerButton shows an image picker to upload a image for a message
-//        mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showDialogOptionUpload();
-//            }
-//        });
+//         ImagePickerButton shows an image picker to upload a image for a message
+        mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_ALBUM);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+            }
+        });
 
         // Enable Send button when there's text to send
         mMessageEditText.addTextChangedListener(new TextWatcher() {
@@ -178,133 +182,55 @@ public class ChatFragment extends Fragment {
         // Initialize message ListView and its adapter
         mMessageAdapter = new MessageAdapter(getActivity(), R.layout.item_message, friendlyMessages);
         mMessageListView.setAdapter(mMessageAdapter);
-//        image_post=(ImageView) view.findViewById(R.id.);
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        storageRef = storage.getReference();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
     }
 
-//
-//    private void showDialogOptionUpload() {
-//        dialog = new Dialog(getActivity());
-//        dialog.setContentView(R.layout.dialog_optionupload);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//        open_gallery_btn = (Button) dialog.findViewById(R.id.dialog_update_gallery);
-//        open_capture_btn = (Button) dialog.findViewById(R.id.dialog_update_capture);
-//        exit_btn = (Button) dialog.findViewById(R.id.dialog_update_exit);
-//        exit_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.hide();
-//            }
-//        });
-//        open_gallery_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.hide();
-//                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_ALBUM);
-//            }
-//        });
-//        open_capture_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.hide();
-//                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
-//            }
-//        });
-//        dialog.show();
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        switch (requestCode) {
-//            case REQUEST_CODE_CAMERA:
-//                Log.e("Long", "onRequestPermissionsResult: den duoc day");
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    Intent capture_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                    startActivityForResult(capture_intent, REQUEST_CODE_CAMERA);
-//                } else {
-//                    Toast.makeText(getActivity(), "Không có quyền truy cập camera", Toast.LENGTH_SHORT).show();
-//                }
-//                break;
-//            case REQUEST_CODE_ALBUM:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-//                            MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-//                    startActivityForResult(galleryIntent, REQUEST_CODE_ALBUM);
-//                } else {
-//                    Toast.makeText(getActivity(), "Không có quyền truy cập ALBUM", Toast.LENGTH_SHORT).show();
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//    }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        switch (requestCode) {
-//            case REQUEST_CODE_CAMERA:
-//                if (resultCode == Activity.RESULT_OK && data != null) {
-//                    Log.e("Long", "onActivityResult: set anh");
-//                    Bitmap img = (Bitmap) data.getExtras().get("data");
-//                    image_post.setImageBitmap(img);
-//                    image_post.setScaleType(ImageView.ScaleType.FIT_XY);
-//                    uploadimage();
-//                }
-//                break;
-//            case REQUEST_CODE_ALBUM:
-//                if (resultCode == Activity.RESULT_OK && data != null) {
-//                    Uri uri = data.getData();
-//                    image_post.setImageURI(uri);
-//                    image_post.setScaleType(ImageView.ScaleType.FIT_XY);
-//                    uploadimage();
-//                }
-//                break;
-//        }
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
-//
-//    private void uploadimage() {
-//        Calendar cal = Calendar.getInstance();
-//        // Get the data from an ImageView as bytes
-//        StorageReference mountainsRef = storageRef.child("chat/image" + cal.getTimeInMillis() + ".png");
-//
-//        image_post.setDrawingCacheEnabled(true);
-//        image_post.buildDrawingCache();
-//        Bitmap bitmap = ((BitmapDrawable) image_post.getDrawable()).getBitmap();
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//        byte[] data = baos.toByteArray();
-//
-//        UploadTask uploadTask = mountainsRef.putBytes(data);
-//        uploadTask.addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                Log.e("memory", "upload anh: upload ảnh thất bại");
-//            }
-//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                Log.e("memory", "upload anh: upload ảnh thành công");
-//                Task<Uri> result = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-//                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        linkimage = uri.toString();
-//                        Log.e("memory", "link image: " + linkimage);
-//                        long time = System.currentTimeMillis();
-//                        // TODO: Send messages on click
-//                        MessageModel friendlyMessage = new MessageModel(Constant.MY_USER_ID, null, linkimage, time, Constant.MY_COUPLE_ID);
-//                        mMessageDatabaseReference.push().setValue(friendlyMessage);
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception exception) {
-//                        Log.e("long", "get link fail ");
-//                    }
-//                });
-//            }
-//        });
-//    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == RC_PHOTO_PICKER && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/jpeg");
+            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+            startActivityForResult(intent, RC_PHOTO_PICKER);
+        } else {
+            Toast.makeText(getActivity(), "Không có quyền truy cập ALBUM", Toast.LENGTH_SHORT).show();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == RC_PHOTO_PICKER && resultCode == Activity.RESULT_OK && data != null) {
+            Calendar cal = Calendar.getInstance();
+            Uri uri = data.getData();
+            StorageReference photoref = storageRef.child("chat/image" + cal.getTimeInMillis() + ".png");
+            photoref.putFile(uri).addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> result = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                    result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            linkimage = uri.toString();
+                            long time = System.currentTimeMillis();
+                            // TODO: Send messages on click
+                            MessageModel friendlyMessage = new MessageModel(Constant.MY_USER_ID, null, linkimage, time, Constant.MY_COUPLE_ID);
+                            mMessageDatabaseReference.push().setValue(friendlyMessage);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Log.e("long", "get link fail ");
+                        }
+                    });
+                }
+            });
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

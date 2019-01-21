@@ -133,9 +133,12 @@ public class UploadBackgroundActivity extends AppCompatActivity {
     }
 
     private void openAlbum() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, REQUEST_CODE_ALBUM);
+//        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        startActivityForResult(intent, REQUEST_CODE_ALBUM);
     }
 
     private void openCapture() {

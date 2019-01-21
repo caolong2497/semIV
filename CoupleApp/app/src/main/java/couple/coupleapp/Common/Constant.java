@@ -37,6 +37,7 @@ public class Constant {
     public static final String URL_DEL_MEMORY = "memory/deleteMemory";
     public static final String URL_GET_MEMORY_BYID = "memory/getMemoryById";
     public static final String URL_UPDATE_MEMORY = "memory/updateMemory";
+    public static final String URL_CHECK_NOTIFICATION = "memory/checkExistMemoryId";
 //    public static final String URL_GET_DETAIL_MEMORY="memory/getDetailMemory";
 
     //URL COMMENT API

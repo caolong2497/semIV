@@ -240,9 +240,10 @@ public class CreateMemoryActivity extends AppCompatActivity {
                 break;
             case REQUEST_CODE_ALBUM:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                            MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                    startActivityForResult(galleryIntent, REQUEST_CODE_ALBUM);
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/jpeg");
+                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                    startActivityForResult(intent, REQUEST_CODE_ALBUM);
                 } else {
                     Toast.makeText(this, "Không có quyền truy cập ALBUM", Toast.LENGTH_SHORT).show();
                 }

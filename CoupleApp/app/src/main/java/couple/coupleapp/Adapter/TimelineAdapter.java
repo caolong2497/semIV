@@ -164,7 +164,7 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
             public void onResponse(String response) {
                 if (Constant.RESULT_TRUE.equals(response)) {
                     list.remove(position);
-                    deleteNotificationByIdMemory(list.get(position).getMemoryId());
+//                    deleteNotificationByIdMemory(list.get(position).getMemoryId());
                     notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "Có lỗi xảy ra,thử lại sau", Toast.LENGTH_SHORT).show();
@@ -182,35 +182,35 @@ public class TimelineAdapter extends ArrayAdapter<TimeLine> {
     }
 
 
-    //xoa thong bao khi xoa memory
-    private void deleteNotificationByIdMemory(int memoryid){
-        Query query=mNotificationReference.orderByChild("memoryid").equalTo(memoryid);
-        mChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                mNotificationReference.child(dataSnapshot.getKey()).removeValue();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        query.addChildEventListener(mChildEventListener);
-    }
+//    //xoa thong bao khi xoa memory
+//    private void deleteNotificationByIdMemory(int memoryid){
+//        Query query=mNotificationReference.orderByChild("memoryid").equalTo(memoryid);
+//        mChildEventListener = new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                mNotificationReference.child(dataSnapshot.getKey()).removeValue();
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        };
+//        query.addChildEventListener(mChildEventListener);
+//    }
 }

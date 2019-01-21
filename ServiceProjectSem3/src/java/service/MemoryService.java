@@ -109,6 +109,17 @@ public class MemoryService {
         String result = son.toJson(memory);
         return result;
     }
+    
+    @GET
+    @Path(value = "/checkExistMemoryId/{memoryId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String checkExistMemoryId(@PathParam("memoryId") Integer memoryId) {
+        Memory memory = new MemoryDAO().getMemoryById(memoryId);
+        if(memory==null){
+            return Constant.FALSE;
+        }
+        return Constant.TRUE;
+    }
 //    @GET
 //    @Path(value = "/getDetailMemory/{memonryId}")
 //    @Consumes(MediaType.APPLICATION_JSON)

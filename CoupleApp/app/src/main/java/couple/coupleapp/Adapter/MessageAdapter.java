@@ -44,6 +44,7 @@ public class MessageAdapter extends ArrayAdapter<MessageModel> {
             myViewHolder.layout_item_received = (ConstraintLayout) view.findViewById(R.id.layout_received);
             myViewHolder.layout_item_send = (ConstraintLayout) view.findViewById(R.id.layout_send);
             myViewHolder.name_received = (TextView) view.findViewById(R.id.text_message_name_received);
+            myViewHolder.name_send=(TextView) view.findViewById(R.id.text_message_name_send);
             myViewHolder.message_received = (TextView) view.findViewById(R.id.text_message_body_received);
             myViewHolder.time_received = (TextView) view.findViewById(R.id.text_message_time_received);
             myViewHolder.image_received = (ImageView) view.findViewById(R.id.image_message_received);
@@ -66,12 +67,14 @@ public class MessageAdapter extends ArrayAdapter<MessageModel> {
             if (isPhoto) {
                 myViewHolder.message_send.setVisibility(View.GONE);
                 myViewHolder.image_send.setVisibility(View.VISIBLE);
-                Picasso.get().load(message.getPhotoUrl()).into(myViewHolder.image_received);
+                Picasso.get().load(message.getPhotoUrl()).into(myViewHolder.image_send);
+                myViewHolder.image_send.setScaleType(ImageView.ScaleType.FIT_XY);
             } else {
                 myViewHolder.message_send.setVisibility(View.VISIBLE);
                 myViewHolder.image_send.setVisibility(View.GONE);
                 myViewHolder.message_send.setText(message.getText());
             }
+            myViewHolder.name_send.setText(Constant.MYSELF.getName());
             myViewHolder.time_send.setText(Utils.formatLongTimeToHHmm(message.getTime()));
         } else {
             myViewHolder.layout_item_received.setVisibility(View.VISIBLE);
@@ -80,6 +83,7 @@ public class MessageAdapter extends ArrayAdapter<MessageModel> {
                 myViewHolder.message_received.setVisibility(View.GONE);
                 myViewHolder.image_received.setVisibility(View.VISIBLE);
                 Picasso.get().load(message.getPhotoUrl()).into(myViewHolder.image_received);
+                myViewHolder.image_received.setScaleType(ImageView.ScaleType.FIT_XY);
             } else {
                 myViewHolder.message_received.setVisibility(View.VISIBLE);
                 myViewHolder.image_received.setVisibility(View.GONE);
@@ -99,7 +103,7 @@ public class MessageAdapter extends ArrayAdapter<MessageModel> {
 
     private class MyViewHolder {
         ConstraintLayout layout_item_received, layout_item_send;
-        TextView name_received, message_received, time_received, message_send, time_send;
+        TextView name_received,name_send, message_received, time_received, message_send, time_send;
         ImageView image_received, image_send;
         TextView time_group;
     }
