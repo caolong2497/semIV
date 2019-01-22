@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonObject;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,18 +27,17 @@ import java.util.ArrayList;
 
 import couple.coupleapp.Adapter.TimelineAdapter;
 import couple.coupleapp.Common.Constant;
-import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
 import couple.coupleapp.entity.TimeLine;
 
 public class TimelineFragment extends Fragment {
-    public ArrayList<TimeLine> list = new ArrayList<>();
-    ListView listView;
-    ImageButton add_memory_btn;
-    Intent intent;
-    View view;
-    TimelineAdapter adapter;
-    String url_getTimeline;
+    private  ArrayList<TimeLine> list = new ArrayList<>();
+    private ListView listView;
+    private ImageButton add_memory_btn;
+    private Intent intent;
+    private View view;
+    private TimelineAdapter adapter;
+    private String url_getTimeline;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

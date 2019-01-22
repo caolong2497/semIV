@@ -23,11 +23,10 @@ public class CommentDAO {
             session.beginTransaction();
             List list = session.createQuery("from Comment").list();
             session.getTransaction().commit();
-            session.close();
             return list;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
             session.close();
         }
         return null;
@@ -39,13 +38,13 @@ public class CommentDAO {
             session.beginTransaction();
             session.save(comment);
             session.getTransaction().commit();
-            session.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
             session.close();
         }
+        session.getTransaction().rollback();
         return false;
     }
 
@@ -83,10 +82,10 @@ public class CommentDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }
+        session.getTransaction().rollback();
         return false;
     }
 
@@ -99,13 +98,13 @@ public class CommentDAO {
             query.setParameter("commentID", commentID);
             p = (Comment) query.uniqueResult();
             session.getTransaction().commit();
-            session.close();
             return p;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
             session.close();
         }
+        session.getTransaction().rollback();
         return null;
     }
 

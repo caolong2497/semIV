@@ -1,32 +1,19 @@
 package couple.coupleapp.Activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.Common.Utils;
@@ -34,9 +21,9 @@ import couple.coupleapp.Common.Validate;
 import couple.coupleapp.R;
 
 public class ChangePassword extends AppCompatActivity {
-    ImageButton password_back_btn, password_save_btn;
-    EditText current_pass_edittext, new_pass_edittext;
-    String currentpass, newpass, url;
+    private ImageButton password_back_btn, password_save_btn;
+    private EditText current_pass_edittext, new_pass_edittext;
+    private String currentpass, newpass, url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

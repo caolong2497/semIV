@@ -37,22 +37,22 @@ import couple.coupleapp.Common.Validate;
 import couple.coupleapp.R;
 
 public class RegisterActivity extends AppCompatActivity {
-    RadioGroup radio_gender;
-    RadioButton check_male, check_female;
-    Button register, reset;
-    TextView txt_birthday;
-    TextView txt_mail;
-    TextView txt_name;
-    TextView noti_email;
-    TextView txt_pass;
-    int year_lastchoise, month_lastchoise, day_lastchoise;
-    ImageButton back_btn;
-    String birthday_infor;
-    String email, fullname, pass;
+    private RadioGroup radio_gender;
+    private RadioButton check_male, check_female;
+    private Button register, reset;
+    private TextView txt_birthday;
+    private TextView txt_mail;
+    private TextView txt_name;
+    private TextView noti_email;
+    private TextView txt_pass;
+    private int year_lastchoise, month_lastchoise, day_lastchoise;
+    private ImageButton back_btn;
+    private String birthday_infor;
+    private String email, fullname, pass;
 
-    SimpleDateFormat simpleDateFormat;
-    long timenow;
-    Calendar cal;
+    private SimpleDateFormat simpleDateFormat;
+    private long timenow;
+    private Calendar cal;
 
     EmailValidator emailValidator;
 
@@ -106,8 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
                         if (check_female.isChecked()) {
                             gender_infor = false;
                         }
-                        String code = (10000+new Random().nextInt(999999))+"";
-                        createUser(Constant.URL_HOSTING + Constant.URL_CREATE_USER, fullname, email, pass, gender_infor, birthday_infor, code);
+
+                        createUser(Constant.URL_HOSTING + Constant.URL_CREATE_USER, fullname, email, pass, gender_infor, birthday_infor, "123");
                     }
 
                 }

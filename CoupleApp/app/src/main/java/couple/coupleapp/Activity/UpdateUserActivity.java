@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -53,17 +52,17 @@ import couple.coupleapp.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UpdateUserActivity extends AppCompatActivity {
-    ImageButton updateuser_back_btn, updateuser_save_btn;
-    Dialog dialog;
-    Button open_gallery_btn, open_capture_btn, exit_btn;
-    CircleImageView user_image;
+    private ImageButton updateuser_back_btn, updateuser_save_btn;
+    private Dialog dialog;
+    private Button open_gallery_btn, open_capture_btn, exit_btn;
+    private CircleImageView user_image;
     private static final int REQUEST_CODE_ALBUM = 200;
     private static final int REQUEST_CODE_CAMERA = 100;
-    TextView label, birthday;
-    EditText name, gmail;
-    RequestQueue requestQueue;
-    RadioButton radio_male, radio_female;
-    String linkimage;
+    private TextView label, birthday;
+    private EditText name, gmail;
+    private RequestQueue requestQueue;
+    private RadioButton radio_male, radio_female;
+    private String linkimage;
     private int year_lastchoise, month_lastchoise, day_lastchoise;
     private Calendar cal;
     private StorageReference storageRef;
@@ -362,7 +361,9 @@ public class UpdateUserActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     if (Constant.RESULT_TRUE.equals(response.getString("result"))) {
-                        onBackPressed();
+//                        onBackPressed();
+                        Intent intent=new Intent(UpdateUserActivity.this,CountDateActivity.class);
+                        startActivity(intent);
                     } else {
                         Toast.makeText(UpdateUserActivity.this, "Lỗi update userinfor", Toast.LENGTH_SHORT).show();
                     }

@@ -95,10 +95,10 @@ public class MemoryDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }
+         session.getTransaction().rollback();
         return false;
     }
 
@@ -114,7 +114,6 @@ public class MemoryDAO {
             return p;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }
@@ -154,7 +153,6 @@ public class MemoryDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
         } finally {
             session.close();
         }

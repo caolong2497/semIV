@@ -1,19 +1,12 @@
 package couple.coupleapp.Activity;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -25,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -42,8 +34,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -55,7 +45,7 @@ import couple.coupleapp.entity.MessageModel;
 
 
 public class ChatFragment extends Fragment {
-    public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
+    private static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
 
     private ListView mMessageListView;
     private MessageAdapter mMessageAdapter;

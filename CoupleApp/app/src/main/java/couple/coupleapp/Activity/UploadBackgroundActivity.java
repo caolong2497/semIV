@@ -34,7 +34,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,19 +43,18 @@ import java.util.Calendar;
 
 import couple.coupleapp.Common.Constant;
 import couple.coupleapp.R;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UploadBackgroundActivity extends AppCompatActivity {
-    LinearLayout uploadbackground_open;
-    Dialog dialog;
-    Button open_gallery_btn, open_capture_btn, exit_btn;
-    ImageButton upload_background_back, upload_background_save;
-    ImageView image_choise;
-    int flag;
+    private LinearLayout uploadbackground_open;
+    private Dialog dialog;
+    private Button open_gallery_btn, open_capture_btn, exit_btn;
+    private ImageButton upload_background_back, upload_background_save;
+    private ImageView image_choise;
+    private int flag;
     private static final int REQUEST_CODE_ALBUM = 200;
     private static final int REQUEST_CODE_CAMERA = 100;
-    StorageReference storageRef;
-    String url_update_image;
+    private StorageReference storageRef;
+    private String url_update_image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

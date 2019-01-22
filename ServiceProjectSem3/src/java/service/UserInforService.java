@@ -83,8 +83,8 @@ public class UserInforService {
         Result_model result_object = new Result_model();
         String kq = Constant.FALSE;
         UserInfoDAO userInfoDAO = new UserInfoDAO();
-        UserInfo u = new UserInfo(0, user.getName(), user.getGmail(), user.getPassword(), user.isGender(), Utils.StringToSQLDate(user.getBirthday()), user.getCoupleID(), user.getAvatar(), user.getCode());
-        if (userInfoDAO.validateMail(user.getGmail()) == null) {
+        UserInfo u = new UserInfo(0, user.getName(), user.getGmail(), user.getPassword(), user.isGender(), Utils.StringToSQLDate(user.getBirthday()), user.getCoupleID(), user.getAvatar(), Utils.codeDefault());
+        if (userInfoDAO.getUserInforByEmail(user.getGmail()) == null) {
 
             if (userInfoDAO.addUserInfo(u)) {
                 kq = Constant.TRUE;
@@ -167,8 +167,9 @@ public class UserInforService {
             return Constant.FALSE;
         }
     }
+
     /**
-     * 
+     *
      * @param userid ma user
      * @param code ma ghep cap
      * @return newcoupleid neu ghep thanh cong ,6 neu that bai
@@ -178,11 +179,77 @@ public class UserInforService {
     public String pairingUser(@PathParam("userid") int userid, @PathParam("code") String code) {
         UserInfoDAO userInfoDAO = new UserInfoDAO();
         int idPartner = userInfoDAO.getUserIdByCode(userid, code);
-        int newCoupleId=Constant.DEFEAULT_COUPLEID;
+        int newCoupleId = Constant.DEFEAULT_COUPLEID;
         if (idPartner != 0) {
-            newCoupleId=userInfoDAO.createCouple(userid, idPartner);
+            newCoupleId = userInfoDAO.createCouple(userid, idPartner);
         }
-        return newCoupleId+"";
+        return newCoupleId + "";
 
     }
+
+    /**
+     * check email đã được đăng kí chưa
+     *
+     * @param gmail
+     * @return "1" nếu chưa tồn tại,"0" nếu đã tồn tại
+     */
+    @GET
+    @Path(value = "/checkmail/{gmail}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String checkMail(@PathParam("gmail") String gmail) {
+        String kq = Constant.FALSE;
+        UserInfoDAO userInfoDAO = new UserInfoDAO();
+        UserInfo user = userInfoDAO.getUserInforByEmail(gmail);
+        if (user != null) {
+            String code = Utils.codeDefault();
+            user.setCode(code);
+            if (userInfoDAO.updateUserInfo(user)) {
+                if (Utils.sendMail(gmail, code)) {
+                    kq = Constant.TRUE;
+                }
+            }
+        }
+        return kq;
+    }
+
+    /**
+     * check code đã được đăng kí chưa
+     *
+     * @param gmail
+     * @return "1" nếu chưa tồn tại,"0" nếu đã tồn tại
+     */
+    @GET
+    @Path(value = "/checkcode/{gmail}/{code}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String checkCode(@PathParam("gmail") String gmail, @PathParam("code") String code) {
+        String kq = Constant.FALSE;
+        UserInfoDAO userInfoDAO = new UserInfoDAO();
+        UserInfo user = userInfoDAO.checkCode(gmail, code);
+        if (user != null) {
+            kq = Constant.TRUE;
+        }
+        return kq;
+    }
+
+    @POST
+    @Path(value = "/newPassword")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String checkCode(Login_Model login) {
+        String kq = Constant.FALSE;
+        UserInfoDAO userInfoDAO = new UserInfoDAO();
+        UserInfo user = userInfoDAO.getUserInforByEmail(login.getGmail());
+
+        if (user != null) {
+            user.setPassword(login.getPassword());
+            if (userInfoDAO.updateUserInfo(user)) {
+                kq = Constant.TRUE;
+            };
+        }
+        Result_model result_model = new Result_model();
+        result_model.setResult(kq);
+        Gson son = new Gson();
+        String result = son.toJson(result_model);
+        return result;
+    }
+
 }

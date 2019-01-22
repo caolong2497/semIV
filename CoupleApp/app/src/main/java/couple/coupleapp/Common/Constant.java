@@ -28,7 +28,9 @@ public class Constant {
     public static final String URL_UPDATEUSER = "user/updateUser";      //url update date thông tin user
     public static final String URL_CREATE_USER = "user/addUser";        //url create user
     public static final String URL_PAIRING = "user/pairingUser";        //url ghép cặp
-
+    public static final String URL_CHECKEMAIL="user/checkmail";
+    public static final String URL_CHECKCODE="user/checkcode";
+    public static final String URL_NEWPASS="user/newPassword";
     //--------------------------
 
     //URL MEMORY API

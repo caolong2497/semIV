@@ -232,13 +232,32 @@ public class UserInfoDAO {
         return false;
     }
 
-    public UserInfo validateMail(String email) {
+    public UserInfo getUserInforByEmail(String email) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         UserInfo p = null;
         try {
             session.beginTransaction();
             Query query = session.createQuery("from UserInfo where gmail=:gmail");
             query.setParameter("gmail", email);
+            query.setMaxResults(1).uniqueResult();
+            p = (UserInfo) query.uniqueResult();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return p;
+    }
+
+    public UserInfo checkCode(String email, String code) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        UserInfo p = null;
+        try {
+            session.beginTransaction();
+            Query query = session.createQuery("from UserInfo where gmail=:gmail and code = :code");
+            query.setParameter("gmail", email);
+            query.setParameter("code", code);
             query.setMaxResults(1).uniqueResult();
             p = (UserInfo) query.uniqueResult();
             session.getTransaction().commit();
@@ -304,4 +323,5 @@ public class UserInfoDAO {
         tranc.rollback();
         return Constant.DEFEAULT_COUPLEID;
     }
+
 }

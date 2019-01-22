@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,12 +29,12 @@ import couple.coupleapp.R;
 
 
 public class LoginActivity extends AppCompatActivity {
-    EditText Ed_Email, Ed_Password;
-    TextView txt_regis;
-    Button btn_login;
-    String email, password;
-
-    SharedPreferences login;
+    private EditText Ed_Email, Ed_Password;
+    private TextView txt_regis,txt_forgetPass;
+    private Button btn_login;
+    private String email, password;
+    private Intent intent;
+    private SharedPreferences login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +58,17 @@ public class LoginActivity extends AppCompatActivity {
         txt_regis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent  = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
-
+        txt_forgetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent  = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void anhxa() {
@@ -72,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         Ed_Password = (EditText) findViewById(R.id.login_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         txt_regis = (TextView) findViewById(R.id.txt_register);
+        txt_forgetPass=(TextView) findViewById(R.id.txt_forgetPassword);
     }
     private void Login(String email,String password) {
         String url = Constant.URL_HOSTING + Constant.URL_LOGIN ;

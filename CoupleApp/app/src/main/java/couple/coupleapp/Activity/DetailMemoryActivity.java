@@ -10,14 +10,11 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +29,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -49,10 +44,8 @@ import couple.coupleapp.Common.Constant;
 import couple.coupleapp.Common.ExpandedListView;
 import couple.coupleapp.Common.Utils;
 import couple.coupleapp.R;
-import couple.coupleapp.entity.Comment;
 import couple.coupleapp.entity.Comment_Model;
 import couple.coupleapp.entity.Notification_Model;
-import couple.coupleapp.entity.TimeLine;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailMemoryActivity extends AppCompatActivity {
